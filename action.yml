@@ -1,0 +1,15 @@
+name: "article-webpage-to-markdown-action"
+description: "Automatically generate Markdown files based on the webpages of articles. Currently supports freecodecamp's news site."
+author: "freeCodeCamp-China"
+inputs:
+  newsLink:
+    description: "A string in a specific format that contains a link to a article."
+    required: true
+  markDownFilePath:
+    description: "Path of the generated MarkDown file and relative path relative to the root folder."
+    required: false
+    default: "./"
+
+runs:
+  using: "node12"
+  main: "dist/index.js"

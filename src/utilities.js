@@ -81,7 +81,7 @@ exports.HTMLtoMarkdown = (html) =>
     const articleTitle = $('.post-full-title').text();
     // Original article address
     const articleURL = 'https://' + options.hostname + options.path;
-    const authorCardName = $('.author-card-name > a');
+    const authorCardName = $('.author-card-content-no-bio > .author-card-name > a');
     // Original author's signature
     const authorName = authorCardName.text();
     // Original author's personal page

@@ -178,7 +178,9 @@ describe("5. test HTMLtoMarkdown(Write content to file).", () => {
                   <h1 class="post-full-title">testexample post-full-title</h1>
                 </header>
                 <figure class="post-full-image">
-                  <img src="/postFullImageURL" alt="postFullImage" />
+                  <picture>
+                    <img src="/postFullImageURL" alt="postFullImage" />
+                  </picture>
                 </figure>
                 <section class="post-full-content">
                   <div class="post-content">
@@ -209,7 +211,7 @@ describe("5. test HTMLtoMarkdown(Write content to file).", () => {
                   <div class="post-full-author-header">
                     <section class="author-card">
                       <img class="author-profile-image" src="/news/content/images/size/w100/2019/06/WhatsApp-Image-2018-03-22-at-13.36.56.jpeg" alt="Zubin Pratap" />
-                      <section class="author-card-content">
+                      <section class="author-card-content author-card-content-no-bio">
                         <h4 class="author-card-name"><a href="/news/author/authorURL/">authorName</a></h4>
                       </section>
                     </section>
@@ -274,7 +276,9 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <h1 class="post-full-title">testexample post-full-title</h1>
                 </header>
                 <figure class="post-full-image">
-                  <img src="https://www.freecodecamp.org/postFullImageURL" alt="postFullImage" />
+                  <picture>
+                    <img src="https://www.freecodecamp.org/postFullImageURL" alt="postFullImage" />
+                  </picture>
                 </figure>
                 <section class="post-full-content">
                   <div class="post-content">
@@ -283,7 +287,7 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <div class="post-full-author-header">
                     <section class="author-card">
                       <img class="author-profile-image" src="/news/content/images/size/w100/2019/06/WhatsApp-Image-2018-03-22-at-13.36.56.jpeg" alt="Zubin Pratap" />
-                      <section class="author-card-content">
+                      <section class="author-card-content author-card-content-no-bio">
                         <h4 class="author-card-name"><a href="/news/author/authorURL/">authorName</a></h4>
                       </section>
                     </section>
@@ -322,7 +326,9 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <h1 class="post-full-title">testexample post-full-title</h1>
                 </header>
                 <figure class="post-full-image">
-                  <img src="http://www.freecodecamp.org/postFullImageURL" alt="postFullImage" />
+                  <picture>
+                    <img src="http://www.freecodecamp.org/postFullImageURL" alt="postFullImage" />
+                  </picture>
                 </figure>
                 <section class="post-full-content">
                   <div class="post-content">
@@ -331,7 +337,7 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <div class="post-full-author-header">
                     <section class="author-card">
                       <img class="author-profile-image" src="/news/content/images/size/w100/2019/06/WhatsApp-Image-2018-03-22-at-13.36.56.jpeg" alt="Zubin Pratap" />
-                      <section class="author-card-content">
+                      <section class="author-card-content author-card-content-no-bio">
                         <h4 class="author-card-name"><a href="/news/author/authorURL/">authorName</a></h4>
                       </section>
                     </section>
@@ -372,7 +378,9 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <h1 class="post-full-title"></h1>
                 </header>
                 <figure class="post-full-image">
-                  <img src="/postFullImageURL" alt="postFullImage" />
+                  <picture>
+                    <img src="/postFullImageURL" alt="postFullImage" />
+                  </picture>
                 </figure>
                 <section class="post-full-content">
                   <div class="post-content">
@@ -382,7 +390,7 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <div class="post-full-author-header">
                     <section class="author-card">
                       <img class="author-profile-image" src="/news/content/images/size/w100/2019/06/WhatsApp-Image-2018-03-22-at-13.36.56.jpeg" alt="Zubin Pratap" />
-                      <section class="author-card-content">
+                      <section class="author-card-content author-card-content-no-bio">
                         <h4 class="author-card-name"><a href="/news/author/authorURL/">authorName</a></h4>
                       </section>
                     </section>
@@ -414,7 +422,9 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                 <header class="post-full-header">
                 </header>
                 <figure class="post-full-image">
-                  <img src="/postFullImageURL" alt="postFullImage" />
+                  <picture>
+                    <img src="/postFullImageURL" alt="postFullImage" />
+                  </picture>
                 </figure>
                 <section class="post-full-content">
                   <div class="post-content">
@@ -424,7 +434,7 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <div class="post-full-author-header">
                     <section class="author-card">
                       <img class="author-profile-image" src="/news/content/images/size/w100/2019/06/WhatsApp-Image-2018-03-22-at-13.36.56.jpeg" alt="Zubin Pratap" />
-                      <section class="author-card-content">
+                      <section class="author-card-content author-card-content-no-bio">
                         <h4 class="author-card-name"><a href="/news/author/authorURL/">authorName</a></h4>
                       </section>
                     </section>
@@ -457,7 +467,9 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <h1 class="post-full-title">testexample post-full-title</h1>
                 </header>
                 <figure class="post-full-image">
-                  <img src="/postFullImageURL" alt="postFullImage" />
+                  <picture>
+                    <img src="/postFullImageURL" alt="postFullImage" />
+                  </picture>
                 </figure>
                 <section class="post-full-content">
                   <div class="post-content">
@@ -467,7 +479,7 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <div class="post-full-author-header">
                     <section class="author-card">
                       <img class="author-profile-image" src="/news/content/images/size/w100/2019/06/WhatsApp-Image-2018-03-22-at-13.36.56.jpeg" alt="Zubin Pratap" />
-                      <section class="author-card-content">
+                      <section class="author-card-content author-card-content-no-bio">
                         <h4 class="author-card-name"><a href="/news/author/authorURL/">authorName</a></h4>
                       </section>
                     </section>
@@ -500,7 +512,9 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <h1 class="post-full-title">testexample post-full-title</h1>
                 </header>
                 <figure class="post-full-image">
-                  <img src="/postFullImageURL" alt="postFullImage" />
+                  <picture>
+                    <img src="/postFullImageURL" alt="postFullImage" />
+                  </picture>
                 </figure>
                 <section class="post-full-content">
                   <div class="post-content">
@@ -510,7 +524,7 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <div class="post-full-author-header">
                     <section class="author-card">
                       <img class="author-profile-image" src="/news/content/images/size/w100/2019/06/WhatsApp-Image-2018-03-22-at-13.36.56.jpeg" alt="Zubin Pratap" />
-                      <section class="author-card-content">
+                      <section class="author-card-content author-card-content-no-bio">
                         <h4 class="author-card-name"><a href="/news/author/authorURL/"></a></h4>
                       </section>
                     </section>
@@ -543,7 +557,9 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <h1 class="post-full-title">testexample post-full-title</h1>
                 </header>
                 <figure class="post-full-image">
-                  <img src="/postFullImageURL" alt="postFullImage" />
+                  <picture>
+                    <img src="/postFullImageURL" alt="postFullImage" />
+                  </picture>
                 </figure>
                 <section class="post-full-content">
                   <div class="post-content">
@@ -553,7 +569,7 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <div class="post-full-author-header">
                     <section class="author-card">
                       <img class="author-profile-image" src="/news/content/images/size/w100/2019/06/WhatsApp-Image-2018-03-22-at-13.36.56.jpeg" alt="Zubin Pratap" />
-                      <section class="author-card-content">
+                      <section class="author-card-content author-card-content-no-bio">
                         <h4 class="author-card-name">authorName</h4>
                       </section>
                     </section>
@@ -586,7 +602,9 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <h1 class="post-full-title">testexample post-full-title</h1>
                 </header>
                 <figure class="post-full-image">
-                  <img src="/postFullImageURL" alt="postFullImage" />
+                  <picture>
+                    <img src="/postFullImageURL" alt="postFullImage" />
+                  </picture>
                 </figure>
                 <section class="post-full-content">
                   <div class="post-content">
@@ -596,7 +614,7 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <div class="post-full-author-header">
                     <section class="author-card">
                       <img class="author-profile-image" src="/news/content/images/size/w100/2019/06/WhatsApp-Image-2018-03-22-at-13.36.56.jpeg" alt="Zubin Pratap" />
-                      <section class="author-card-content">
+                      <section class="author-card-content author-card-content-no-bio">
                         <h4 class="author-card-name"></h4>
                       </section>
                     </section>
@@ -629,7 +647,9 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <h1 class="post-full-title">testexample post-full-title</h1>
                 </header>
                 <figure class="post-full-image">
-                  <img src="/postFullImageURL" alt="postFullImage" />
+                  <picture>
+                    <img src="/postFullImageURL" alt="postFullImage" />
+                  </picture>
                 </figure>
                 <section class="post-full-content">
                   <div class="post-content">
@@ -639,7 +659,7 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <div class="post-full-author-header">
                     <section class="author-card">
                       <img class="author-profile-image" src="/news/content/images/size/w100/2019/06/WhatsApp-Image-2018-03-22-at-13.36.56.jpeg" alt="Zubin Pratap" />
-                      <section class="author-card-content">
+                      <section class="author-card-content author-card-content-no-bio">
                       </section>
                     </section>
                   </div>
@@ -671,7 +691,9 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <h1 class="post-full-title">testexample post-full-title</h1>
                 </header>
                 <figure class="post-full-image">
-                  <img src="/postFullImageURL" alt="postFullImage" />
+                  </picture>
+                    <img src="/postFullImageURL" alt="postFullImage" />
+                  <picture>
                 </figure>
                 <section class="post-full-content">
                   <div class="post-content">
@@ -681,7 +703,7 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <div class="post-full-author-header">
                     <section class="author-card">
                       <img class="author-profile-image" src="/news/content/images/size/w100/2019/06/WhatsApp-Image-2018-03-22-at-13.36.56.jpeg" alt="Zubin Pratap" />
-                      <section class="author-card-content">
+                      <section class="author-card-content author-card-content-no-bio">
                         <h4 class="author-card-name"><a href="">authorName</a></h4>
                       </section>
                     </section>
@@ -714,7 +736,9 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <h1 class="post-full-title">testexample post-full-title</h1>
                 </header>
                 <figure class="post-full-image">
-                  <img src="/postFullImageURL" alt="postFullImage" />
+                  <picture>
+                    <img src="/postFullImageURL" alt="postFullImage" />
+                  </picture>
                 </figure>
                 <section class="post-full-content">
                   <div class="post-content">
@@ -724,7 +748,7 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <div class="post-full-author-header">
                     <section class="author-card">
                       <img class="author-profile-image" src="/news/content/images/size/w100/2019/06/WhatsApp-Image-2018-03-22-at-13.36.56.jpeg" alt="Zubin Pratap" />
-                      <section class="author-card-content">
+                      <section class="author-card-content author-card-content-no-bio">
                         <h4 class="author-card-name">authorName</h4>
                       </section>
                     </section>
@@ -757,7 +781,9 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <h1 class="post-full-title">testexample post-full-title</h1>
                 </header>
                 <figure class="post-full-image">
-                  <img src="/postFullImageURL" alt="postFullImage" />
+                  <picture>
+                    <img src="/postFullImageURL" alt="postFullImage" />
+                  </picture>
                 </figure>
                 <section class="post-full-content">
                   <div class="post-content">
@@ -767,7 +793,7 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <div class="post-full-author-header">
                     <section class="author-card">
                       <img class="author-profile-image" src="/news/content/images/size/w100/2019/06/WhatsApp-Image-2018-03-22-at-13.36.56.jpeg" alt="Zubin Pratap" />
-                      <section class="author-card-content">
+                      <section class="author-card-content author-card-content-no-bio">
                         <h4 class="author-card-name"><a>authorName</a></h4>
                       </section>
                     </section>
@@ -800,7 +826,9 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                     <h1 class="post-full-title">testexample post-full-title</h1>
                   </header>
                   <figure class="post-full-image">
-                    <img src="" alt="postFullImage" />
+                    <picture>
+                      <img src="" alt="postFullImage" />
+                    </picture>
                   </figure>
                   <section class="post-full-content">
                     <div class="post-content">
@@ -809,7 +837,7 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                     <div class="post-full-author-header">
                       <section class="author-card">
                         <img class="author-profile-image" src="/news/content/images/size/w100/2019/06/WhatsApp-Image-2018-03-22-at-13.36.56.jpeg" alt="Zubin Pratap" />
-                        <section class="author-card-content">
+                        <section class="author-card-content author-card-content-no-bio">
                           <h4 class="author-card-name"><a href="/news/author/authorURL/">authorName</a></h4>
                         </section>
                       </section>
@@ -842,7 +870,9 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                     <h1 class="post-full-title">testexample post-full-title</h1>
                   </header>
                   <figure class="post-full-image">
-                    <img alt="postFullImage" />
+                    <picture>
+                      <img alt="postFullImage" />
+                    </picture>
                   </figure>
                   <section class="post-full-content">
                     <div class="post-content">
@@ -851,7 +881,7 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                     <div class="post-full-author-header">
                       <section class="author-card">
                         <img class="author-profile-image" src="/news/content/images/size/w100/2019/06/WhatsApp-Image-2018-03-22-at-13.36.56.jpeg" alt="Zubin Pratap" />
-                        <section class="author-card-content">
+                        <section class="author-card-content author-card-content-no-bio">
                           <h4 class="author-card-name"><a href="/news/author/authorURL/">authorName</a></h4>
                         </section>
                       </section>
@@ -884,6 +914,7 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <h1 class="post-full-title">testexample post-full-title</h1>
                 </header>
                 <figure class="post-full-image">
+                  <picture></picture>
                 </figure>
                 <section class="post-full-content">
                   <div class="post-content">
@@ -892,7 +923,7 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                   <div class="post-full-author-header">
                     <section class="author-card">
                       <img class="author-profile-image" src="/news/content/images/size/w100/2019/06/WhatsApp-Image-2018-03-22-at-13.36.56.jpeg" alt="Zubin Pratap" />
-                      <section class="author-card-content">
+                      <section class="author-card-content author-card-content-no-bio">
                         <h4 class="author-card-name"><a href="/news/author/authorURL/">authorName</a></h4>
                       </section>
                     </section>

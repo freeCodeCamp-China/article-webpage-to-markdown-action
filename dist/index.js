@@ -45312,11 +45312,12 @@ exports.HTMLtoMarkdown = (html) =>
       return reject(Err_DOMWrong);
 
     // full image
-    let fullImage = $('.post-full-image > img') || '',
+    let fullImage = $('.post-full-image > picture > img') || '',
       fullImageURL;
     // Is there a full image
     if (fullImage) {
       fullImageURL = fullImage.attr('src');
+
       // Whether the src of the full image is empty
       if (!fullImageURL) return reject(Err_DOMWrong);
       else {

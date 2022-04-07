@@ -83,7 +83,7 @@ exports.HTMLtoMarkdown = (html) =>
     const articleURL = 'https://' + options.hostname + options.path;
     const authorCardName = $('.author-card-content-no-bio > .author-card-name > a');
     // Original author's signature
-    const authorName = authorCardName.text().replace(/[\n ]/g, '') || 'Anonymous';
+    const authorName = authorCardName.text().replace(/[\n]/g, '').trim() || 'Anonymous';
     // Original author's personal page
     const authorURL = hostURL_EN + (authorCardName.attr('href') || 'Anonymous');
 

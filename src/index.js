@@ -44,6 +44,7 @@ const {
       }
     );
   } catch (error) {
+      console.log('ERR:', error)
       process.exitCode = 1;
   }
 })();

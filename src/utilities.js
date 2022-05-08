@@ -44,6 +44,13 @@ exports.inputExistCheck = (input) =>
     input.newsLink ? resolve(input.newsLink) : reject(Err_DontGetNewsLink);
   });
 
+
+//fileExitCheck in the path.
+exports.fileExistCheck = (path) =>
+  new Promise((resolve, reject) => {
+    fs.existsSync(path)? resolve(true) : reject(false);
+  });
+    
 // Check the input parameters, and get the routing address of the article.
 // - 原文网址：[原文标题](https://www.freecodecamp.org/news/xxxxxxx/
 exports.getRouteAddr = (URL) =>

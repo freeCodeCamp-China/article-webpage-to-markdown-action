@@ -8,6 +8,7 @@ const {
 const {
   gatherInputs,
   inputExistCheck,
+  fileExistCheck,
   getRouteAddr,
   haveRouterAddrmd,
   HTMLtoMarkdown
@@ -15,7 +16,6 @@ const {
 
 // cd ./news-translation
 // You can run `node script\toMarkdown\index.js URL<String>`(URL is the URL of the article).
-
 (async function toMarkdown() {
   try {
     const input = gatherInputs();
@@ -31,6 +31,10 @@ const {
     const articleFileName = await haveRouterAddrmd(articleChildRouter);
     const htmlString = await (await nodeFetch(URL, options)).text();
     const articleText = await HTMLtoMarkdown(htmlString);
+      
+    if (await fileExistCheck(input.markDownFilePath + articleFileName)) {
+      return Promise.reject("file has exist");
+    } 
 
     await fs.writeFile(
       input.markDownFilePath + articleFileName,
@@ -40,7 +44,7 @@ const {
       }
     );
   } catch (error) {
-    console.log('ERR:', error);
-    process.exitCode = 1;
+      console.log('ERR:', error);
+      process.exitCode = 1;
   }
 })();

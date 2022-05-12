@@ -46,9 +46,9 @@ exports.inputExistCheck = (input) =>
 
 
 //fileExitCheck in the path.
-exports.fileExistCheck = (path) =>
+exports.isNewFile = (path) =>
   new Promise((resolve, reject) => {
-    fs.existsSync(path)? resolve(true) : reject(false);
+    !fs.existsSync(path)? resolve(true) : reject(false);
   });
     
 // Check the input parameters, and get the routing address of the article.

@@ -42,7 +42,7 @@ news-translate
 在 job 中添加下面的 step.
 
 ```yml
-- uses: freeCodeCamp-China/article-webpage-to-markdown-action@v0.1.4
+- uses: freeCodeCamp-China/article-webpage-to-markdown-action@v0.1.5
   with:
     newsLink: '${{ github.event.issue.Body }}'
 ```
@@ -50,7 +50,7 @@ news-translate
 下面是一个扩展示例，尽可能包含所有选项。
 
 ```yml
-- uses: freeCodeCamp-China/article-webpage-to-markdown-action@v0.1.4
+- uses: freeCodeCamp-China/article-webpage-to-markdown-action@v0.1.5
   with:
     # 一个特定的格式的字符串，该字符串包含一个指向 freeCodeCamp 的News 的链接。
     # 格式: "原文网址：[原文标题](https://www.freecodecamp.org/news/xxxxxxx/"

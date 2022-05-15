@@ -11,23 +11,29 @@ const {
   inputExistCheck,
   getRouteAddr,
   haveRouterAddrmd,
-  HTMLtoMarkdown
+  HTMLtoMarkdown,
+  isNewFile
 } = require("../utilities.js");
+
+const path = require('path');
+const crypto = require('crypto');
+const fs   = require('fs');
+
 
 // Take an object of key/value pairs and convert it to input environment variables
 function buildInput(inputs) {
   let key = "";
-  for(key in inputs) {
+  for (key in inputs) {
     process.env[`INPUT_${key.replace(/ /g, '_').toUpperCase()}`] = inputs[key];
   }
 }
 
-  // Reset modules and remove input environment variables before each run
-  beforeEach(() => {
-    jest.resetModules();
-    delete process.env.INPUT_NEWSLINK;
-    delete process.env.INPUT_markDownFilePath;
-  });
+// Reset modules and remove input environment variables before each run
+beforeEach(() => {
+  jest.resetModules();
+  delete process.env.INPUT_NEWSLINK;
+  delete process.env.INPUT_markDownFilePath;
+});
 
 describe("1. test gather all conditioned inputs.", () => {
   test("1-1. gather minimal inputs.", () => {
@@ -78,67 +84,67 @@ describe("3. test getRouteAddr(Check the input parameters, and get the routing a
   });
 
   describe("3-2. Wrong URL test", () => {
-    test("3-2-1. Without the last forward slash", ()=>{
+    test("3-2-1. Without the last forward slash", () => {
       return getRouteAddr("- 原文网址：[Test Example](https://www.freecodecamp.org/news/testexample)").catch((err) => {
         expect(err).toBe(Err_DontGetTrueRoute);
       });
     });
 
-    test("3-2-2. http", ()=>{
+    test("3-2-2. http", () => {
       return getRouteAddr("- 原文网址：[Test Example](http://www.freecodecamp.org/news/testexample/)").catch((err) => {
         expect(err).toBe(Err_DontGetTrueRoute);
       });
     });
 
-    test("3-2-3. No htts", ()=>{
+    test("3-2-3. No htts", () => {
       return getRouteAddr("- 原文网址：[Test Example](www.freecodecamp.org/news/testexample/)").catch((err) => {
         expect(err).toBe(Err_DontGetTrueRoute);
       });
     });
 
-    test("3-2-4. No www", ()=>{
+    test("3-2-4. No www", () => {
       return getRouteAddr("- 原文网址：[Test Example](https://freecodecamp.org/news/testexample/)").catch((err) => {
         expect(err).toBe(Err_DontGetTrueRoute);
       });
     });
 
-    test("3-2-5. No news", ()=>{
+    test("3-2-5. No news", () => {
       return getRouteAddr("- 原文网址：[Test Example](https://www.freecodecamp.org/testexample/)").catch((err) => {
         expect(err).toBe(Err_DontGetTrueRoute);
       });
     });
 
-    test("3-2-6. No Route", ()=>{
+    test("3-2-6. No Route", () => {
       return getRouteAddr("- 原文网址：[Test Example](https://www.freecodecamp.org/news/)").catch((err) => {
         expect(err).toBe(Err_DontGetTrueRoute);
       });
     });
 
-    test("3-2-8. Without '- 原文网址：'", ()=>{
+    test("3-2-8. Without '- 原文网址：'", () => {
       return getRouteAddr("[Test Example](https://www.freecodecamp.org/news/testexample/)").catch((err) => {
         expect(err).toBe(Err_DontGetTrueRoute);
       });
     });
 
-    test("3-2-8. With '\\n'", ()=>{
+    test("3-2-8. With '\\n'", () => {
       return getRouteAddr("- 原文网址：[Test\nExample](https://www.freecodecamp.org/news/testexample/)").catch((err) => {
         expect(err).toBe(Err_DontGetTrueRoute);
       });
     });
 
-    test("3-2-8. With '\\f'", ()=>{
+    test("3-2-8. With '\\f'", () => {
       return getRouteAddr("- 原文网址：[Test\fExample](https://www.freecodecamp.org/news/testexample/)").catch((err) => {
         expect(err).toBe(Err_DontGetTrueRoute);
       });
     });
 
-    test("3-2-8. With '\\r'", ()=>{
+    test("3-2-8. With '\\r'", () => {
       return getRouteAddr("- 原文网址：[Test\rExample](https://www.freecodecamp.org/news/testexample/)").catch((err) => {
         expect(err).toBe(Err_DontGetTrueRoute);
       });
     });
 
-    test("3-2-8. With '\\t'", ()=>{
+    test("3-2-8. With '\\t'", () => {
       return getRouteAddr("- 原文网址：[Test\tExample](https://www.freecodecamp.org/news/testexample/)").catch((err) => {
         expect(err).toBe(Err_DontGetTrueRoute);
       });
@@ -161,7 +167,7 @@ describe("4. test haveRouterAddrmd(Check if the ${routerAddr}.md exists.If it ex
 });
 
 describe("5. test HTMLtoMarkdown(Write content to file).", () => {
-  describe("5-1. Normal case ",() => {
+  describe("5-1. Normal case ", () => {
     test("5-1-1. <img src='/postFullImageURL'>", () => {
       options.path = "/news/testexample/";
       return HTMLtoMarkdown(`<!DOCTYPE html>
@@ -225,7 +231,7 @@ describe("5. test HTMLtoMarkdown(Write content to file).", () => {
       </body>
     </html>`).then((data) => {
         expect(data).toBe(
-`> -  原文地址：[testexample post-full-title](https://www.freecodecamp.org/news/testexample/)
+          `> -  原文地址：[testexample post-full-title](https://www.freecodecamp.org/news/testexample/)
 > -  原文作者：[authorName](https://www.freecodecamp.org/news/author/authorURL/)
 > -  译者：
 > -  校对者：
@@ -301,7 +307,7 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
       </body>
     </html>`).then((data) => {
         expect(data).toBe(
-`> -  原文地址：[testexample post-full-title](https://www.freecodecamp.org/news/testexample/)
+          `> -  原文地址：[testexample post-full-title](https://www.freecodecamp.org/news/testexample/)
 > -  原文作者：[authorName](https://www.freecodecamp.org/news/author/authorURL/)
 > -  译者：
 > -  校对者：
@@ -351,7 +357,7 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
       </body>
     </html>`).then((data) => {
         expect(data).toBe(
-`> -  原文地址：[testexample post-full-title](https://www.freecodecamp.org/news/testexample/)
+          `> -  原文地址：[testexample post-full-title](https://www.freecodecamp.org/news/testexample/)
 > -  原文作者：[authorName](https://www.freecodecamp.org/news/author/authorURL/)
 > -  译者：
 > -  校对者：
@@ -946,4 +952,19 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
   //     expect(err).toBe(Err_SameNameFile);
   //   });
   // });
+});
+
+describe("6. test file is new", () => {
+  const DIR_BASE = path.resolve() + '/src/__test__/';
+  const FILE_ID = crypto.createHash('md5').update(Date.now().toString()).digest("hex");
+
+  test("6-1-1. It is not new file", () => {
+    fs.writeFileSync(DIR_BASE + FILE_ID, 'Hey there!');
+    return expect(isNewFile(DIR_BASE + FILE_ID)).toBe(false)
+  })
+
+  test("6-1-2. It is  new file", () => {
+    fs.unlinkSync(DIR_BASE + FILE_ID);
+    return expect(isNewFile(DIR_BASE + FILE_ID)).toBe(true);
+  })
 });

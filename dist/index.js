@@ -49331,7 +49331,7 @@ const {
     const articleText = await HTMLtoMarkdown(htmlString);
       
     if (!await isNewFile(input.markDownFilePath + articleFileName)) {
-      console.log('file has existed'); //this console no run, catch error before it, only for code clear.
+      throw new Error('file has exist');
     } 
 
     await fs.writeFile(
@@ -49436,11 +49436,10 @@ exports.inputExistCheck = (input) =>
 
 
 //fileExitCheck in the path.
-exports.isNewFile = (path) =>
-  new Promise((resolve, reject) => {
-    !fs.existsSync(path)? resolve(true) : reject(false);
-  });
-    
+exports.isNewFile = (path) => {
+  return !fs.existsSync(path)
+};
+
 // Check the input parameters, and get the routing address of the article.
 // - 原文网址：[原文标题](https://www.freecodecamp.org/news/xxxxxxx/
 exports.getRouteAddr = (URL) =>
@@ -49463,7 +49462,7 @@ exports.haveRouterAddrmd = (routerAddr) =>
         err
           ? resolve(routerAddr + '.md')
           : // There is one file with the same name.
-            reject(Err_SameNameFile)
+          reject(Err_SameNameFile)
     )
   );
 

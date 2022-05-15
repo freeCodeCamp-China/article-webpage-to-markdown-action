@@ -33,7 +33,7 @@ const {
     const articleText = await HTMLtoMarkdown(htmlString);
       
     if (!await isNewFile(input.markDownFilePath + articleFileName)) {
-      console.log('file has existed'); //this console no run, catch error before it, only for code clear.
+      throw new Error('file has exist');
     } 
 
     await fs.writeFile(

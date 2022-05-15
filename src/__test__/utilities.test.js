@@ -17,7 +17,8 @@ const {
 
 const path = require('path');
 const crypto = require('crypto');
-const fs = require('fs');
+const fs   = require('fs');
+
 
 // Take an object of key/value pairs and convert it to input environment variables
 function buildInput(inputs) {
@@ -955,23 +956,15 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
 
 describe("6. test file is new", () => {
   const DIR_BASE = path.resolve() + '/src/__test__/';
-  const FILE_ID = crypto.createHash('md5').update('some_string').digest("hex");
-  fs.writeFileSync(DIR_BASE + FILE_ID, 'Hey there!');
+  const FILE_ID = crypto.createHash('md5').update(Date.now().toString()).digest("hex");
+
   test("6-1-1. It is not new file", () => {
-
-
-    console.log("6-1-1 1234", DIR_BASE, FILE_ID);
-    return isNewFile(DIR_BASE + FILE_ID).catch((err) => {
-      expect(err).toBe(false)
-    })
+    fs.writeFileSync(DIR_BASE + FILE_ID, 'Hey there!');
+    return expect(isNewFile(DIR_BASE + FILE_ID)).toBe(false)
   })
 
-  fs.unlinkSync(DIR_BASE + FILE_ID);
   test("6-1-2. It is  new file", () => {
-    return isNewFile(DIR_BASE + FILE_ID).catch((err) => {
-      expect(err).toBe(true)
-    })
+    fs.unlinkSync(DIR_BASE + FILE_ID);
+    return expect(isNewFile(DIR_BASE + FILE_ID)).toBe(true);
   })
-
-
 });

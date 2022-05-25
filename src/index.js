@@ -9,6 +9,7 @@ const {
   gatherInputs,
   inputExistCheck,
   isNewFile,
+  addComment,
   getRouteAddr,
   haveRouterAddrmd,
   HTMLtoMarkdown
@@ -45,6 +46,7 @@ const {
     );
   } catch (error) {
       console.log('ERR:', error);
+      addComment(error);
       process.exitCode = 1;
   }
 })();

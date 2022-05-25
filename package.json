@@ -21,6 +21,7 @@
   "homepage": "https://github.com/freeCodeCamp-China/article-webpage-to-markdown-action#readme",
   "dependencies": {
     "@actions/core": "^1.2.7",
+    "@actions/github": "^5.0.3",
     "@octokit/rest": "^18.12.0",
     "cheerio": "^1.0.0-rc.5",
     "node-fetch": "^2.6.1",

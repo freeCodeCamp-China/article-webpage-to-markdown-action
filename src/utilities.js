@@ -35,6 +35,7 @@ exports.gatherInputs = function gatherInputs() {
   return {
     newsLink: core.getInput("newsLink") || undefined,
     markDownFilePath: core.getInput("markDownFilePath") || "./",
+    githubToken: core.getInput("githubToken") || undefined,
   }
 }
 

@@ -7,27 +7,14 @@ module.exports =
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.issue = exports.issueCommand = void 0;
 const os = __importStar(__nccwpck_require__(2087));
 const utils_1 = __nccwpck_require__(5278);
 /**
@@ -106,25 +93,6 @@ function escapeProperty(s) {
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -134,14 +102,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getIDToken = exports.getState = exports.saveState = exports.group = exports.endGroup = exports.startGroup = exports.info = exports.notice = exports.warning = exports.error = exports.debug = exports.isDebug = exports.setFailed = exports.setCommandEcho = exports.setOutput = exports.getBooleanInput = exports.getMultilineInput = exports.getInput = exports.addPath = exports.setSecret = exports.exportVariable = exports.ExitCode = void 0;
 const command_1 = __nccwpck_require__(7351);
 const file_command_1 = __nccwpck_require__(717);
 const utils_1 = __nccwpck_require__(5278);
 const os = __importStar(__nccwpck_require__(2087));
 const path = __importStar(__nccwpck_require__(5622));
-const oidc_utils_1 = __nccwpck_require__(8041);
 /**
  * The code to exit an action
  */
@@ -203,9 +176,7 @@ function addPath(inputPath) {
 }
 exports.addPath = addPath;
 /**
- * Gets the value of an input.
- * Unless trimWhitespace is set to false in InputOptions, the value is also trimmed.
- * Returns an empty string if the value is not defined.
+ * Gets the value of an input.  The value is also trimmed.
  *
  * @param     name     name of the input to get
  * @param     options  optional. See InputOptions.
@@ -216,49 +187,9 @@ function getInput(name, options) {
     if (options && options.required && !val) {
         throw new Error(`Input required and not supplied: ${name}`);
     }
-    if (options && options.trimWhitespace === false) {
-        return val;
-    }
     return val.trim();
 }
 exports.getInput = getInput;
-/**
- * Gets the values of an multiline input.  Each value is also trimmed.
- *
- * @param     name     name of the input to get
- * @param     options  optional. See InputOptions.
- * @returns   string[]
- *
- */
-function getMultilineInput(name, options) {
-    const inputs = getInput(name, options)
-        .split('\n')
-        .filter(x => x !== '');
-    return inputs;
-}
-exports.getMultilineInput = getMultilineInput;
-/**
- * Gets the input value of the boolean type in the YAML 1.2 "core schema" specification.
- * Support boolean input list: `true | True | TRUE | false | False | FALSE` .
- * The return value is also in boolean type.
- * ref: https://yaml.org/spec/1.2/spec.html#id2804923
- *
- * @param     name     name of the input to get
- * @param     options  optional. See InputOptions.
- * @returns   boolean
- */
-function getBooleanInput(name, options) {
-    const trueValue = ['true', 'True', 'TRUE'];
-    const falseValue = ['false', 'False', 'FALSE'];
-    const val = getInput(name, options);
-    if (trueValue.includes(val))
-        return true;
-    if (falseValue.includes(val))
-        return false;
-    throw new TypeError(`Input does not meet YAML 1.2 "Core Schema" specification: ${name}\n` +
-        `Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
-}
-exports.getBooleanInput = getBooleanInput;
 /**
  * Sets the value of an output.
  *
@@ -314,30 +245,19 @@ exports.debug = debug;
 /**
  * Adds an error issue
  * @param message error issue message. Errors will be converted to string via toString()
- * @param properties optional properties to add to the annotation.
  */
-function error(message, properties = {}) {
-    command_1.issueCommand('error', utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
+function error(message) {
+    command_1.issue('error', message instanceof Error ? message.toString() : message);
 }
 exports.error = error;
 /**
- * Adds a warning issue
+ * Adds an warning issue
  * @param message warning issue message. Errors will be converted to string via toString()
- * @param properties optional properties to add to the annotation.
  */
-function warning(message, properties = {}) {
-    command_1.issueCommand('warning', utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
+function warning(message) {
+    command_1.issue('warning', message instanceof Error ? message.toString() : message);
 }
 exports.warning = warning;
-/**
- * Adds a notice issue
- * @param message notice issue message. Errors will be converted to string via toString()
- * @param properties optional properties to add to the annotation.
- */
-function notice(message, properties = {}) {
-    command_1.issueCommand('notice', utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
-}
-exports.notice = notice;
 /**
  * Writes info to log with console.log.
  * @param message info message
@@ -410,22 +330,6 @@ function getState(name) {
     return process.env[`STATE_${name}`] || '';
 }
 exports.getState = getState;
-function getIDToken(aud) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return yield oidc_utils_1.OidcClient.getIDToken(aud);
-    });
-}
-exports.getIDToken = getIDToken;
-/**
- * Summary exports
- */
-var summary_1 = __nccwpck_require__(1327);
-Object.defineProperty(exports, "summary", ({ enumerable: true, get: function () { return summary_1.summary; } }));
-/**
- * @deprecated use core.summary
- */
-var summary_2 = __nccwpck_require__(1327);
-Object.defineProperty(exports, "markdownSummary", ({ enumerable: true, get: function () { return summary_2.markdownSummary; } }));
 //# sourceMappingURL=core.js.map
 
 /***/ }),
@@ -436,27 +340,14 @@ Object.defineProperty(exports, "markdownSummary", ({ enumerable: true, get: func
 "use strict";
 
 // For internal use, subject to change.
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.issueCommand = void 0;
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const fs = __importStar(__nccwpck_require__(5747));
@@ -479,380 +370,6 @@ exports.issueCommand = issueCommand;
 
 /***/ }),
 
-/***/ 8041:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.OidcClient = void 0;
-const http_client_1 = __nccwpck_require__(9925);
-const auth_1 = __nccwpck_require__(3702);
-const core_1 = __nccwpck_require__(2186);
-class OidcClient {
-    static createHttpClient(allowRetry = true, maxRetry = 10) {
-        const requestOptions = {
-            allowRetries: allowRetry,
-            maxRetries: maxRetry
-        };
-        return new http_client_1.HttpClient('actions/oidc-client', [new auth_1.BearerCredentialHandler(OidcClient.getRequestToken())], requestOptions);
-    }
-    static getRequestToken() {
-        const token = process.env['ACTIONS_ID_TOKEN_REQUEST_TOKEN'];
-        if (!token) {
-            throw new Error('Unable to get ACTIONS_ID_TOKEN_REQUEST_TOKEN env variable');
-        }
-        return token;
-    }
-    static getIDTokenUrl() {
-        const runtimeUrl = process.env['ACTIONS_ID_TOKEN_REQUEST_URL'];
-        if (!runtimeUrl) {
-            throw new Error('Unable to get ACTIONS_ID_TOKEN_REQUEST_URL env variable');
-        }
-        return runtimeUrl;
-    }
-    static getCall(id_token_url) {
-        var _a;
-        return __awaiter(this, void 0, void 0, function* () {
-            const httpclient = OidcClient.createHttpClient();
-            const res = yield httpclient
-                .getJson(id_token_url)
-                .catch(error => {
-                throw new Error(`Failed to get ID Token. \n 
-        Error Code : ${error.statusCode}\n 
-        Error Message: ${error.result.message}`);
-            });
-            const id_token = (_a = res.result) === null || _a === void 0 ? void 0 : _a.value;
-            if (!id_token) {
-                throw new Error('Response json body do not have ID Token field');
-            }
-            return id_token;
-        });
-    }
-    static getIDToken(audience) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                // New ID Token is requested from action service
-                let id_token_url = OidcClient.getIDTokenUrl();
-                if (audience) {
-                    const encodedAudience = encodeURIComponent(audience);
-                    id_token_url = `${id_token_url}&audience=${encodedAudience}`;
-                }
-                core_1.debug(`ID token url is ${id_token_url}`);
-                const id_token = yield OidcClient.getCall(id_token_url);
-                core_1.setSecret(id_token);
-                return id_token;
-            }
-            catch (error) {
-                throw new Error(`Error message: ${error.message}`);
-            }
-        });
-    }
-}
-exports.OidcClient = OidcClient;
-//# sourceMappingURL=oidc-utils.js.map
-
-/***/ }),
-
-/***/ 1327:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.summary = exports.markdownSummary = exports.SUMMARY_DOCS_URL = exports.SUMMARY_ENV_VAR = void 0;
-const os_1 = __nccwpck_require__(2087);
-const fs_1 = __nccwpck_require__(5747);
-const { access, appendFile, writeFile } = fs_1.promises;
-exports.SUMMARY_ENV_VAR = 'GITHUB_STEP_SUMMARY';
-exports.SUMMARY_DOCS_URL = 'https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary';
-class Summary {
-    constructor() {
-        this._buffer = '';
-    }
-    /**
-     * Finds the summary file path from the environment, rejects if env var is not found or file does not exist
-     * Also checks r/w permissions.
-     *
-     * @returns step summary file path
-     */
-    filePath() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this._filePath) {
-                return this._filePath;
-            }
-            const pathFromEnv = process.env[exports.SUMMARY_ENV_VAR];
-            if (!pathFromEnv) {
-                throw new Error(`Unable to find environment variable for $${exports.SUMMARY_ENV_VAR}. Check if your runtime environment supports job summaries.`);
-            }
-            try {
-                yield access(pathFromEnv, fs_1.constants.R_OK | fs_1.constants.W_OK);
-            }
-            catch (_a) {
-                throw new Error(`Unable to access summary file: '${pathFromEnv}'. Check if the file has correct read/write permissions.`);
-            }
-            this._filePath = pathFromEnv;
-            return this._filePath;
-        });
-    }
-    /**
-     * Wraps content in an HTML tag, adding any HTML attributes
-     *
-     * @param {string} tag HTML tag to wrap
-     * @param {string | null} content content within the tag
-     * @param {[attribute: string]: string} attrs key-value list of HTML attributes to add
-     *
-     * @returns {string} content wrapped in HTML element
-     */
-    wrap(tag, content, attrs = {}) {
-        const htmlAttrs = Object.entries(attrs)
-            .map(([key, value]) => ` ${key}="${value}"`)
-            .join('');
-        if (!content) {
-            return `<${tag}${htmlAttrs}>`;
-        }
-        return `<${tag}${htmlAttrs}>${content}</${tag}>`;
-    }
-    /**
-     * Writes text in the buffer to the summary buffer file and empties buffer. Will append by default.
-     *
-     * @param {SummaryWriteOptions} [options] (optional) options for write operation
-     *
-     * @returns {Promise<Summary>} summary instance
-     */
-    write(options) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const overwrite = !!(options === null || options === void 0 ? void 0 : options.overwrite);
-            const filePath = yield this.filePath();
-            const writeFunc = overwrite ? writeFile : appendFile;
-            yield writeFunc(filePath, this._buffer, { encoding: 'utf8' });
-            return this.emptyBuffer();
-        });
-    }
-    /**
-     * Clears the summary buffer and wipes the summary file
-     *
-     * @returns {Summary} summary instance
-     */
-    clear() {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.emptyBuffer().write({ overwrite: true });
-        });
-    }
-    /**
-     * Returns the current summary buffer as a string
-     *
-     * @returns {string} string of summary buffer
-     */
-    stringify() {
-        return this._buffer;
-    }
-    /**
-     * If the summary buffer is empty
-     *
-     * @returns {boolen} true if the buffer is empty
-     */
-    isEmptyBuffer() {
-        return this._buffer.length === 0;
-    }
-    /**
-     * Resets the summary buffer without writing to summary file
-     *
-     * @returns {Summary} summary instance
-     */
-    emptyBuffer() {
-        this._buffer = '';
-        return this;
-    }
-    /**
-     * Adds raw text to the summary buffer
-     *
-     * @param {string} text content to add
-     * @param {boolean} [addEOL=false] (optional) append an EOL to the raw text (default: false)
-     *
-     * @returns {Summary} summary instance
-     */
-    addRaw(text, addEOL = false) {
-        this._buffer += text;
-        return addEOL ? this.addEOL() : this;
-    }
-    /**
-     * Adds the operating system-specific end-of-line marker to the buffer
-     *
-     * @returns {Summary} summary instance
-     */
-    addEOL() {
-        return this.addRaw(os_1.EOL);
-    }
-    /**
-     * Adds an HTML codeblock to the summary buffer
-     *
-     * @param {string} code content to render within fenced code block
-     * @param {string} lang (optional) language to syntax highlight code
-     *
-     * @returns {Summary} summary instance
-     */
-    addCodeBlock(code, lang) {
-        const attrs = Object.assign({}, (lang && { lang }));
-        const element = this.wrap('pre', this.wrap('code', code), attrs);
-        return this.addRaw(element).addEOL();
-    }
-    /**
-     * Adds an HTML list to the summary buffer
-     *
-     * @param {string[]} items list of items to render
-     * @param {boolean} [ordered=false] (optional) if the rendered list should be ordered or not (default: false)
-     *
-     * @returns {Summary} summary instance
-     */
-    addList(items, ordered = false) {
-        const tag = ordered ? 'ol' : 'ul';
-        const listItems = items.map(item => this.wrap('li', item)).join('');
-        const element = this.wrap(tag, listItems);
-        return this.addRaw(element).addEOL();
-    }
-    /**
-     * Adds an HTML table to the summary buffer
-     *
-     * @param {SummaryTableCell[]} rows table rows
-     *
-     * @returns {Summary} summary instance
-     */
-    addTable(rows) {
-        const tableBody = rows
-            .map(row => {
-            const cells = row
-                .map(cell => {
-                if (typeof cell === 'string') {
-                    return this.wrap('td', cell);
-                }
-                const { header, data, colspan, rowspan } = cell;
-                const tag = header ? 'th' : 'td';
-                const attrs = Object.assign(Object.assign({}, (colspan && { colspan })), (rowspan && { rowspan }));
-                return this.wrap(tag, data, attrs);
-            })
-                .join('');
-            return this.wrap('tr', cells);
-        })
-            .join('');
-        const element = this.wrap('table', tableBody);
-        return this.addRaw(element).addEOL();
-    }
-    /**
-     * Adds a collapsable HTML details element to the summary buffer
-     *
-     * @param {string} label text for the closed state
-     * @param {string} content collapsable content
-     *
-     * @returns {Summary} summary instance
-     */
-    addDetails(label, content) {
-        const element = this.wrap('details', this.wrap('summary', label) + content);
-        return this.addRaw(element).addEOL();
-    }
-    /**
-     * Adds an HTML image tag to the summary buffer
-     *
-     * @param {string} src path to the image you to embed
-     * @param {string} alt text description of the image
-     * @param {SummaryImageOptions} options (optional) addition image attributes
-     *
-     * @returns {Summary} summary instance
-     */
-    addImage(src, alt, options) {
-        const { width, height } = options || {};
-        const attrs = Object.assign(Object.assign({}, (width && { width })), (height && { height }));
-        const element = this.wrap('img', null, Object.assign({ src, alt }, attrs));
-        return this.addRaw(element).addEOL();
-    }
-    /**
-     * Adds an HTML section heading element
-     *
-     * @param {string} text heading text
-     * @param {number | string} [level=1] (optional) the heading level, default: 1
-     *
-     * @returns {Summary} summary instance
-     */
-    addHeading(text, level) {
-        const tag = `h${level}`;
-        const allowedTag = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(tag)
-            ? tag
-            : 'h1';
-        const element = this.wrap(allowedTag, text);
-        return this.addRaw(element).addEOL();
-    }
-    /**
-     * Adds an HTML thematic break (<hr>) to the summary buffer
-     *
-     * @returns {Summary} summary instance
-     */
-    addSeparator() {
-        const element = this.wrap('hr', null);
-        return this.addRaw(element).addEOL();
-    }
-    /**
-     * Adds an HTML line break (<br>) to the summary buffer
-     *
-     * @returns {Summary} summary instance
-     */
-    addBreak() {
-        const element = this.wrap('br', null);
-        return this.addRaw(element).addEOL();
-    }
-    /**
-     * Adds an HTML blockquote to the summary buffer
-     *
-     * @param {string} text quote text
-     * @param {string} cite (optional) citation url
-     *
-     * @returns {Summary} summary instance
-     */
-    addQuote(text, cite) {
-        const attrs = Object.assign({}, (cite && { cite }));
-        const element = this.wrap('blockquote', text, attrs);
-        return this.addRaw(element).addEOL();
-    }
-    /**
-     * Adds an HTML anchor tag to the summary buffer
-     *
-     * @param {string} text link text/content
-     * @param {string} href hyperlink
-     *
-     * @returns {Summary} summary instance
-     */
-    addLink(text, href) {
-        const element = this.wrap('a', text, { href });
-        return this.addRaw(element).addEOL();
-    }
-}
-const _summary = new Summary();
-/**
- * @deprecated use `core.summary`
- */
-exports.markdownSummary = _summary;
-exports.summary = _summary;
-//# sourceMappingURL=summary.js.map
-
-/***/ }),
-
 /***/ 5278:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -861,7 +378,6 @@ exports.summary = _summary;
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.toCommandProperties = exports.toCommandValue = void 0;
 /**
  * Sanitizes an input into a string so it can be passed into issueCommand safely
  * @param input input to sanitize into a string
@@ -876,703 +392,7 @@ function toCommandValue(input) {
     return JSON.stringify(input);
 }
 exports.toCommandValue = toCommandValue;
-/**
- *
- * @param annotationProperties
- * @returns The command properties to send with the actual annotation command
- * See IssueCommandProperties: https://github.com/actions/runner/blob/main/src/Runner.Worker/ActionCommandManager.cs#L646
- */
-function toCommandProperties(annotationProperties) {
-    if (!Object.keys(annotationProperties).length) {
-        return {};
-    }
-    return {
-        title: annotationProperties.title,
-        file: annotationProperties.file,
-        line: annotationProperties.startLine,
-        endLine: annotationProperties.endLine,
-        col: annotationProperties.startColumn,
-        endColumn: annotationProperties.endColumn
-    };
-}
-exports.toCommandProperties = toCommandProperties;
 //# sourceMappingURL=utils.js.map
-
-/***/ }),
-
-/***/ 3702:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-class BasicCredentialHandler {
-    constructor(username, password) {
-        this.username = username;
-        this.password = password;
-    }
-    prepareRequest(options) {
-        options.headers['Authorization'] =
-            'Basic ' +
-                Buffer.from(this.username + ':' + this.password).toString('base64');
-    }
-    // This handler cannot handle 401
-    canHandleAuthentication(response) {
-        return false;
-    }
-    handleAuthentication(httpClient, requestInfo, objs) {
-        return null;
-    }
-}
-exports.BasicCredentialHandler = BasicCredentialHandler;
-class BearerCredentialHandler {
-    constructor(token) {
-        this.token = token;
-    }
-    // currently implements pre-authorization
-    // TODO: support preAuth = false where it hooks on 401
-    prepareRequest(options) {
-        options.headers['Authorization'] = 'Bearer ' + this.token;
-    }
-    // This handler cannot handle 401
-    canHandleAuthentication(response) {
-        return false;
-    }
-    handleAuthentication(httpClient, requestInfo, objs) {
-        return null;
-    }
-}
-exports.BearerCredentialHandler = BearerCredentialHandler;
-class PersonalAccessTokenCredentialHandler {
-    constructor(token) {
-        this.token = token;
-    }
-    // currently implements pre-authorization
-    // TODO: support preAuth = false where it hooks on 401
-    prepareRequest(options) {
-        options.headers['Authorization'] =
-            'Basic ' + Buffer.from('PAT:' + this.token).toString('base64');
-    }
-    // This handler cannot handle 401
-    canHandleAuthentication(response) {
-        return false;
-    }
-    handleAuthentication(httpClient, requestInfo, objs) {
-        return null;
-    }
-}
-exports.PersonalAccessTokenCredentialHandler = PersonalAccessTokenCredentialHandler;
-
-
-/***/ }),
-
-/***/ 9925:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const http = __nccwpck_require__(8605);
-const https = __nccwpck_require__(7211);
-const pm = __nccwpck_require__(6443);
-let tunnel;
-var HttpCodes;
-(function (HttpCodes) {
-    HttpCodes[HttpCodes["OK"] = 200] = "OK";
-    HttpCodes[HttpCodes["MultipleChoices"] = 300] = "MultipleChoices";
-    HttpCodes[HttpCodes["MovedPermanently"] = 301] = "MovedPermanently";
-    HttpCodes[HttpCodes["ResourceMoved"] = 302] = "ResourceMoved";
-    HttpCodes[HttpCodes["SeeOther"] = 303] = "SeeOther";
-    HttpCodes[HttpCodes["NotModified"] = 304] = "NotModified";
-    HttpCodes[HttpCodes["UseProxy"] = 305] = "UseProxy";
-    HttpCodes[HttpCodes["SwitchProxy"] = 306] = "SwitchProxy";
-    HttpCodes[HttpCodes["TemporaryRedirect"] = 307] = "TemporaryRedirect";
-    HttpCodes[HttpCodes["PermanentRedirect"] = 308] = "PermanentRedirect";
-    HttpCodes[HttpCodes["BadRequest"] = 400] = "BadRequest";
-    HttpCodes[HttpCodes["Unauthorized"] = 401] = "Unauthorized";
-    HttpCodes[HttpCodes["PaymentRequired"] = 402] = "PaymentRequired";
-    HttpCodes[HttpCodes["Forbidden"] = 403] = "Forbidden";
-    HttpCodes[HttpCodes["NotFound"] = 404] = "NotFound";
-    HttpCodes[HttpCodes["MethodNotAllowed"] = 405] = "MethodNotAllowed";
-    HttpCodes[HttpCodes["NotAcceptable"] = 406] = "NotAcceptable";
-    HttpCodes[HttpCodes["ProxyAuthenticationRequired"] = 407] = "ProxyAuthenticationRequired";
-    HttpCodes[HttpCodes["RequestTimeout"] = 408] = "RequestTimeout";
-    HttpCodes[HttpCodes["Conflict"] = 409] = "Conflict";
-    HttpCodes[HttpCodes["Gone"] = 410] = "Gone";
-    HttpCodes[HttpCodes["TooManyRequests"] = 429] = "TooManyRequests";
-    HttpCodes[HttpCodes["InternalServerError"] = 500] = "InternalServerError";
-    HttpCodes[HttpCodes["NotImplemented"] = 501] = "NotImplemented";
-    HttpCodes[HttpCodes["BadGateway"] = 502] = "BadGateway";
-    HttpCodes[HttpCodes["ServiceUnavailable"] = 503] = "ServiceUnavailable";
-    HttpCodes[HttpCodes["GatewayTimeout"] = 504] = "GatewayTimeout";
-})(HttpCodes = exports.HttpCodes || (exports.HttpCodes = {}));
-var Headers;
-(function (Headers) {
-    Headers["Accept"] = "accept";
-    Headers["ContentType"] = "content-type";
-})(Headers = exports.Headers || (exports.Headers = {}));
-var MediaTypes;
-(function (MediaTypes) {
-    MediaTypes["ApplicationJson"] = "application/json";
-})(MediaTypes = exports.MediaTypes || (exports.MediaTypes = {}));
-/**
- * Returns the proxy URL, depending upon the supplied url and proxy environment variables.
- * @param serverUrl  The server URL where the request will be sent. For example, https://api.github.com
- */
-function getProxyUrl(serverUrl) {
-    let proxyUrl = pm.getProxyUrl(new URL(serverUrl));
-    return proxyUrl ? proxyUrl.href : '';
-}
-exports.getProxyUrl = getProxyUrl;
-const HttpRedirectCodes = [
-    HttpCodes.MovedPermanently,
-    HttpCodes.ResourceMoved,
-    HttpCodes.SeeOther,
-    HttpCodes.TemporaryRedirect,
-    HttpCodes.PermanentRedirect
-];
-const HttpResponseRetryCodes = [
-    HttpCodes.BadGateway,
-    HttpCodes.ServiceUnavailable,
-    HttpCodes.GatewayTimeout
-];
-const RetryableHttpVerbs = ['OPTIONS', 'GET', 'DELETE', 'HEAD'];
-const ExponentialBackoffCeiling = 10;
-const ExponentialBackoffTimeSlice = 5;
-class HttpClientError extends Error {
-    constructor(message, statusCode) {
-        super(message);
-        this.name = 'HttpClientError';
-        this.statusCode = statusCode;
-        Object.setPrototypeOf(this, HttpClientError.prototype);
-    }
-}
-exports.HttpClientError = HttpClientError;
-class HttpClientResponse {
-    constructor(message) {
-        this.message = message;
-    }
-    readBody() {
-        return new Promise(async (resolve, reject) => {
-            let output = Buffer.alloc(0);
-            this.message.on('data', (chunk) => {
-                output = Buffer.concat([output, chunk]);
-            });
-            this.message.on('end', () => {
-                resolve(output.toString());
-            });
-        });
-    }
-}
-exports.HttpClientResponse = HttpClientResponse;
-function isHttps(requestUrl) {
-    let parsedUrl = new URL(requestUrl);
-    return parsedUrl.protocol === 'https:';
-}
-exports.isHttps = isHttps;
-class HttpClient {
-    constructor(userAgent, handlers, requestOptions) {
-        this._ignoreSslError = false;
-        this._allowRedirects = true;
-        this._allowRedirectDowngrade = false;
-        this._maxRedirects = 50;
-        this._allowRetries = false;
-        this._maxRetries = 1;
-        this._keepAlive = false;
-        this._disposed = false;
-        this.userAgent = userAgent;
-        this.handlers = handlers || [];
-        this.requestOptions = requestOptions;
-        if (requestOptions) {
-            if (requestOptions.ignoreSslError != null) {
-                this._ignoreSslError = requestOptions.ignoreSslError;
-            }
-            this._socketTimeout = requestOptions.socketTimeout;
-            if (requestOptions.allowRedirects != null) {
-                this._allowRedirects = requestOptions.allowRedirects;
-            }
-            if (requestOptions.allowRedirectDowngrade != null) {
-                this._allowRedirectDowngrade = requestOptions.allowRedirectDowngrade;
-            }
-            if (requestOptions.maxRedirects != null) {
-                this._maxRedirects = Math.max(requestOptions.maxRedirects, 0);
-            }
-            if (requestOptions.keepAlive != null) {
-                this._keepAlive = requestOptions.keepAlive;
-            }
-            if (requestOptions.allowRetries != null) {
-                this._allowRetries = requestOptions.allowRetries;
-            }
-            if (requestOptions.maxRetries != null) {
-                this._maxRetries = requestOptions.maxRetries;
-            }
-        }
-    }
-    options(requestUrl, additionalHeaders) {
-        return this.request('OPTIONS', requestUrl, null, additionalHeaders || {});
-    }
-    get(requestUrl, additionalHeaders) {
-        return this.request('GET', requestUrl, null, additionalHeaders || {});
-    }
-    del(requestUrl, additionalHeaders) {
-        return this.request('DELETE', requestUrl, null, additionalHeaders || {});
-    }
-    post(requestUrl, data, additionalHeaders) {
-        return this.request('POST', requestUrl, data, additionalHeaders || {});
-    }
-    patch(requestUrl, data, additionalHeaders) {
-        return this.request('PATCH', requestUrl, data, additionalHeaders || {});
-    }
-    put(requestUrl, data, additionalHeaders) {
-        return this.request('PUT', requestUrl, data, additionalHeaders || {});
-    }
-    head(requestUrl, additionalHeaders) {
-        return this.request('HEAD', requestUrl, null, additionalHeaders || {});
-    }
-    sendStream(verb, requestUrl, stream, additionalHeaders) {
-        return this.request(verb, requestUrl, stream, additionalHeaders);
-    }
-    /**
-     * Gets a typed object from an endpoint
-     * Be aware that not found returns a null.  Other errors (4xx, 5xx) reject the promise
-     */
-    async getJson(requestUrl, additionalHeaders = {}) {
-        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-        let res = await this.get(requestUrl, additionalHeaders);
-        return this._processResponse(res, this.requestOptions);
-    }
-    async postJson(requestUrl, obj, additionalHeaders = {}) {
-        let data = JSON.stringify(obj, null, 2);
-        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-        additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
-        let res = await this.post(requestUrl, data, additionalHeaders);
-        return this._processResponse(res, this.requestOptions);
-    }
-    async putJson(requestUrl, obj, additionalHeaders = {}) {
-        let data = JSON.stringify(obj, null, 2);
-        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-        additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
-        let res = await this.put(requestUrl, data, additionalHeaders);
-        return this._processResponse(res, this.requestOptions);
-    }
-    async patchJson(requestUrl, obj, additionalHeaders = {}) {
-        let data = JSON.stringify(obj, null, 2);
-        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-        additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
-        let res = await this.patch(requestUrl, data, additionalHeaders);
-        return this._processResponse(res, this.requestOptions);
-    }
-    /**
-     * Makes a raw http request.
-     * All other methods such as get, post, patch, and request ultimately call this.
-     * Prefer get, del, post and patch
-     */
-    async request(verb, requestUrl, data, headers) {
-        if (this._disposed) {
-            throw new Error('Client has already been disposed.');
-        }
-        let parsedUrl = new URL(requestUrl);
-        let info = this._prepareRequest(verb, parsedUrl, headers);
-        // Only perform retries on reads since writes may not be idempotent.
-        let maxTries = this._allowRetries && RetryableHttpVerbs.indexOf(verb) != -1
-            ? this._maxRetries + 1
-            : 1;
-        let numTries = 0;
-        let response;
-        while (numTries < maxTries) {
-            response = await this.requestRaw(info, data);
-            // Check if it's an authentication challenge
-            if (response &&
-                response.message &&
-                response.message.statusCode === HttpCodes.Unauthorized) {
-                let authenticationHandler;
-                for (let i = 0; i < this.handlers.length; i++) {
-                    if (this.handlers[i].canHandleAuthentication(response)) {
-                        authenticationHandler = this.handlers[i];
-                        break;
-                    }
-                }
-                if (authenticationHandler) {
-                    return authenticationHandler.handleAuthentication(this, info, data);
-                }
-                else {
-                    // We have received an unauthorized response but have no handlers to handle it.
-                    // Let the response return to the caller.
-                    return response;
-                }
-            }
-            let redirectsRemaining = this._maxRedirects;
-            while (HttpRedirectCodes.indexOf(response.message.statusCode) != -1 &&
-                this._allowRedirects &&
-                redirectsRemaining > 0) {
-                const redirectUrl = response.message.headers['location'];
-                if (!redirectUrl) {
-                    // if there's no location to redirect to, we won't
-                    break;
-                }
-                let parsedRedirectUrl = new URL(redirectUrl);
-                if (parsedUrl.protocol == 'https:' &&
-                    parsedUrl.protocol != parsedRedirectUrl.protocol &&
-                    !this._allowRedirectDowngrade) {
-                    throw new Error('Redirect from HTTPS to HTTP protocol. This downgrade is not allowed for security reasons. If you want to allow this behavior, set the allowRedirectDowngrade option to true.');
-                }
-                // we need to finish reading the response before reassigning response
-                // which will leak the open socket.
-                await response.readBody();
-                // strip authorization header if redirected to a different hostname
-                if (parsedRedirectUrl.hostname !== parsedUrl.hostname) {
-                    for (let header in headers) {
-                        // header names are case insensitive
-                        if (header.toLowerCase() === 'authorization') {
-                            delete headers[header];
-                        }
-                    }
-                }
-                // let's make the request with the new redirectUrl
-                info = this._prepareRequest(verb, parsedRedirectUrl, headers);
-                response = await this.requestRaw(info, data);
-                redirectsRemaining--;
-            }
-            if (HttpResponseRetryCodes.indexOf(response.message.statusCode) == -1) {
-                // If not a retry code, return immediately instead of retrying
-                return response;
-            }
-            numTries += 1;
-            if (numTries < maxTries) {
-                await response.readBody();
-                await this._performExponentialBackoff(numTries);
-            }
-        }
-        return response;
-    }
-    /**
-     * Needs to be called if keepAlive is set to true in request options.
-     */
-    dispose() {
-        if (this._agent) {
-            this._agent.destroy();
-        }
-        this._disposed = true;
-    }
-    /**
-     * Raw request.
-     * @param info
-     * @param data
-     */
-    requestRaw(info, data) {
-        return new Promise((resolve, reject) => {
-            let callbackForResult = function (err, res) {
-                if (err) {
-                    reject(err);
-                }
-                resolve(res);
-            };
-            this.requestRawWithCallback(info, data, callbackForResult);
-        });
-    }
-    /**
-     * Raw request with callback.
-     * @param info
-     * @param data
-     * @param onResult
-     */
-    requestRawWithCallback(info, data, onResult) {
-        let socket;
-        if (typeof data === 'string') {
-            info.options.headers['Content-Length'] = Buffer.byteLength(data, 'utf8');
-        }
-        let callbackCalled = false;
-        let handleResult = (err, res) => {
-            if (!callbackCalled) {
-                callbackCalled = true;
-                onResult(err, res);
-            }
-        };
-        let req = info.httpModule.request(info.options, (msg) => {
-            let res = new HttpClientResponse(msg);
-            handleResult(null, res);
-        });
-        req.on('socket', sock => {
-            socket = sock;
-        });
-        // If we ever get disconnected, we want the socket to timeout eventually
-        req.setTimeout(this._socketTimeout || 3 * 60000, () => {
-            if (socket) {
-                socket.end();
-            }
-            handleResult(new Error('Request timeout: ' + info.options.path), null);
-        });
-        req.on('error', function (err) {
-            // err has statusCode property
-            // res should have headers
-            handleResult(err, null);
-        });
-        if (data && typeof data === 'string') {
-            req.write(data, 'utf8');
-        }
-        if (data && typeof data !== 'string') {
-            data.on('close', function () {
-                req.end();
-            });
-            data.pipe(req);
-        }
-        else {
-            req.end();
-        }
-    }
-    /**
-     * Gets an http agent. This function is useful when you need an http agent that handles
-     * routing through a proxy server - depending upon the url and proxy environment variables.
-     * @param serverUrl  The server URL where the request will be sent. For example, https://api.github.com
-     */
-    getAgent(serverUrl) {
-        let parsedUrl = new URL(serverUrl);
-        return this._getAgent(parsedUrl);
-    }
-    _prepareRequest(method, requestUrl, headers) {
-        const info = {};
-        info.parsedUrl = requestUrl;
-        const usingSsl = info.parsedUrl.protocol === 'https:';
-        info.httpModule = usingSsl ? https : http;
-        const defaultPort = usingSsl ? 443 : 80;
-        info.options = {};
-        info.options.host = info.parsedUrl.hostname;
-        info.options.port = info.parsedUrl.port
-            ? parseInt(info.parsedUrl.port)
-            : defaultPort;
-        info.options.path =
-            (info.parsedUrl.pathname || '') + (info.parsedUrl.search || '');
-        info.options.method = method;
-        info.options.headers = this._mergeHeaders(headers);
-        if (this.userAgent != null) {
-            info.options.headers['user-agent'] = this.userAgent;
-        }
-        info.options.agent = this._getAgent(info.parsedUrl);
-        // gives handlers an opportunity to participate
-        if (this.handlers) {
-            this.handlers.forEach(handler => {
-                handler.prepareRequest(info.options);
-            });
-        }
-        return info;
-    }
-    _mergeHeaders(headers) {
-        const lowercaseKeys = obj => Object.keys(obj).reduce((c, k) => ((c[k.toLowerCase()] = obj[k]), c), {});
-        if (this.requestOptions && this.requestOptions.headers) {
-            return Object.assign({}, lowercaseKeys(this.requestOptions.headers), lowercaseKeys(headers));
-        }
-        return lowercaseKeys(headers || {});
-    }
-    _getExistingOrDefaultHeader(additionalHeaders, header, _default) {
-        const lowercaseKeys = obj => Object.keys(obj).reduce((c, k) => ((c[k.toLowerCase()] = obj[k]), c), {});
-        let clientHeader;
-        if (this.requestOptions && this.requestOptions.headers) {
-            clientHeader = lowercaseKeys(this.requestOptions.headers)[header];
-        }
-        return additionalHeaders[header] || clientHeader || _default;
-    }
-    _getAgent(parsedUrl) {
-        let agent;
-        let proxyUrl = pm.getProxyUrl(parsedUrl);
-        let useProxy = proxyUrl && proxyUrl.hostname;
-        if (this._keepAlive && useProxy) {
-            agent = this._proxyAgent;
-        }
-        if (this._keepAlive && !useProxy) {
-            agent = this._agent;
-        }
-        // if agent is already assigned use that agent.
-        if (!!agent) {
-            return agent;
-        }
-        const usingSsl = parsedUrl.protocol === 'https:';
-        let maxSockets = 100;
-        if (!!this.requestOptions) {
-            maxSockets = this.requestOptions.maxSockets || http.globalAgent.maxSockets;
-        }
-        if (useProxy) {
-            // If using proxy, need tunnel
-            if (!tunnel) {
-                tunnel = __nccwpck_require__(4294);
-            }
-            const agentOptions = {
-                maxSockets: maxSockets,
-                keepAlive: this._keepAlive,
-                proxy: {
-                    ...((proxyUrl.username || proxyUrl.password) && {
-                        proxyAuth: `${proxyUrl.username}:${proxyUrl.password}`
-                    }),
-                    host: proxyUrl.hostname,
-                    port: proxyUrl.port
-                }
-            };
-            let tunnelAgent;
-            const overHttps = proxyUrl.protocol === 'https:';
-            if (usingSsl) {
-                tunnelAgent = overHttps ? tunnel.httpsOverHttps : tunnel.httpsOverHttp;
-            }
-            else {
-                tunnelAgent = overHttps ? tunnel.httpOverHttps : tunnel.httpOverHttp;
-            }
-            agent = tunnelAgent(agentOptions);
-            this._proxyAgent = agent;
-        }
-        // if reusing agent across request and tunneling agent isn't assigned create a new agent
-        if (this._keepAlive && !agent) {
-            const options = { keepAlive: this._keepAlive, maxSockets: maxSockets };
-            agent = usingSsl ? new https.Agent(options) : new http.Agent(options);
-            this._agent = agent;
-        }
-        // if not using private agent and tunnel agent isn't setup then use global agent
-        if (!agent) {
-            agent = usingSsl ? https.globalAgent : http.globalAgent;
-        }
-        if (usingSsl && this._ignoreSslError) {
-            // we don't want to set NODE_TLS_REJECT_UNAUTHORIZED=0 since that will affect request for entire process
-            // http.RequestOptions doesn't expose a way to modify RequestOptions.agent.options
-            // we have to cast it to any and change it directly
-            agent.options = Object.assign(agent.options || {}, {
-                rejectUnauthorized: false
-            });
-        }
-        return agent;
-    }
-    _performExponentialBackoff(retryNumber) {
-        retryNumber = Math.min(ExponentialBackoffCeiling, retryNumber);
-        const ms = ExponentialBackoffTimeSlice * Math.pow(2, retryNumber);
-        return new Promise(resolve => setTimeout(() => resolve(), ms));
-    }
-    static dateTimeDeserializer(key, value) {
-        if (typeof value === 'string') {
-            let a = new Date(value);
-            if (!isNaN(a.valueOf())) {
-                return a;
-            }
-        }
-        return value;
-    }
-    async _processResponse(res, options) {
-        return new Promise(async (resolve, reject) => {
-            const statusCode = res.message.statusCode;
-            const response = {
-                statusCode: statusCode,
-                result: null,
-                headers: {}
-            };
-            // not found leads to null obj returned
-            if (statusCode == HttpCodes.NotFound) {
-                resolve(response);
-            }
-            let obj;
-            let contents;
-            // get the result from the body
-            try {
-                contents = await res.readBody();
-                if (contents && contents.length > 0) {
-                    if (options && options.deserializeDates) {
-                        obj = JSON.parse(contents, HttpClient.dateTimeDeserializer);
-                    }
-                    else {
-                        obj = JSON.parse(contents);
-                    }
-                    response.result = obj;
-                }
-                response.headers = res.message.headers;
-            }
-            catch (err) {
-                // Invalid resource (contents not json);  leaving result obj null
-            }
-            // note that 3xx redirects are handled by the http layer.
-            if (statusCode > 299) {
-                let msg;
-                // if exception/error in body, attempt to get better error
-                if (obj && obj.message) {
-                    msg = obj.message;
-                }
-                else if (contents && contents.length > 0) {
-                    // it may be the case that the exception is in the body message as string
-                    msg = contents;
-                }
-                else {
-                    msg = 'Failed request: (' + statusCode + ')';
-                }
-                let err = new HttpClientError(msg, statusCode);
-                err.result = response.result;
-                reject(err);
-            }
-            else {
-                resolve(response);
-            }
-        });
-    }
-}
-exports.HttpClient = HttpClient;
-
-
-/***/ }),
-
-/***/ 6443:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-function getProxyUrl(reqUrl) {
-    let usingSsl = reqUrl.protocol === 'https:';
-    let proxyUrl;
-    if (checkBypass(reqUrl)) {
-        return proxyUrl;
-    }
-    let proxyVar;
-    if (usingSsl) {
-        proxyVar = process.env['https_proxy'] || process.env['HTTPS_PROXY'];
-    }
-    else {
-        proxyVar = process.env['http_proxy'] || process.env['HTTP_PROXY'];
-    }
-    if (proxyVar) {
-        proxyUrl = new URL(proxyVar);
-    }
-    return proxyUrl;
-}
-exports.getProxyUrl = getProxyUrl;
-function checkBypass(reqUrl) {
-    if (!reqUrl.hostname) {
-        return false;
-    }
-    let noProxy = process.env['no_proxy'] || process.env['NO_PROXY'] || '';
-    if (!noProxy) {
-        return false;
-    }
-    // Determine the request port
-    let reqPort;
-    if (reqUrl.port) {
-        reqPort = Number(reqUrl.port);
-    }
-    else if (reqUrl.protocol === 'http:') {
-        reqPort = 80;
-    }
-    else if (reqUrl.protocol === 'https:') {
-        reqPort = 443;
-    }
-    // Format the request hostname and hostname with port
-    let upperReqHosts = [reqUrl.hostname.toUpperCase()];
-    if (typeof reqPort === 'number') {
-        upperReqHosts.push(`${upperReqHosts[0]}:${reqPort}`);
-    }
-    // Compare request host against noproxy
-    for (let upperNoProxyItem of noProxy
-        .split(',')
-        .map(x => x.trim().toUpperCase())
-        .filter(x => x)) {
-        if (upperReqHosts.some(x => x === upperNoProxyItem)) {
-            return true;
-        }
-    }
-    return false;
-}
-exports.checkBypass = checkBypass;
-
 
 /***/ }),
 
@@ -1641,11 +461,7 @@ var __assign = (this && this.__assign) || function () {
 };
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -1662,18 +478,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.select = exports.filter = exports.some = exports.is = exports.aliases = exports.pseudos = exports.filters = void 0;
-var css_what_1 = __nccwpck_require__(284);
+var css_what_1 = __nccwpck_require__(9218);
 var css_select_1 = __nccwpck_require__(4508);
 var DomUtils = __importStar(__nccwpck_require__(1754));
 var helpers_1 = __nccwpck_require__(8513);
@@ -1685,27 +497,28 @@ Object.defineProperty(exports, "pseudos", ({ enumerable: true, get: function () 
 Object.defineProperty(exports, "aliases", ({ enumerable: true, get: function () { return css_select_2.aliases; } }));
 /** Used to indicate a scope should be filtered. Might be ignored when filtering. */
 var SCOPE_PSEUDO = {
-    type: css_what_1.SelectorType.Pseudo,
+    type: "pseudo",
     name: "scope",
     data: null,
 };
 /** Used for actually filtering for scope. */
 var CUSTOM_SCOPE_PSEUDO = __assign({}, SCOPE_PSEUDO);
-var UNIVERSAL_SELECTOR = {
-    type: css_what_1.SelectorType.Universal,
-    namespace: null,
-};
+var UNIVERSAL_SELECTOR = { type: "universal", namespace: null };
 function is(element, selector, options) {
     if (options === void 0) { options = {}; }
-    return some([element], selector, options);
+    if (typeof selector === "function")
+        return selector(element);
+    var _a = helpers_1.groupSelectors(css_what_1.parse(selector, options)), plain = _a[0], filtered = _a[1];
+    return ((plain.length > 0 && css_select_1.is(element, plain, options)) ||
+        filtered.some(function (sel) { return filterBySelector(sel, [element], options).length > 0; }));
 }
 exports.is = is;
 function some(elements, selector, options) {
     if (options === void 0) { options = {}; }
     if (typeof selector === "function")
         return elements.some(selector);
-    var _a = (0, helpers_1.groupSelectors)((0, css_what_1.parse)(selector)), plain = _a[0], filtered = _a[1];
-    return ((plain.length > 0 && elements.some((0, css_select_1._compileToken)(plain, options))) ||
+    var _a = helpers_1.groupSelectors(css_what_1.parse(selector, options)), plain = _a[0], filtered = _a[1];
+    return ((plain.length > 0 && elements.some(css_select_1._compileToken(plain, options))) ||
         filtered.some(function (sel) { return filterBySelector(sel, elements, options).length > 0; }));
 }
 exports.some = some;
@@ -1737,7 +550,7 @@ function filterByPosition(filter, elems, data, options) {
 }
 function filter(selector, elements, options) {
     if (options === void 0) { options = {}; }
-    return filterParsed((0, css_what_1.parse)(selector), elements, options);
+    return filterParsed(css_what_1.parse(selector, options), elements, options);
 }
 exports.filter = filter;
 /**
@@ -1752,7 +565,7 @@ exports.filter = filter;
 function filterParsed(selector, elements, options) {
     if (elements.length === 0)
         return [];
-    var _a = (0, helpers_1.groupSelectors)(selector), plainSelectors = _a[0], filteredSelectors = _a[1];
+    var _a = helpers_1.groupSelectors(selector), plainSelectors = _a[0], filteredSelectors = _a[1];
     var found;
     if (plainSelectors.length) {
         var filtered = filterElements(elements, plainSelectors, options);
@@ -1768,7 +581,7 @@ function filterParsed(selector, elements, options) {
     for (var i = 0; i < filteredSelectors.length && (found === null || found === void 0 ? void 0 : found.size) !== elements.length; i++) {
         var filteredSelector = filteredSelectors[i];
         var missing = found
-            ? elements.filter(function (e) { return DomUtils.isTag(e) && !found.has(e); })
+            ? elements.filter(function (e) { return !found.has(e); })
             : elements;
         if (missing.length === 0)
             break;
@@ -1790,23 +603,19 @@ function filterParsed(selector, elements, options) {
         }
     }
     return typeof found !== "undefined"
-        ? (found.size === elements.length
+        ? found.size === elements.length
             ? elements
-            : // Filter elements to preserve order
-                elements.filter(function (el) {
-                    return found.has(el);
-                }))
+            : elements.filter(function (el) { return found.has(el); })
         : [];
 }
 function filterBySelector(selector, elements, options) {
-    var _a;
     if (selector.some(css_what_1.isTraversal)) {
         /*
-         * Get root node, run selector with the scope
+         * Get one root node, run selector with the scope
          * set to all of our nodes.
          */
-        var root = (_a = options.root) !== null && _a !== void 0 ? _a : (0, helpers_1.getDocumentRoot)(elements[0]);
-        var sel = __spreadArray(__spreadArray([], selector, true), [CUSTOM_SCOPE_PSEUDO], false);
+        var root = helpers_1.getDocumentRoot(elements[0]);
+        var sel = __spreadArray(__spreadArray([], selector), [CUSTOM_SCOPE_PSEUDO]);
         return findFilterElements(root, sel, options, true, elements);
     }
     // Performance optimization: If we don't have to traverse, just filter set.
@@ -1817,7 +626,7 @@ function select(selector, root, options) {
     if (typeof selector === "function") {
         return find(root, selector);
     }
-    var _a = (0, helpers_1.groupSelectors)((0, css_what_1.parse)(selector)), plain = _a[0], filtered = _a[1];
+    var _a = helpers_1.groupSelectors(css_what_1.parse(selector, options)), plain = _a[0], filtered = _a[1];
     var results = filtered.map(function (sel) {
         return findFilterElements(root, sel, options, true);
     });
@@ -1825,22 +634,16 @@ function select(selector, root, options) {
     if (plain.length) {
         results.push(findElements(root, plain, options, Infinity));
     }
-    if (results.length === 0) {
-        return [];
-    }
     // If there was only a single selector, just return the result
     if (results.length === 1) {
         return results[0];
     }
     // Sort results, filtering for duplicates
-    return DomUtils.uniqueSort(results.reduce(function (a, b) { return __spreadArray(__spreadArray([], a, true), b, true); }));
+    return DomUtils.uniqueSort(results.reduce(function (a, b) { return __spreadArray(__spreadArray([], a), b); }));
 }
 exports.select = select;
 // Traversals that are treated differently in css-select.
-var specialTraversal = new Set([
-    css_what_1.SelectorType.Descendant,
-    css_what_1.SelectorType.Adjacent,
-]);
+var specialTraversal = new Set(["descendant", "adjacent"]);
 function includesScopePseudo(t) {
     return (t !== SCOPE_PSEUDO &&
         t.type === "pseudo" &&
@@ -1868,7 +671,7 @@ function findFilterElements(root, selector, options, queryForSelector, scopeCont
      * Set the number of elements to retrieve.
      * Eg. for :first, we only have to get a single element.
      */
-    var limit = (0, positionals_1.getLimit)(filter.name, filter.data);
+    var limit = positionals_1.getLimit(filter.name, filter.data);
     if (limit === 0)
         return [];
     var subOpts = addContextIfScope(sub, options, scopeContext);
@@ -1925,19 +728,19 @@ function findFilterElements(root, selector, options, queryForSelector, scopeCont
 function findElements(root, sel, options, limit) {
     if (limit === 0)
         return [];
-    var query = (0, css_select_1._compileToken)(sel, options, root);
+    var query = css_select_1._compileToken(sel, options, root);
     return find(root, query, limit);
 }
 function find(root, query, limit) {
     if (limit === void 0) { limit = Infinity; }
-    var elems = (0, css_select_1.prepareContext)(root, DomUtils, query.shouldTestNextSiblings);
+    var elems = css_select_1.prepareContext(root, DomUtils, query.shouldTestNextSiblings);
     return DomUtils.find(function (node) { return DomUtils.isTag(node) && query(node); }, elems, true, limit);
 }
 function filterElements(elements, sel, options) {
     var els = (Array.isArray(elements) ? elements : [elements]).filter(DomUtils.isTag);
     if (els.length === 0)
         return els;
-    var query = (0, css_select_1._compileToken)(sel, options);
+    var query = css_select_1._compileToken(sel, options);
     return els.filter(query);
 }
 
@@ -2005,7 +808,7 @@ exports.getLimit = getLimit;
  * @module cheerio/attributes
  */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.toggleClass = exports.removeClass = exports.addClass = exports.hasClass = exports.removeAttr = exports.val = exports.data = exports.prop = exports.attr = void 0;
+exports.is = exports.toggleClass = exports.removeClass = exports.addClass = exports.hasClass = exports.removeAttr = exports.val = exports.data = exports.prop = exports.attr = void 0;
 var static_1 = __nccwpck_require__(2);
 var utils_1 = __nccwpck_require__(1183);
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -2023,8 +826,8 @@ var primitives = {
 // Attributes that are booleans
 var rboolean = /^(?:autofocus|autoplay|async|checked|controls|defer|disabled|hidden|loop|multiple|open|readonly|required|scoped|selected)$/i;
 // Matches strings that look like JSON objects or arrays
-var rbrace = /^{[^]*}$|^\[[^]*]$/;
-function getAttr(elem, name, xmlMode) {
+var rbrace = /^(?:{[\w\W]*}|\[[\w\W]*])$/;
+function getAttr(elem, name) {
     var _a;
     if (!elem || !utils_1.isTag(elem))
         return undefined;
@@ -2035,7 +838,7 @@ function getAttr(elem, name, xmlMode) {
     }
     if (hasOwn.call(elem.attribs, name)) {
         // Get the (decoded) attribute
-        return !xmlMode && rboolean.test(name) ? name : elem.attribs[name];
+        return rboolean.test(name) ? name : elem.attribs[name];
     }
     // Mimic the DOM and return text content as value for `option's`
     if (elem.name === 'option' && name === 'value') {
@@ -2074,12 +877,12 @@ function attr(name, value) {
                     throw new Error('Bad combination of arguments.');
                 }
             }
-            return utils_1.domEach(this, function (el, i) {
+            return utils_1.domEach(this, function (i, el) {
                 if (utils_1.isTag(el))
                     setAttr(el, name, value.call(el, i, el.attribs[name]));
             });
         }
-        return utils_1.domEach(this, function (el) {
+        return utils_1.domEach(this, function (_, el) {
             if (!utils_1.isTag(el))
                 return;
             if (typeof name === 'object') {
@@ -2093,9 +896,7 @@ function attr(name, value) {
             }
         });
     }
-    return arguments.length > 1
-        ? this
-        : getAttr(this[0], name, this.options.xmlMode);
+    return arguments.length > 1 ? this : getAttr(this[0], name);
 }
 exports.attr = attr;
 /**
@@ -2107,15 +908,15 @@ exports.attr = attr;
  * @param name - Name of the prop.
  * @returns The prop's value.
  */
-function getProp(el, name, xmlMode) {
+function getProp(el, name) {
     if (!el || !utils_1.isTag(el))
         return;
     return name in el
         ? // @ts-expect-error TS doesn't like us accessing the value directly here.
             el[name]
-        : !xmlMode && rboolean.test(name)
-            ? getAttr(el, name, false) !== undefined
-            : getAttr(el, name, xmlMode);
+        : rboolean.test(name)
+            ? getAttr(el, name) !== undefined
+            : getAttr(el, name);
 }
 /**
  * Sets the value of a prop.
@@ -2125,17 +926,16 @@ function getProp(el, name, xmlMode) {
  * @param name - The prop's name.
  * @param value - The prop's value.
  */
-function setProp(el, name, value, xmlMode) {
+function setProp(el, name, value) {
     if (name in el) {
         // @ts-expect-error Overriding value
         el[name] = value;
     }
     else {
-        setAttr(el, name, !xmlMode && rboolean.test(name) ? (value ? '' : null) : "" + value);
+        setAttr(el, name, rboolean.test(name) ? (value ? '' : null) : "" + value);
     }
 }
 function prop(name, value) {
-    var _this = this;
     if (typeof name === 'string' && value === undefined) {
         switch (name) {
             case 'style': {
@@ -2157,7 +957,7 @@ function prop(name, value) {
             case 'innerHTML':
                 return this.html();
             default:
-                return getProp(this[0], name, this.options.xmlMode);
+                return getProp(this[0], name);
         }
     }
     if (typeof name === 'object' || value !== undefined) {
@@ -2165,22 +965,22 @@ function prop(name, value) {
             if (typeof name === 'object') {
                 throw new Error('Bad combination of arguments.');
             }
-            return utils_1.domEach(this, function (el, i) {
+            return utils_1.domEach(this, function (j, el) {
                 if (utils_1.isTag(el))
-                    setProp(el, name, value.call(el, i, getProp(el, name, _this.options.xmlMode)), _this.options.xmlMode);
+                    setProp(el, name, value.call(el, j, getProp(el, name)));
             });
         }
-        return utils_1.domEach(this, function (el) {
+        return utils_1.domEach(this, function (__, el) {
             if (!utils_1.isTag(el))
                 return;
             if (typeof name === 'object') {
                 Object.keys(name).forEach(function (key) {
                     var val = name[key];
-                    setProp(el, key, val, _this.options.xmlMode);
+                    setProp(el, key, val);
                 });
             }
             else {
-                setProp(el, name, value, _this.options.xmlMode);
+                setProp(el, name, value);
             }
         });
     }
@@ -2270,7 +1070,7 @@ function data(name, value) {
     }
     // Set the value (with attr map support)
     if (typeof name === 'object' || value !== undefined) {
-        utils_1.domEach(this, function (el) {
+        utils_1.domEach(this, function (_, el) {
             if (utils_1.isTag(el))
                 if (typeof name === 'object')
                     setData(el, name);
@@ -2363,7 +1163,7 @@ function splitNames(names) {
 function removeAttr(name) {
     var attrNames = splitNames(name);
     var _loop_1 = function (i) {
-        utils_1.domEach(this_1, function (elem) {
+        utils_1.domEach(this_1, function (_, elem) {
             if (utils_1.isTag(elem))
                 removeAttribute(elem, attrNames[i]);
         });
@@ -2434,7 +1234,7 @@ exports.hasClass = hasClass;
 function addClass(value) {
     // Support functions
     if (typeof value === 'function') {
-        return utils_1.domEach(this, function (el, i) {
+        return utils_1.domEach(this, function (i, el) {
             if (utils_1.isTag(el)) {
                 var className = el.attribs.class || '';
                 addClass.call([el], value.call(el, i, className));
@@ -2451,8 +1251,8 @@ function addClass(value) {
         // If selected element isn't a tag, move on
         if (!utils_1.isTag(el))
             continue;
-        // If we don't already have classes — always set xmlMode to false here, as it doesn't matter for classes
-        var className = getAttr(el, 'class', false);
+        // If we don't already have classes
+        var className = getAttr(el, 'class');
         if (!className) {
             setAttr(el, 'class', classNames.join(' ').trim());
         }
@@ -2492,7 +1292,7 @@ exports.addClass = addClass;
 function removeClass(name) {
     // Handle if value is a function
     if (typeof name === 'function') {
-        return utils_1.domEach(this, function (el, i) {
+        return utils_1.domEach(this, function (i, el) {
             if (utils_1.isTag(el))
                 removeClass.call([el], name.call(el, i, el.attribs.class || ''));
         });
@@ -2500,7 +1300,7 @@ function removeClass(name) {
     var classes = splitNames(name);
     var numClasses = classes.length;
     var removeAll = arguments.length === 0;
-    return utils_1.domEach(this, function (el) {
+    return utils_1.domEach(this, function (_, el) {
         if (!utils_1.isTag(el))
             return;
         if (removeAll) {
@@ -2552,7 +1352,7 @@ exports.removeClass = removeClass;
 function toggleClass(value, stateVal) {
     // Support functions
     if (typeof value === 'function') {
-        return utils_1.domEach(this, function (el, i) {
+        return utils_1.domEach(this, function (i, el) {
             if (utils_1.isTag(el)) {
                 toggleClass.call([el], value.call(el, i, el.attribs.class || '', stateVal), stateVal);
             }
@@ -2589,6 +1389,25 @@ function toggleClass(value, stateVal) {
     return this;
 }
 exports.toggleClass = toggleClass;
+/**
+ * Checks the current list of elements and returns `true` if *any* of the
+ * elements match the selector. If using an element or Cheerio selection,
+ * returns `true` if *any* of the elements match. If using a predicate function,
+ * the function is executed in the context of the selected element, so `this`
+ * refers to the current element.
+ *
+ * @category Attributes
+ * @param selector - Selector for the selection.
+ * @returns Whether or not the selector matches an element of the instance.
+ * @see {@link https://api.jquery.com/is/}
+ */
+function is(selector) {
+    if (selector) {
+        return this.filter(selector).length > 0;
+    }
+    return false;
+}
+exports.is = is;
 
 
 /***/ }),
@@ -2605,10 +1424,10 @@ function css(prop, val) {
     if ((prop != null && val != null) ||
         // When `prop` is a "plain" object
         (typeof prop === 'object' && !Array.isArray(prop))) {
-        return utils_1.domEach(this, function (el, i) {
+        return utils_1.domEach(this, function (idx, el) {
             if (utils_1.isTag(el)) {
                 // `prop` can't be an array here anymore.
-                setCss(el, prop, val, i);
+                setCss(el, prop, val, idx);
             }
         });
     }
@@ -2744,10 +1563,10 @@ exports.serialize = serialize;
  * @see {@link https://api.jquery.com/serializeArray/}
  */
 function serializeArray() {
-    var _this = this;
     // Resolve all form elements from either forms or collections of form elements
+    var Cheerio = this.constructor;
     return this.map(function (_, elem) {
-        var $elem = _this._make(elem);
+        var $elem = Cheerio(elem);
         if (utils_1.isTag(elem) && elem.name === 'form') {
             return $elem.find(submittableSelector).toArray();
         }
@@ -2764,7 +1583,7 @@ function serializeArray() {
     )
         .map(function (_, elem) {
         var _a;
-        var $elem = _this._make(elem);
+        var $elem = Cheerio(elem);
         var name = $elem.attr('name'); // We have filtered for elements with a name before.
         // If there is no value set (e.g. `undefined`, `null`), then default value to empty
         var value = (_a = $elem.val()) !== null && _a !== void 0 ? _a : '';
@@ -2841,7 +1660,7 @@ function _insert(concatenator) {
             elems[_i] = arguments[_i];
         }
         var lastIdx = this.length - 1;
-        return utils_1.domEach(this, function (el, i) {
+        return utils_1.domEach(this, function (i, el) {
             if (!domhandler_1.hasChildren(el))
                 return;
             var domSrc = typeof elems[0] === 'function'
@@ -2929,7 +1748,9 @@ function uniqueSplice(array, spliceIdx, spliceCount, newElems, parent) {
  * @see {@link https://api.jquery.com/appendTo/}
  */
 function appendTo(target) {
-    var appendTarget = utils_1.isCheerio(target) ? target : this._make(target);
+    var appendTarget = utils_1.isCheerio(target)
+        ? target
+        : this._make(target, null, this._originalRoot);
     appendTarget.append(this);
     return this;
 }
@@ -2956,7 +1777,9 @@ exports.appendTo = appendTo;
  * @see {@link https://api.jquery.com/prependTo/}
  */
 function prependTo(target) {
-    var prependTarget = utils_1.isCheerio(target) ? target : this._make(target);
+    var prependTarget = utils_1.isCheerio(target)
+        ? target
+        : this._make(target, null, this._originalRoot);
     prependTarget.prepend(this);
     return this;
 }
@@ -3305,7 +2128,7 @@ function after() {
         elems[_i] = arguments[_i];
     }
     var lastIdx = this.length - 1;
-    return utils_1.domEach(this, function (el, i) {
+    return utils_1.domEach(this, function (i, el) {
         var parent = el.parent;
         if (!htmlparser2_1.DomUtils.hasChildren(el) || !parent) {
             return;
@@ -3350,11 +2173,11 @@ exports.after = after;
 function insertAfter(target) {
     var _this = this;
     if (typeof target === 'string') {
-        target = this._make(target);
+        target = this._make(target, null, this._originalRoot);
     }
     this.remove();
     var clones = [];
-    this._makeDomArray(target).forEach(function (el) {
+    utils_1.domEach(this._makeDomArray(target), function (_, el) {
         var clonedSelf = _this.clone().toArray();
         var parent = el.parent;
         if (!parent) {
@@ -3403,7 +2226,7 @@ function before() {
         elems[_i] = arguments[_i];
     }
     var lastIdx = this.length - 1;
-    return utils_1.domEach(this, function (el, i) {
+    return utils_1.domEach(this, function (i, el) {
         var parent = el.parent;
         if (!htmlparser2_1.DomUtils.hasChildren(el) || !parent) {
             return;
@@ -3447,10 +2270,10 @@ exports.before = before;
  */
 function insertBefore(target) {
     var _this = this;
-    var targetArr = this._make(target);
+    var targetArr = this._make(target, null, this._originalRoot);
     this.remove();
     var clones = [];
-    utils_1.domEach(targetArr, function (el) {
+    utils_1.domEach(targetArr, function (_, el) {
         var clonedSelf = _this.clone().toArray();
         var parent = el.parent;
         if (!parent) {
@@ -3492,7 +2315,7 @@ exports.insertBefore = insertBefore;
 function remove(selector) {
     // Filter if we have selector
     var elems = selector ? this.filter(selector) : this;
-    utils_1.domEach(elems, function (el) {
+    utils_1.domEach(elems, function (_, el) {
         htmlparser2_1.DomUtils.removeElement(el);
         el.prev = el.next = el.parent = null;
     });
@@ -3522,7 +2345,7 @@ exports.remove = remove;
  */
 function replaceWith(content) {
     var _this = this;
-    return utils_1.domEach(this, function (el, i) {
+    return utils_1.domEach(this, function (i, el) {
         var parent = el.parent;
         if (!parent) {
             return;
@@ -3560,7 +2383,7 @@ exports.replaceWith = replaceWith;
  * @see {@link https://api.jquery.com/empty/}
  */
 function empty() {
-    return utils_1.domEach(this, function (el) {
+    return utils_1.domEach(this, function (_, el) {
         if (!htmlparser2_1.DomUtils.hasChildren(el))
             return;
         el.children.forEach(function (child) {
@@ -3579,7 +2402,7 @@ function html(str) {
     }
     // Keep main options unchanged
     var opts = tslib_1.__assign(tslib_1.__assign({}, this.options), { context: null });
-    return utils_1.domEach(this, function (el) {
+    return utils_1.domEach(this, function (_, el) {
         if (!htmlparser2_1.DomUtils.hasChildren(el))
             return;
         el.children.forEach(function (child) {
@@ -3587,7 +2410,7 @@ function html(str) {
         });
         opts.context = el;
         var content = utils_1.isCheerio(str)
-            ? str.toArray()
+            ? str.clone().get()
             : parse_1.default("" + str, opts, false).children;
         parse_1.update(content, el);
     });
@@ -3611,12 +2434,12 @@ function text(str) {
     }
     if (typeof str === 'function') {
         // Function support
-        return utils_1.domEach(this, function (el, i) {
+        return utils_1.domEach(this, function (i, el) {
             text.call(_this._make(el), str.call(el, i, static_1.text([el])));
         });
     }
     // Append text node to each selected elements
-    return utils_1.domEach(this, function (el) {
+    return utils_1.domEach(this, function (_, el) {
         if (!htmlparser2_1.DomUtils.hasChildren(el))
             return;
         el.children.forEach(function (child) {
@@ -3659,12 +2482,11 @@ exports.clone = clone;
  * @module cheerio/traversing
  */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.addBack = exports.add = exports.end = exports.slice = exports.index = exports.toArray = exports.get = exports.eq = exports.last = exports.first = exports.has = exports.not = exports.is = exports.filterArray = exports.filter = exports.map = exports.each = exports.contents = exports.children = exports.siblings = exports.prevUntil = exports.prevAll = exports.prev = exports.nextUntil = exports.nextAll = exports.next = exports.closest = exports.parentsUntil = exports.parents = exports.parent = exports.find = void 0;
+exports.addBack = exports.add = exports.end = exports.slice = exports.index = exports.get = exports.eq = exports.last = exports.first = exports.has = exports.not = exports.filter = exports.map = exports.each = exports.contents = exports.children = exports.siblings = exports.prevUntil = exports.prevAll = exports.prev = exports.nextUntil = exports.nextAll = exports.next = exports.closest = exports.parentsUntil = exports.parents = exports.parent = exports.find = void 0;
 var tslib_1 = __nccwpck_require__(5636);
 var domhandler_1 = __nccwpck_require__(4038);
 var select = tslib_1.__importStar(__nccwpck_require__(5409));
 var utils_1 = __nccwpck_require__(1183);
-var static_1 = __nccwpck_require__(2);
 var htmlparser2_1 = __nccwpck_require__(2928);
 var uniqueSort = htmlparser2_1.DomUtils.uniqueSort;
 var reSiblingSelector = /^\s*[~+]/;
@@ -3687,119 +2509,28 @@ var reSiblingSelector = /^\s*[~+]/;
  * @see {@link https://api.jquery.com/find/}
  */
 function find(selectorOrHaystack) {
-    var _a;
     if (!selectorOrHaystack) {
         return this._make([]);
     }
     var context = this.toArray();
     if (typeof selectorOrHaystack !== 'string') {
+        var contains_1 = this.constructor.contains;
         var haystack = utils_1.isCheerio(selectorOrHaystack)
-            ? selectorOrHaystack.toArray()
+            ? selectorOrHaystack.get()
             : [selectorOrHaystack];
-        return this._make(haystack.filter(function (elem) { return context.some(function (node) { return static_1.contains(node, elem); }); }));
+        return this._make(haystack.filter(function (elem) { return context.some(function (node) { return contains_1(node, elem); }); }));
     }
     var elems = reSiblingSelector.test(selectorOrHaystack)
         ? context
-        : this.children().toArray();
-    var options = {
-        context: context,
-        root: (_a = this._root) === null || _a === void 0 ? void 0 : _a[0],
-        xmlMode: this.options.xmlMode,
-    };
+        : context.reduce(function (newElems, elem) {
+            return domhandler_1.hasChildren(elem)
+                ? newElems.concat(elem.children.filter(utils_1.isTag))
+                : newElems;
+        }, []);
+    var options = { context: context, xmlMode: this.options.xmlMode };
     return this._make(select.select(selectorOrHaystack, elems, options));
 }
 exports.find = find;
-/**
- * Creates a matcher, using a particular mapping function. Matchers provide a
- * function that finds elements using a generating function, supporting filtering.
- *
- * @private
- * @param matchMap - Mapping function.
- * @returns - Function for wrapping generating functions.
- */
-function _getMatcher(matchMap) {
-    return function (fn) {
-        var postFns = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            postFns[_i - 1] = arguments[_i];
-        }
-        return function (selector) {
-            var _a;
-            var matched = matchMap(fn, this);
-            if (selector) {
-                matched = filterArray(matched, selector, this.options.xmlMode, (_a = this._root) === null || _a === void 0 ? void 0 : _a[0]);
-            }
-            return this._make(
-            // Post processing is only necessary if there is more than one element.
-            this.length > 1 && matched.length > 1
-                ? postFns.reduce(function (elems, fn) { return fn(elems); }, matched)
-                : matched);
-        };
-    };
-}
-/** Matcher that adds multiple elements for each entry in the input. */
-var _matcher = _getMatcher(function (fn, elems) {
-    var _a;
-    var ret = [];
-    for (var i = 0; i < elems.length; i++) {
-        var value = fn(elems[i]);
-        ret.push(value);
-    }
-    return (_a = new Array()).concat.apply(_a, ret);
-});
-/** Matcher that adds at most one element for each entry in the input. */
-var _singleMatcher = _getMatcher(function (fn, elems) {
-    var ret = [];
-    for (var i = 0; i < elems.length; i++) {
-        var value = fn(elems[i]);
-        if (value !== null) {
-            ret.push(value);
-        }
-    }
-    return ret;
-});
-/**
- * Matcher that supports traversing until a condition is met.
- *
- * @returns A function usable for `*Until` methods.
- */
-function _matchUntil(nextElem) {
-    var postFns = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        postFns[_i - 1] = arguments[_i];
-    }
-    // We use a variable here that is used from within the matcher.
-    var matches = null;
-    var innerMatcher = _getMatcher(function (nextElem, elems) {
-        var matched = [];
-        utils_1.domEach(elems, function (elem) {
-            for (var next_1; (next_1 = nextElem(elem)); elem = next_1) {
-                // FIXME: `matched` might contain duplicates here and the index is too large.
-                if (matches === null || matches === void 0 ? void 0 : matches(next_1, matched.length))
-                    break;
-                matched.push(next_1);
-            }
-        });
-        return matched;
-    }).apply(void 0, tslib_1.__spreadArray([nextElem], postFns));
-    return function (selector, filterSelector) {
-        var _this = this;
-        // Override `matches` variable with the new target.
-        matches =
-            typeof selector === 'string'
-                ? function (elem) { return select.is(elem, selector, _this.options); }
-                : selector
-                    ? getFilterFn(selector)
-                    : null;
-        var ret = innerMatcher.call(this, filterSelector);
-        // Set `matches` to `null`, so we don't waste memory.
-        matches = null;
-        return ret;
-    };
-}
-function _removeDuplicates(elems) {
-    return Array.from(new Set(elems));
-}
 /**
  * Get the parent of each element in the current set of matched elements,
  * optionally filtered by a selector.
@@ -3816,10 +2547,19 @@ function _removeDuplicates(elems) {
  * @returns The parents.
  * @see {@link https://api.jquery.com/parent/}
  */
-exports.parent = _singleMatcher(function (_a) {
-    var parent = _a.parent;
-    return (parent && !domhandler_1.isDocument(parent) ? parent : null);
-}, _removeDuplicates);
+function parent(selector) {
+    var set = [];
+    utils_1.domEach(this, function (_, elem) {
+        var parentElem = elem.parent;
+        if (parentElem &&
+            parentElem.type !== 'root' &&
+            !set.includes(parentElem)) {
+            set.push(parentElem);
+        }
+    });
+    return selector ? filter.call(set, selector, this) : this._make(set);
+}
+exports.parent = parent;
 /**
  * Get a set of parents filtered by `selector` of each element in the current
  * set of match elements.
@@ -3838,14 +2578,27 @@ exports.parent = _singleMatcher(function (_a) {
  * @returns The parents.
  * @see {@link https://api.jquery.com/parents/}
  */
-exports.parents = _matcher(function (elem) {
-    var matched = [];
-    while (elem.parent && !domhandler_1.isDocument(elem.parent)) {
-        matched.push(elem.parent);
-        elem = elem.parent;
-    }
-    return matched;
-}, uniqueSort, function (elems) { return elems.reverse(); });
+function parents(selector) {
+    var _this = this;
+    var parentNodes = [];
+    /*
+     * When multiple DOM elements are in the original set, the resulting set will
+     * be in *reverse* order of the original elements as well, with duplicates
+     * removed.
+     */
+    this.get()
+        .reverse()
+        .forEach(function (elem) {
+        return traverseParents(_this, elem.parent, selector, Infinity).forEach(function (node) {
+            // We know these must be `Element`s, as we filter out root nodes.
+            if (!parentNodes.includes(node)) {
+                parentNodes.push(node);
+            }
+        });
+    });
+    return this._make(parentNodes);
+}
+exports.parents = parents;
 /**
  * Get the ancestors of each element in the current set of matched elements, up
  * to but not including the element matched by the selector, DOM node, or cheerio object.
@@ -3859,14 +2612,50 @@ exports.parents = _matcher(function (elem) {
  * ```
  *
  * @param selector - Selector for element to stop at.
- * @param filterSelector - Optional filter for parents.
+ * @param filterBy - Optional filter for parents.
  * @returns The parents.
  * @see {@link https://api.jquery.com/parentsUntil/}
  */
-exports.parentsUntil = _matchUntil(function (_a) {
-    var parent = _a.parent;
-    return (parent && !domhandler_1.isDocument(parent) ? parent : null);
-}, uniqueSort, function (elems) { return elems.reverse(); });
+function parentsUntil(selector, filterBy) {
+    var parentNodes = [];
+    var untilNode;
+    var untilNodes;
+    if (typeof selector === 'string') {
+        untilNodes = this.parents(selector).toArray();
+    }
+    else if (selector && utils_1.isCheerio(selector)) {
+        untilNodes = selector.toArray();
+    }
+    else if (selector) {
+        untilNode = selector;
+    }
+    /*
+     * When multiple DOM elements are in the original set, the resulting set will
+     * be in *reverse* order of the original elements as well, with duplicates
+     * removed.
+     */
+    this.toArray()
+        .reverse()
+        .forEach(function (elem) {
+        while (elem.parent) {
+            elem = elem.parent;
+            if ((untilNode && elem !== untilNode) ||
+                (untilNodes && !untilNodes.includes(elem)) ||
+                (!untilNode && !untilNodes)) {
+                if (utils_1.isTag(elem) && !parentNodes.includes(elem)) {
+                    parentNodes.push(elem);
+                }
+            }
+            else {
+                break;
+            }
+        }
+    }, this);
+    return filterBy
+        ? filter.call(parentNodes, filterBy, this)
+        : this._make(parentNodes);
+}
+exports.parentsUntil = parentsUntil;
 /**
  * For each element in the set, get the first element that matches the selector
  * by testing the element itself and traversing up through its ancestors in the DOM tree.
@@ -3898,19 +2687,11 @@ function closest(selector) {
     if (!selector) {
         return this._make(set);
     }
-    utils_1.domEach(this, function (elem) {
-        var _a;
-        while (elem && elem.type !== 'root') {
-            if (!selector ||
-                filterArray([elem], selector, _this.options.xmlMode, (_a = _this._root) === null || _a === void 0 ? void 0 : _a[0])
-                    .length) {
-                // Do not add duplicate elements to the set
-                if (elem && !set.includes(elem)) {
-                    set.push(elem);
-                }
-                break;
-            }
-            elem = elem.parent;
+    utils_1.domEach(this, function (_, elem) {
+        var closestElem = traverseParents(_this, elem, selector, 1)[0];
+        // Do not add duplicate elements to the set
+        if (closestElem && !set.includes(closestElem)) {
+            set.push(closestElem);
         }
     });
     return this._make(set);
@@ -3931,7 +2712,20 @@ exports.closest = closest;
  * @returns The next nodes.
  * @see {@link https://api.jquery.com/next/}
  */
-exports.next = _singleMatcher(function (elem) { return htmlparser2_1.DomUtils.nextElementSibling(elem); });
+function next(selector) {
+    var elems = [];
+    utils_1.domEach(this, function (_, elem) {
+        while (elem.next) {
+            elem = elem.next;
+            if (utils_1.isTag(elem)) {
+                elems.push(elem);
+                return;
+            }
+        }
+    });
+    return selector ? filter.call(elems, selector, this) : this._make(elems);
+}
+exports.next = next;
 /**
  * Gets all the following siblings of the first selected element, optionally
  * filtered by a selector.
@@ -3950,15 +2744,19 @@ exports.next = _singleMatcher(function (elem) { return htmlparser2_1.DomUtils.ne
  * @returns The next nodes.
  * @see {@link https://api.jquery.com/nextAll/}
  */
-exports.nextAll = _matcher(function (elem) {
-    var matched = [];
-    while (elem.next) {
-        elem = elem.next;
-        if (utils_1.isTag(elem))
-            matched.push(elem);
-    }
-    return matched;
-}, _removeDuplicates);
+function nextAll(selector) {
+    var elems = [];
+    utils_1.domEach(this, function (_, elem) {
+        while (elem.next) {
+            elem = elem.next;
+            if (utils_1.isTag(elem) && !elems.includes(elem)) {
+                elems.push(elem);
+            }
+        }
+    });
+    return selector ? filter.call(elems, selector, this) : this._make(elems);
+}
+exports.nextAll = nextAll;
 /**
  * Gets all the following siblings up to but not including the element matched
  * by the selector, optionally filtered by another selector.
@@ -3976,7 +2774,39 @@ exports.nextAll = _matcher(function (elem) {
  * @returns The next nodes.
  * @see {@link https://api.jquery.com/nextUntil/}
  */
-exports.nextUntil = _matchUntil(function (el) { return htmlparser2_1.DomUtils.nextElementSibling(el); }, _removeDuplicates);
+function nextUntil(selector, filterSelector) {
+    var elems = [];
+    var untilNode;
+    var untilNodes;
+    if (typeof selector === 'string') {
+        untilNodes = this.nextAll(selector).toArray();
+    }
+    else if (selector && utils_1.isCheerio(selector)) {
+        untilNodes = selector.get();
+    }
+    else if (selector) {
+        untilNode = selector;
+    }
+    utils_1.domEach(this, function (_, elem) {
+        while (elem.next) {
+            elem = elem.next;
+            if ((untilNode && elem !== untilNode) ||
+                (untilNodes && !untilNodes.includes(elem)) ||
+                (!untilNode && !untilNodes)) {
+                if (utils_1.isTag(elem) && !elems.includes(elem)) {
+                    elems.push(elem);
+                }
+            }
+            else {
+                break;
+            }
+        }
+    });
+    return filterSelector
+        ? filter.call(elems, filterSelector, this)
+        : this._make(elems);
+}
+exports.nextUntil = nextUntil;
 /**
  * Gets the previous sibling of the first selected element optionally filtered
  * by a selector.
@@ -3993,7 +2823,20 @@ exports.nextUntil = _matchUntil(function (el) { return htmlparser2_1.DomUtils.ne
  * @returns The previous nodes.
  * @see {@link https://api.jquery.com/prev/}
  */
-exports.prev = _singleMatcher(function (elem) { return htmlparser2_1.DomUtils.prevElementSibling(elem); });
+function prev(selector) {
+    var elems = [];
+    utils_1.domEach(this, function (_, elem) {
+        while (elem.prev) {
+            elem = elem.prev;
+            if (utils_1.isTag(elem)) {
+                elems.push(elem);
+                return;
+            }
+        }
+    });
+    return selector ? filter.call(elems, selector, this) : this._make(elems);
+}
+exports.prev = prev;
 /**
  * Gets all the preceding siblings of the first selected element, optionally
  * filtered by a selector.
@@ -4013,15 +2856,19 @@ exports.prev = _singleMatcher(function (elem) { return htmlparser2_1.DomUtils.pr
  * @returns The previous nodes.
  * @see {@link https://api.jquery.com/prevAll/}
  */
-exports.prevAll = _matcher(function (elem) {
-    var matched = [];
-    while (elem.prev) {
-        elem = elem.prev;
-        if (utils_1.isTag(elem))
-            matched.push(elem);
-    }
-    return matched;
-}, _removeDuplicates);
+function prevAll(selector) {
+    var elems = [];
+    utils_1.domEach(this, function (_, elem) {
+        while (elem.prev) {
+            elem = elem.prev;
+            if (utils_1.isTag(elem) && !elems.includes(elem)) {
+                elems.push(elem);
+            }
+        }
+    });
+    return selector ? filter.call(elems, selector, this) : this._make(elems);
+}
+exports.prevAll = prevAll;
 /**
  * Gets all the preceding siblings up to but not including the element matched
  * by the selector, optionally filtered by another selector.
@@ -4039,7 +2886,39 @@ exports.prevAll = _matcher(function (elem) {
  * @returns The previous nodes.
  * @see {@link https://api.jquery.com/prevUntil/}
  */
-exports.prevUntil = _matchUntil(function (el) { return htmlparser2_1.DomUtils.prevElementSibling(el); }, _removeDuplicates);
+function prevUntil(selector, filterSelector) {
+    var elems = [];
+    var untilNode;
+    var untilNodes;
+    if (typeof selector === 'string') {
+        untilNodes = this.prevAll(selector).toArray();
+    }
+    else if (selector && utils_1.isCheerio(selector)) {
+        untilNodes = selector.get();
+    }
+    else if (selector) {
+        untilNode = selector;
+    }
+    utils_1.domEach(this, function (_, elem) {
+        while (elem.prev) {
+            elem = elem.prev;
+            if ((untilNode && elem !== untilNode) ||
+                (untilNodes && !untilNodes.includes(elem)) ||
+                (!untilNode && !untilNodes)) {
+                if (utils_1.isTag(elem) && !elems.includes(elem)) {
+                    elems.push(elem);
+                }
+            }
+            else {
+                break;
+            }
+        }
+    });
+    return filterSelector
+        ? filter.call(elems, filterSelector, this)
+        : this._make(elems);
+}
+exports.prevUntil = prevUntil;
 /**
  * Get the siblings of each element (excluding the element) in the set of
  * matched elements, optionally filtered by a selector.
@@ -4059,9 +2938,18 @@ exports.prevUntil = _matchUntil(function (el) { return htmlparser2_1.DomUtils.pr
  * @returns The siblings.
  * @see {@link https://api.jquery.com/siblings/}
  */
-exports.siblings = _matcher(function (elem) {
-    return htmlparser2_1.DomUtils.getSiblings(elem).filter(function (el) { return utils_1.isTag(el) && el !== elem; });
-}, uniqueSort);
+function siblings(selector) {
+    var _this = this;
+    // TODO Still get siblings if `parent` is null; see DomUtils' `getSiblings`.
+    var parent = this.parent();
+    var elems = parent
+        .children()
+        .toArray()
+        // TODO: This removes all elements in the selection. Note that they could be added here, if siblings are part of the selection.
+        .filter(function (elem) { return !_this.is(elem); });
+    return selector ? filter.call(elems, selector, this) : this._make(elems);
+}
+exports.siblings = siblings;
 /**
  * Gets the children of the first selected element.
  *
@@ -4080,7 +2968,15 @@ exports.siblings = _matcher(function (elem) {
  * @returns The children.
  * @see {@link https://api.jquery.com/children/}
  */
-exports.children = _matcher(function (elem) { return htmlparser2_1.DomUtils.getChildren(elem).filter(utils_1.isTag); }, _removeDuplicates);
+function children(selector) {
+    var elems = this.toArray().reduce(function (newElems, elem) {
+        return domhandler_1.hasChildren(elem)
+            ? newElems.concat(elem.children.filter(utils_1.isTag))
+            : newElems;
+    }, []);
+    return selector ? filter.call(elems, selector, this) : this._make(elems);
+}
+exports.children = children;
 /**
  * Gets the children of each element in the set of matched elements, including
  * text and comment nodes.
@@ -4174,55 +3070,66 @@ function map(fn) {
     return this._make(elems);
 }
 exports.map = map;
-/**
- * Creates a function to test if a filter is matched.
- *
- * @param match - A filter.
- * @returns A function that determines if a filter has been matched.
- */
 function getFilterFn(match) {
     if (typeof match === 'function') {
-        return function (el, i) { return match.call(el, i, el); };
+        return function (el, i) {
+            return match.call(el, i, el);
+        };
     }
     if (utils_1.isCheerio(match)) {
-        return function (el) { return Array.prototype.includes.call(match, el); };
+        return match.is.bind(match);
     }
     return function (el) {
         return match === el;
     };
 }
-function filter(match) {
-    var _a;
-    return this._make(filterArray(this.toArray(), match, this.options.xmlMode, (_a = this._root) === null || _a === void 0 ? void 0 : _a[0]));
+/**
+ * Iterates over a cheerio object, reducing the set of selector elements to
+ * those that match the selector or pass the function's test. When a Cheerio
+ * selection is specified, return only the elements contained in that selection.
+ * When an element is specified, return only that element (if it is contained in
+ * the original selection). If using the function method, the function is
+ * executed in the context of the selected element, so `this` refers to the
+ * current element.
+ *
+ * @category Traversing
+ * @example <caption>Selector</caption>
+ *
+ * ```js
+ * $('li').filter('.orange').attr('class');
+ * //=> orange
+ * ```
+ *
+ * @example <caption>Function</caption>
+ *
+ * ```js
+ * $('li')
+ *   .filter(function (i, el) {
+ *     // this === el
+ *     return $(this).attr('class') === 'orange';
+ *   })
+ *   .attr('class'); //=> orange
+ * ```
+ *
+ * @param match - Value to look for, following the rules above.
+ * @param container - Optional node to filter instead.
+ * @returns The filtered collection.
+ * @see {@link https://api.jquery.com/filter/}
+ */
+function filter(match, container) {
+    if (container === void 0) { container = this; }
+    if (!utils_1.isCheerio(container)) {
+        throw new Error('Not able to create a Cheerio instance.');
+    }
+    var nodes = utils_1.isCheerio(this) ? this.toArray() : this;
+    var elements = nodes.filter(utils_1.isTag);
+    elements =
+        typeof match === 'string'
+            ? select.filter(match, elements, container.options)
+            : elements.filter(getFilterFn(match));
+    return container._make(elements);
 }
 exports.filter = filter;
-function filterArray(nodes, match, xmlMode, root) {
-    return typeof match === 'string'
-        ? select.filter(match, nodes, { xmlMode: xmlMode, root: root })
-        : nodes.filter(getFilterFn(match));
-}
-exports.filterArray = filterArray;
-/**
- * Checks the current list of elements and returns `true` if *any* of the
- * elements match the selector. If using an element or Cheerio selection,
- * returns `true` if *any* of the elements match. If using a predicate function,
- * the function is executed in the context of the selected element, so `this`
- * refers to the current element.
- *
- * @category Attributes
- * @param selector - Selector for the selection.
- * @returns Whether or not the selector matches an element of the instance.
- * @see {@link https://api.jquery.com/is/}
- */
-function is(selector) {
-    var nodes = this.toArray();
-    return typeof selector === 'string'
-        ? select.some(nodes.filter(utils_1.isTag), selector, this.options)
-        : selector
-            ? nodes.some(getFilterFn(selector))
-            : false;
-}
-exports.is = is;
 /**
  * Remove elements from the set of matched elements. Given a Cheerio object that
  * represents a set of DOM elements, the `.not()` method constructs a new
@@ -4256,17 +3163,22 @@ exports.is = is;
  * @returns The filtered collection.
  * @see {@link https://api.jquery.com/not/}
  */
-function not(match) {
-    var nodes = this.toArray();
+function not(match, container) {
+    if (container === void 0) { container = this; }
+    if (!utils_1.isCheerio(container)) {
+        throw new Error('Not able to create a Cheerio instance.');
+    }
+    var nodes = utils_1.isCheerio(this) ? this.toArray() : this;
     if (typeof match === 'string') {
-        var matches_1 = new Set(select.filter(match, nodes, this.options));
+        var elements = nodes.filter(utils_1.isTag);
+        var matches_1 = new Set(select.filter(match, elements, container.options));
         nodes = nodes.filter(function (el) { return !matches_1.has(el); });
     }
     else {
         var filterFn_1 = getFilterFn(match);
         nodes = nodes.filter(function (el, i) { return !filterFn_1(el, i); });
     }
-    return this._make(nodes);
+    return container._make(nodes);
 }
 exports.not = not;
 /**
@@ -4295,7 +3207,7 @@ exports.not = not;
  */
 function has(selectorOrHaystack) {
     var _this = this;
-    return this.filter(typeof selectorOrHaystack === 'string'
+    return filter.call(this, typeof selectorOrHaystack === 'string'
         ? // Using the `:has` selector here short-circuits searches.
             ":has(" + selectorOrHaystack + ")"
         : function (_, el) { return _this._make(el).find(selectorOrHaystack).length > 0; });
@@ -4369,27 +3281,11 @@ function eq(i) {
 exports.eq = eq;
 function get(i) {
     if (i == null) {
-        return this.toArray();
+        return Array.prototype.slice.call(this);
     }
     return this[i < 0 ? this.length + i : i];
 }
 exports.get = get;
-/**
- * Retrieve all the DOM elements contained in the jQuery set as an array.
- *
- * @example
- *
- * ```js
- * $('li').toArray();
- * //=> [ {...}, {...}, {...} ]
- * ```
- *
- * @returns The contained items.
- */
-function toArray() {
-    return Array.prototype.slice.call(this);
-}
-exports.toArray = toArray;
 /**
  * Search for a given element from among the matched elements.
  *
@@ -4425,7 +3321,7 @@ function index(selectorOrNeedle) {
             ? selectorOrNeedle[0]
             : selectorOrNeedle;
     }
-    return Array.prototype.indexOf.call($haystack, needle);
+    return $haystack.get().indexOf(needle);
 }
 exports.index = index;
 /**
@@ -4454,6 +3350,16 @@ function slice(start, end) {
     return this._make(Array.prototype.slice.call(this, start, end));
 }
 exports.slice = slice;
+function traverseParents(self, elem, selector, limit) {
+    var elems = [];
+    while (elem && elems.length < limit && elem.type !== 'root') {
+        if (!selector || filter.call([elem], selector, self).length) {
+            elems.push(elem);
+        }
+        elem = elem.parent;
+    }
+    return elems;
+}
 /**
  * End the most recent filtering operation in the current chain and return the
  * set of matched elements to its previous state.
@@ -4531,13 +3437,18 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Cheerio = void 0;
 var tslib_1 = __nccwpck_require__(5636);
 var parse_1 = tslib_1.__importDefault(__nccwpck_require__(9024));
-var options_1 = tslib_1.__importDefault(__nccwpck_require__(9901));
+var options_1 = tslib_1.__importStar(__nccwpck_require__(9901));
 var utils_1 = __nccwpck_require__(1183);
+var Static = tslib_1.__importStar(__nccwpck_require__(2));
 var Attributes = tslib_1.__importStar(__nccwpck_require__(8596));
 var Traversing = tslib_1.__importStar(__nccwpck_require__(6563));
 var Manipulation = tslib_1.__importStar(__nccwpck_require__(8196));
 var Css = tslib_1.__importStar(__nccwpck_require__(7084));
 var Forms = tslib_1.__importStar(__nccwpck_require__(5954));
+/*
+ * The API
+ */
+var api = [Attributes, Traversing, Manipulation, Css, Forms];
 var Cheerio = /** @class */ (function () {
     /**
      * Instance of cheerio. Methods are specified in the modules. Usage of this
@@ -4551,18 +3462,18 @@ var Cheerio = /** @class */ (function () {
      */
     function Cheerio(selector, context, root, options) {
         var _this = this;
-        if (options === void 0) { options = options_1.default; }
+        if (!(this instanceof Cheerio)) {
+            return new Cheerio(selector, context, root, options);
+        }
         this.length = 0;
-        this.options = options;
+        this.options = tslib_1.__assign(tslib_1.__assign(tslib_1.__assign({}, options_1.default), this.options), options_1.flatten(options));
         // $(), $(null), $(undefined), $(false)
         if (!selector)
             return this;
         if (root) {
             if (typeof root === 'string')
                 root = parse_1.default(root, this.options, false);
-            this._root = new this.constructor(root, null, null, this.options);
-            // Add a cyclic reference, so that calling methods on `_root` never fails.
-            this._root._root = this._root;
+            this._root = Cheerio.call(this, root);
         }
         // $($)
         if (utils_1.isCheerio(selector))
@@ -4592,14 +3503,14 @@ var Cheerio = /** @class */ (function () {
             : typeof context === 'string'
                 ? utils_1.isHtml(context)
                     ? // $('li', '<ul>...</ul>')
-                        this._make(parse_1.default(context, this.options, false))
+                        new Cheerio(parse_1.default(context, this.options, false))
                     : // $('li', 'ul')
                         ((search = context + " " + search), this._root)
                 : utils_1.isCheerio(context)
                     ? // $('li', $)
                         context
                     : // $('li', node), $('li', [nodes])
-                        this._make(context);
+                        new Cheerio(context);
         // If we still don't have a context, return
         if (!searchContext)
             return this;
@@ -4617,11 +3528,36 @@ var Cheerio = /** @class */ (function () {
      * @param context - The context of the new object.
      * @returns The new cheerio object.
      */
-    Cheerio.prototype._make = function (dom, context) {
-        var cheerio = new this.constructor(dom, context, this._root, this.options);
+    Cheerio.prototype._make = function (dom, context, root) {
+        if (root === void 0) { root = this._root; }
+        var cheerio = new this.constructor(dom, context, root, this.options);
         cheerio.prevObject = this;
         return cheerio;
     };
+    /**
+     * Retrieve all the DOM elements contained in the jQuery set as an array.
+     *
+     * @example
+     *
+     * ```js
+     * $('li').toArray();
+     * //=> [ {...}, {...}, {...} ]
+     * ```
+     *
+     * @returns The contained items.
+     */
+    Cheerio.prototype.toArray = function () {
+        return this.get();
+    };
+    Cheerio.html = Static.html;
+    Cheerio.xml = Static.xml;
+    Cheerio.text = Static.text;
+    Cheerio.parseHTML = Static.parseHTML;
+    Cheerio.root = Static.root;
+    Cheerio.contains = Static.contains;
+    Cheerio.merge = Static.merge;
+    /** Mimic jQuery's prototype alias for plugin authors. */
+    Cheerio.fn = Cheerio.prototype;
     return Cheerio;
 }());
 exports.Cheerio = Cheerio;
@@ -4634,13 +3570,15 @@ Cheerio.prototype.splice = Array.prototype.splice;
 // Support for (const element of $(...)) iteration:
 Cheerio.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
 // Plug in the API
-Object.assign(Cheerio.prototype, Attributes, Traversing, Manipulation, Css, Forms);
+api.forEach(function (mod) { return Object.assign(Cheerio.prototype, mod); });
 function isNode(obj) {
     return (!!obj.name ||
         obj.type === 'root' ||
         obj.type === 'text' ||
         obj.type === 'comment');
 }
+// Make it possible to call Cheerio without using `new`.
+exports.default = Cheerio;
 
 
 /***/ }),
@@ -4653,6 +3591,13 @@ function isNode(obj) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.root = exports.parseHTML = exports.merge = exports.contains = void 0;
 var tslib_1 = __nccwpck_require__(5636);
+var cheerio_1 = tslib_1.__importDefault(__nccwpck_require__(641));
+/**
+ * The default cheerio instance.
+ *
+ * @deprecated Use the function returned by `load` instead.
+ */
+exports.default = cheerio_1.default;
 /**
  * Types used in signatures of Cheerio methods.
  *
@@ -4661,12 +3606,8 @@ var tslib_1 = __nccwpck_require__(5636);
 tslib_1.__exportStar(__nccwpck_require__(9317), exports);
 tslib_1.__exportStar(__nccwpck_require__(1313), exports);
 var load_1 = __nccwpck_require__(1313);
-/**
- * The default cheerio instance.
- *
- * @deprecated Use the function returned by `load` instead.
- */
-exports.default = load_1.load([]);
+// We add this here, to avoid a cyclic depenency
+cheerio_1.default.load = load_1.load;
 var staticMethods = tslib_1.__importStar(__nccwpck_require__(2));
 /**
  * In order to promote consistency with the jQuery library, users are encouraged
@@ -4752,42 +3693,48 @@ var parse_1 = tslib_1.__importDefault(__nccwpck_require__(9024));
  * introduce `<html>`, `<head>`, and `<body>` elements; set `isDocument` to
  * `false` to switch to fragment mode and disable this.
  *
+ * See the README section titled "Loading" for additional usage information.
+ *
  * @param content - Markup to be loaded.
  * @param options - Options for the created instance.
  * @param isDocument - Allows parser to be switched to fragment mode.
  * @returns The loaded document.
- * @see {@link https://cheerio.js.org#loading} for additional usage information.
  */
 function load(content, options, isDocument) {
-    if (isDocument === void 0) { isDocument = true; }
     if (content == null) {
         throw new Error('cheerio.load() expects a string');
     }
-    var internalOpts = tslib_1.__assign(tslib_1.__assign({}, options_1.default), options_1.flatten(options));
-    var root = parse_1.default(content, internalOpts, isDocument);
-    /** Create an extended class here, so that extensions only live on one instance. */
-    var LoadedCheerio = /** @class */ (function (_super) {
-        tslib_1.__extends(LoadedCheerio, _super);
-        function LoadedCheerio() {
-            return _super !== null && _super.apply(this, arguments) || this;
+    options = tslib_1.__assign(tslib_1.__assign({}, options_1.default), options_1.flatten(options));
+    if (typeof isDocument === 'undefined')
+        isDocument = true;
+    var root = parse_1.default(content, options, isDocument);
+    var initialize = /** @class */ (function (_super) {
+        tslib_1.__extends(initialize, _super);
+        function initialize(selector, context, r, opts) {
+            if (r === void 0) { r = root; }
+            var _this = this;
+            // @ts-expect-error Using `this` before calling the constructor.
+            if (!(_this instanceof initialize)) {
+                return new initialize(selector, context, r, opts);
+            }
+            _this = _super.call(this, selector, context, r, tslib_1.__assign(tslib_1.__assign({}, options), opts)) || this;
+            return _this;
         }
-        return LoadedCheerio;
+        // Mimic jQuery's prototype alias for plugin authors.
+        initialize.fn = initialize.prototype;
+        return initialize;
     }(cheerio_1.Cheerio));
-    function initialize(selector, context, r, opts) {
-        if (r === void 0) { r = root; }
-        return new LoadedCheerio(selector, context, r, tslib_1.__assign(tslib_1.__assign({}, internalOpts), options_1.flatten(opts)));
-    }
-    // Add in static methods & properties
-    Object.assign(initialize, staticMethods, {
-        load: load,
-        // `_root` and `_options` are used in static methods.
-        _root: root,
-        _options: internalOpts,
-        // Add `fn` for plugins
-        fn: LoadedCheerio.prototype,
-        // Add the prototype here to maintain `instanceof` behavior.
-        prototype: LoadedCheerio.prototype,
-    });
+    /*
+     * Keep a reference to the top-level scope so we can chain methods that implicitly
+     * resolve selectors; e.g. $("<span>").(".bar"), which otherwise loses ._root
+     */
+    initialize.prototype._originalRoot = root;
+    // Add in the static methods
+    Object.assign(initialize, staticMethods, { load: load });
+    // Add in the root
+    initialize._root = root;
+    // Store options
+    initialize._options = options;
     return initialize;
 }
 exports.load = load;
@@ -4833,8 +3780,8 @@ exports.flatten = flatten;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.update = void 0;
 var htmlparser2_1 = __nccwpck_require__(2928);
-var htmlparser2_adapter_1 = __nccwpck_require__(2632);
-var parse5_adapter_1 = __nccwpck_require__(8186);
+var htmlparser2_2 = __nccwpck_require__(6621);
+var parse5_1 = __nccwpck_require__(246);
 var domhandler_1 = __nccwpck_require__(4038);
 /*
  * Parser
@@ -4845,8 +3792,8 @@ function parse(content, options, isDocument) {
     }
     if (typeof content === 'string') {
         return options.xmlMode || options._useHtmlParser2
-            ? htmlparser2_adapter_1.parse(content, options)
-            : parse5_adapter_1.parse(content, options, isDocument);
+            ? htmlparser2_2.parse(content, options)
+            : parse5_1.parse(content, options, isDocument);
     }
     var doc = content;
     if (!Array.isArray(doc) && domhandler_1.isDocument(doc)) {
@@ -4900,7 +3847,7 @@ exports.update = update;
 
 /***/ }),
 
-/***/ 2632:
+/***/ 6621:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -4918,7 +3865,7 @@ Object.defineProperty(exports, "render", ({ enumerable: true, get: function () {
 
 /***/ }),
 
-/***/ 8186:
+/***/ 246:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -4978,8 +3925,8 @@ var tslib_1 = __nccwpck_require__(5636);
 var options_1 = tslib_1.__importStar(__nccwpck_require__(9901));
 var cheerio_select_1 = __nccwpck_require__(5409);
 var htmlparser2_1 = __nccwpck_require__(2928);
-var parse5_adapter_1 = __nccwpck_require__(8186);
-var htmlparser2_adapter_1 = __nccwpck_require__(2632);
+var parse5_1 = __nccwpck_require__(246);
+var htmlparser2_2 = __nccwpck_require__(6621);
 /**
  * Helper function to render a DOM.
  *
@@ -4989,17 +3936,22 @@ var htmlparser2_adapter_1 = __nccwpck_require__(2632);
  * @returns The rendered document.
  */
 function render(that, dom, options) {
-    var _a;
-    var toRender = dom
-        ? typeof dom === 'string'
-            ? cheerio_select_1.select(dom, (_a = that === null || that === void 0 ? void 0 : that._root) !== null && _a !== void 0 ? _a : [], options)
-            : dom
-        : that === null || that === void 0 ? void 0 : that._root.children;
-    if (!toRender)
-        return '';
+    var _a, _b;
+    if (!dom) {
+        if ((_a = that === null || that === void 0 ? void 0 : that._root) === null || _a === void 0 ? void 0 : _a.children) {
+            dom = that._root.children;
+        }
+        else {
+            return '';
+        }
+    }
+    else if (typeof dom === 'string') {
+        dom = cheerio_select_1.select(dom, (_b = that === null || that === void 0 ? void 0 : that._root) !== null && _b !== void 0 ? _b : [], options);
+    }
     return options.xmlMode || options._useHtmlParser2
-        ? htmlparser2_adapter_1.render(toRender, options)
-        : parse5_adapter_1.render(toRender);
+        ? // FIXME: Pull in new version of dom-serializer to fix this.
+            htmlparser2_2.render(dom, options)
+        : parse5_1.render(dom);
 }
 /**
  * Checks if a passed object is an options object.
@@ -5028,8 +3980,8 @@ function html(dom, options) {
      * Sometimes `$.html()` is used without preloading html,
      * so fallback non-existing options to the default ones.
      */
-    var opts = tslib_1.__assign(tslib_1.__assign(tslib_1.__assign({}, options_1.default), (this ? this._options : {})), options_1.flatten(options !== null && options !== void 0 ? options : {}));
-    return render(this || undefined, dom, opts);
+    options = tslib_1.__assign(tslib_1.__assign(tslib_1.__assign({}, options_1.default), (this ? this._options : {})), options_1.flatten(options !== null && options !== void 0 ? options : {}));
+    return render(this || undefined, dom, options);
 }
 exports.html = html;
 /**
@@ -5103,7 +4055,8 @@ exports.parseHTML = parseHTML;
  * @alias Cheerio.root
  */
 function root() {
-    return this(this._root);
+    var fn = this;
+    return fn(this._root);
 }
 exports.root = root;
 /**
@@ -5261,8 +4214,8 @@ exports.cssCase = cssCase;
  */
 function domEach(array, fn) {
     var len = array.length;
-    for (var i = 0; i < len; i++)
-        fn(array[i], i);
+    for (var i = 0; i < len && fn(i, array[i]) !== false; i++)
+        ;
     return array;
 }
 exports.domEach = domEach;
@@ -5330,75 +4283,14 @@ function escapeRegex(value) {
     return value.replace(reChars, "\\$&");
 }
 /**
- * Attributes that are case-insensitive in HTML.
- *
- * @private
- * @see https://html.spec.whatwg.org/multipage/semantics-other.html#case-sensitivity-of-selectors
- */
-var caseInsensitiveAttributes = new Set([
-    "accept",
-    "accept-charset",
-    "align",
-    "alink",
-    "axis",
-    "bgcolor",
-    "charset",
-    "checked",
-    "clear",
-    "codetype",
-    "color",
-    "compact",
-    "declare",
-    "defer",
-    "dir",
-    "direction",
-    "disabled",
-    "enctype",
-    "face",
-    "frame",
-    "hreflang",
-    "http-equiv",
-    "lang",
-    "language",
-    "link",
-    "media",
-    "method",
-    "multiple",
-    "nohref",
-    "noresize",
-    "noshade",
-    "nowrap",
-    "readonly",
-    "rel",
-    "rev",
-    "rules",
-    "scope",
-    "scrolling",
-    "selected",
-    "shape",
-    "target",
-    "text",
-    "type",
-    "valign",
-    "valuetype",
-    "vlink",
-]);
-function shouldIgnoreCase(selector, options) {
-    return typeof selector.ignoreCase === "boolean"
-        ? selector.ignoreCase
-        : selector.ignoreCase === "quirks"
-            ? !!options.quirksMode
-            : !options.xmlMode && caseInsensitiveAttributes.has(selector.name);
-}
-/**
  * Attribute selectors
  */
 exports.attributeRules = {
-    equals: function (next, data, options) {
-        var adapter = options.adapter;
+    equals: function (next, data, _a) {
+        var adapter = _a.adapter;
         var name = data.name;
         var value = data.value;
-        if (shouldIgnoreCase(data, options)) {
+        if (data.ignoreCase) {
             value = value.toLowerCase();
             return function (elem) {
                 var attr = adapter.getAttributeValue(elem, name);
@@ -5412,12 +4304,12 @@ exports.attributeRules = {
             return adapter.getAttributeValue(elem, name) === value && next(elem);
         };
     },
-    hyphen: function (next, data, options) {
-        var adapter = options.adapter;
+    hyphen: function (next, data, _a) {
+        var adapter = _a.adapter;
         var name = data.name;
         var value = data.value;
         var len = value.length;
-        if (shouldIgnoreCase(data, options)) {
+        if (data.ignoreCase) {
             value = value.toLowerCase();
             return function hyphenIC(elem) {
                 var attr = adapter.getAttributeValue(elem, name);
@@ -5435,13 +4327,13 @@ exports.attributeRules = {
                 next(elem));
         };
     },
-    element: function (next, data, options) {
-        var adapter = options.adapter;
-        var name = data.name, value = data.value;
+    element: function (next, _a, _b) {
+        var name = _a.name, value = _a.value, ignoreCase = _a.ignoreCase;
+        var adapter = _b.adapter;
         if (/\s/.test(value)) {
             return boolbase_1.falseFunc;
         }
-        var regex = new RegExp("(?:^|\\s)".concat(escapeRegex(value), "(?:$|\\s)"), shouldIgnoreCase(data, options) ? "i" : "");
+        var regex = new RegExp("(?:^|\\s)" + escapeRegex(value) + "(?:$|\\s)", ignoreCase ? "i" : "");
         return function element(elem) {
             var attr = adapter.getAttributeValue(elem, name);
             return (attr != null &&
@@ -5455,15 +4347,15 @@ exports.attributeRules = {
         var adapter = _b.adapter;
         return function (elem) { return adapter.hasAttrib(elem, name) && next(elem); };
     },
-    start: function (next, data, options) {
-        var adapter = options.adapter;
+    start: function (next, data, _a) {
+        var adapter = _a.adapter;
         var name = data.name;
         var value = data.value;
         var len = value.length;
         if (len === 0) {
             return boolbase_1.falseFunc;
         }
-        if (shouldIgnoreCase(data, options)) {
+        if (data.ignoreCase) {
             value = value.toLowerCase();
             return function (elem) {
                 var attr = adapter.getAttributeValue(elem, name);
@@ -5479,15 +4371,15 @@ exports.attributeRules = {
                 next(elem);
         };
     },
-    end: function (next, data, options) {
-        var adapter = options.adapter;
+    end: function (next, data, _a) {
+        var adapter = _a.adapter;
         var name = data.name;
         var value = data.value;
         var len = -value.length;
         if (len === 0) {
             return boolbase_1.falseFunc;
         }
-        if (shouldIgnoreCase(data, options)) {
+        if (data.ignoreCase) {
             value = value.toLowerCase();
             return function (elem) {
                 var _a;
@@ -5501,13 +4393,13 @@ exports.attributeRules = {
                 next(elem);
         };
     },
-    any: function (next, data, options) {
-        var adapter = options.adapter;
+    any: function (next, data, _a) {
+        var adapter = _a.adapter;
         var name = data.name, value = data.value;
         if (value === "") {
             return boolbase_1.falseFunc;
         }
-        if (shouldIgnoreCase(data, options)) {
+        if (data.ignoreCase) {
             var regex_1 = new RegExp(escapeRegex(value), "i");
             return function anyIC(elem) {
                 var attr = adapter.getAttributeValue(elem, name);
@@ -5523,8 +4415,8 @@ exports.attributeRules = {
                 next(elem);
         };
     },
-    not: function (next, data, options) {
-        var adapter = options.adapter;
+    not: function (next, data, _a) {
+        var adapter = _a.adapter;
         var name = data.name;
         var value = data.value;
         if (value === "") {
@@ -5532,7 +4424,7 @@ exports.attributeRules = {
                 return !!adapter.getAttributeValue(elem, name) && next(elem);
             };
         }
-        else if (shouldIgnoreCase(data, options)) {
+        else if (data.ignoreCase) {
             value = value.toLowerCase();
             return function (elem) {
                 var attr = adapter.getAttributeValue(elem, name);
@@ -5561,7 +4453,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.compileToken = exports.compileUnsafe = exports.compile = void 0;
-var css_what_1 = __nccwpck_require__(284);
+var css_what_1 = __nccwpck_require__(9218);
 var boolbase_1 = __nccwpck_require__(4159);
 var sort_1 = __importDefault(__nccwpck_require__(7320));
 var procedure_1 = __nccwpck_require__(7396);
@@ -5576,11 +4468,11 @@ var subselects_1 = __nccwpck_require__(5813);
  */
 function compile(selector, options, context) {
     var next = compileUnsafe(selector, options, context);
-    return (0, subselects_1.ensureIsTag)(next, options.adapter);
+    return subselects_1.ensureIsTag(next, options.adapter);
 }
 exports.compile = compile;
 function compileUnsafe(selector, options, context) {
-    var token = typeof selector === "string" ? (0, css_what_1.parse)(selector) : selector;
+    var token = typeof selector === "string" ? css_what_1.parse(selector, options) : selector;
     return compileToken(token, options, context);
 }
 exports.compileUnsafe = compileUnsafe;
@@ -5590,15 +4482,11 @@ function includesScopePseudo(t) {
             (Array.isArray(t.data) &&
                 t.data.some(function (data) { return data.some(includesScopePseudo); }))));
 }
-var DESCENDANT_TOKEN = { type: css_what_1.SelectorType.Descendant };
+var DESCENDANT_TOKEN = { type: "descendant" };
 var FLEXIBLE_DESCENDANT_TOKEN = {
     type: "_flexibleDescendant",
 };
-var SCOPE_TOKEN = {
-    type: css_what_1.SelectorType.Pseudo,
-    name: "scope",
-    data: null,
-};
+var SCOPE_TOKEN = { type: "pseudo", name: "scope", data: null };
 /*
  * CSS 4 Spec (Draft): 3.3.1. Absolutizing a Scope-relative Selector
  * http://www.w3.org/TR/selectors4/#absolutizing
@@ -5612,7 +4500,7 @@ function absolutize(token, _a, context) {
     }));
     for (var _i = 0, token_1 = token; _i < token_1.length; _i++) {
         var t = token_1[_i];
-        if (t.length > 0 && (0, procedure_1.isTraversal)(t[0]) && t[0].type !== "descendant") {
+        if (t.length > 0 && procedure_1.isTraversal(t[0]) && t[0].type !== "descendant") {
             // Don't continue in else branch
         }
         else if (hasContext && !t.some(includesScopePseudo)) {
@@ -5660,7 +4548,7 @@ function compileRules(rules, options, context) {
     return rules.reduce(function (previous, rule) {
         return previous === boolbase_1.falseFunc
             ? boolbase_1.falseFunc
-            : (0, general_1.compileGeneralSelector)(previous, rule, options, context, compileToken);
+            : general_1.compileGeneralSelector(previous, rule, options, context, compileToken);
     }, (_a = options.rootFunc) !== null && _a !== void 0 ? _a : boolbase_1.trueFunc);
 }
 function reduceRules(a, b) {
@@ -5687,46 +4575,25 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.compileGeneralSelector = void 0;
 var attributes_1 = __nccwpck_require__(6863);
 var pseudo_selectors_1 = __nccwpck_require__(9312);
-var css_what_1 = __nccwpck_require__(284);
 /*
  * All available rules
  */
 function compileGeneralSelector(next, selector, options, context, compileToken) {
     var adapter = options.adapter, equals = options.equals;
     switch (selector.type) {
-        case css_what_1.SelectorType.PseudoElement: {
+        case "pseudo-element":
             throw new Error("Pseudo-elements are not supported by css-select");
-        }
-        case css_what_1.SelectorType.ColumnCombinator: {
-            throw new Error("Column combinators are not yet supported by css-select");
-        }
-        case css_what_1.SelectorType.Attribute: {
-            if (selector.namespace != null) {
-                throw new Error("Namespaced attributes are not yet supported by css-select");
-            }
-            if (!options.xmlMode || options.lowerCaseAttributeNames) {
-                selector.name = selector.name.toLowerCase();
-            }
+        case "attribute":
             return attributes_1.attributeRules[selector.action](next, selector, options);
-        }
-        case css_what_1.SelectorType.Pseudo: {
-            return (0, pseudo_selectors_1.compilePseudoSelector)(next, selector, options, context, compileToken);
-        }
+        case "pseudo":
+            return pseudo_selectors_1.compilePseudoSelector(next, selector, options, context, compileToken);
         // Tags
-        case css_what_1.SelectorType.Tag: {
-            if (selector.namespace != null) {
-                throw new Error("Namespaced tag names are not yet supported by css-select");
-            }
-            var name_1 = selector.name;
-            if (!options.xmlMode || options.lowerCaseTags) {
-                name_1 = name_1.toLowerCase();
-            }
+        case "tag":
             return function tag(elem) {
-                return adapter.getName(elem) === name_1 && next(elem);
+                return adapter.getName(elem) === selector.name && next(elem);
             };
-        }
         // Traversal
-        case css_what_1.SelectorType.Descendant: {
+        case "descendant":
             if (options.cacheResults === false ||
                 typeof WeakSet === "undefined") {
                 return function descendant(elem) {
@@ -5740,6 +4607,7 @@ function compileGeneralSelector(next, selector, options, context, compileToken) 
                 };
             }
             // @ts-expect-error `ElementNode` is not extending object
+            // eslint-disable-next-line no-case-declarations
             var isFalseCache_1 = new WeakSet();
             return function cachedDescendant(elem) {
                 var current = elem;
@@ -5753,8 +4621,7 @@ function compileGeneralSelector(next, selector, options, context, compileToken) 
                 }
                 return false;
             };
-        }
-        case "_flexibleDescendant": {
+        case "_flexibleDescendant":
             // Include element itself, only used while querying an array
             return function flexibleDescendant(elem) {
                 var current = elem;
@@ -5764,21 +4631,18 @@ function compileGeneralSelector(next, selector, options, context, compileToken) 
                 } while ((current = adapter.getParent(current)));
                 return false;
             };
-        }
-        case css_what_1.SelectorType.Parent: {
+        case "parent":
             return function parent(elem) {
                 return adapter
                     .getChildren(elem)
                     .some(function (elem) { return adapter.isTag(elem) && next(elem); });
             };
-        }
-        case css_what_1.SelectorType.Child: {
+        case "child":
             return function child(elem) {
                 var parent = adapter.getParent(elem);
                 return parent != null && adapter.isTag(parent) && next(parent);
             };
-        }
-        case css_what_1.SelectorType.Sibling: {
+        case "sibling":
             return function sibling(elem) {
                 var siblings = adapter.getSiblings(elem);
                 for (var i = 0; i < siblings.length; i++) {
@@ -5791,14 +4655,7 @@ function compileGeneralSelector(next, selector, options, context, compileToken) 
                 }
                 return false;
             };
-        }
-        case css_what_1.SelectorType.Adjacent: {
-            if (adapter.prevElementSibling) {
-                return function adjacent(elem) {
-                    var previous = adapter.prevElementSibling(elem);
-                    return previous != null && next(previous);
-                };
-            }
+        case "adjacent":
             return function adjacent(elem) {
                 var siblings = adapter.getSiblings(elem);
                 var lastElement;
@@ -5812,13 +4669,8 @@ function compileGeneralSelector(next, selector, options, context, compileToken) 
                 }
                 return !!lastElement && next(lastElement);
             };
-        }
-        case css_what_1.SelectorType.Universal: {
-            if (selector.namespace != null && selector.namespace !== "*") {
-                throw new Error("Namespaced universal selectors are not yet supported by css-select");
-            }
+        case "universal":
             return next;
-        }
     }
 }
 exports.compileGeneralSelector = compileGeneralSelector;
@@ -5833,11 +4685,7 @@ exports.compileGeneralSelector = compileGeneralSelector;
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -5894,7 +4742,7 @@ function getSelectorFunc(searchFunc) {
     return function select(query, elements, options) {
         var opts = convertOptionFormats(options);
         if (typeof query !== "function") {
-            query = (0, compile_1.compileUnsafe)(query, opts, elements);
+            query = compile_1.compileUnsafe(query, opts, elements);
         }
         var filteredElements = prepareContext(elements, opts.adapter, query.shouldTestNextSiblings);
         return searchFunc(query, filteredElements, opts);
@@ -5917,9 +4765,8 @@ exports.prepareContext = prepareContext;
 function appendNextSiblings(elem, adapter) {
     // Order matters because jQuery seems to check the children before the siblings
     var elems = Array.isArray(elem) ? elem.slice(0) : [elem];
-    var elemsLength = elems.length;
-    for (var i = 0; i < elemsLength; i++) {
-        var nextSiblings = (0, subselects_1.getNextSiblings)(elems[i], adapter);
+    for (var i = 0; i < elems.length; i++) {
+        var nextSiblings = subselects_1.getNextSiblings(elems[i], adapter);
         elems.push.apply(elems, nextSiblings);
     }
     return elems;
@@ -5966,7 +4813,7 @@ exports.selectOne = getSelectorFunc(function (query, elems, options) {
  */
 function is(elem, query, options) {
     var opts = convertOptionFormats(options);
-    return (typeof query === "function" ? query : (0, compile_1.compile)(query, opts))(elem);
+    return (typeof query === "function" ? query : compile_1.compile(query, opts))(elem);
 }
 exports.is = is;
 /**
@@ -5996,7 +4843,6 @@ exports.procedure = {
     attribute: 1,
     pseudo: 0,
     "pseudo-element": 0,
-    "column-combinator": -1,
     descendant: -1,
     child: -1,
     parent: -1,
@@ -6089,7 +4935,7 @@ exports.filters = {
     // Location specific methods
     "nth-child": function (next, rule, _a) {
         var adapter = _a.adapter, equals = _a.equals;
-        var func = (0, nth_check_1.default)(rule);
+        var func = nth_check_1.default(rule);
         if (func === boolbase_1.falseFunc)
             return boolbase_1.falseFunc;
         if (func === boolbase_1.trueFunc)
@@ -6109,7 +4955,7 @@ exports.filters = {
     },
     "nth-last-child": function (next, rule, _a) {
         var adapter = _a.adapter, equals = _a.equals;
-        var func = (0, nth_check_1.default)(rule);
+        var func = nth_check_1.default(rule);
         if (func === boolbase_1.falseFunc)
             return boolbase_1.falseFunc;
         if (func === boolbase_1.trueFunc)
@@ -6129,7 +4975,7 @@ exports.filters = {
     },
     "nth-of-type": function (next, rule, _a) {
         var adapter = _a.adapter, equals = _a.equals;
-        var func = (0, nth_check_1.default)(rule);
+        var func = nth_check_1.default(rule);
         if (func === boolbase_1.falseFunc)
             return boolbase_1.falseFunc;
         if (func === boolbase_1.trueFunc)
@@ -6151,7 +4997,7 @@ exports.filters = {
     },
     "nth-last-of-type": function (next, rule, _a) {
         var adapter = _a.adapter, equals = _a.equals;
-        var func = (0, nth_check_1.default)(rule);
+        var func = nth_check_1.default(rule);
         if (func === boolbase_1.falseFunc)
             return boolbase_1.falseFunc;
         if (func === boolbase_1.trueFunc)
@@ -6239,7 +5085,7 @@ exports.compilePseudoSelector = exports.aliases = exports.pseudos = exports.filt
  * Pseudos should be used to implement simple checks.
  */
 var boolbase_1 = __nccwpck_require__(4159);
-var css_what_1 = __nccwpck_require__(284);
+var css_what_1 = __nccwpck_require__(9218);
 var filters_1 = __nccwpck_require__(1686);
 Object.defineProperty(exports, "filters", ({ enumerable: true, get: function () { return filters_1.filters; } }));
 var pseudos_1 = __nccwpck_require__(8952);
@@ -6254,10 +5100,10 @@ function compilePseudoSelector(next, selector, options, context, compileToken) {
     }
     if (name in aliases_1.aliases) {
         if (data != null) {
-            throw new Error("Pseudo ".concat(name, " doesn't have any arguments"));
+            throw new Error("Pseudo " + name + " doesn't have any arguments");
         }
         // The alias has to be parsed here, to make sure options are respected.
-        var alias = (0, css_what_1.parse)(aliases_1.aliases[name]);
+        var alias = css_what_1.parse(aliases_1.aliases[name], options);
         return subselects_1.subselects.is(next, alias, options, context, compileToken);
     }
     if (name in filters_1.filters) {
@@ -6265,14 +5111,14 @@ function compilePseudoSelector(next, selector, options, context, compileToken) {
     }
     if (name in pseudos_1.pseudos) {
         var pseudo_1 = pseudos_1.pseudos[name];
-        (0, pseudos_1.verifyPseudoArgs)(pseudo_1, name, data);
+        pseudos_1.verifyPseudoArgs(pseudo_1, name, data);
         return pseudo_1 === boolbase_1.falseFunc
             ? boolbase_1.falseFunc
             : next === boolbase_1.trueFunc
                 ? function (elem) { return pseudo_1(elem, options, data); }
                 : function (elem) { return pseudo_1(elem, options, data) && next(elem); };
     }
-    throw new Error("unmatched pseudo-class :".concat(name));
+    throw new Error("unmatched pseudo-class :" + name);
 }
 exports.compilePseudoSelector = compilePseudoSelector;
 
@@ -6364,11 +5210,11 @@ exports.pseudos = {
 function verifyPseudoArgs(func, name, subselect) {
     if (subselect === null) {
         if (func.length > 2) {
-            throw new Error("pseudo-selector :".concat(name, " requires an argument"));
+            throw new Error("pseudo-selector :" + name + " requires an argument");
         }
     }
     else if (func.length === 2) {
-        throw new Error("pseudo-selector :".concat(name, " doesn't have any arguments"));
+        throw new Error("pseudo-selector :" + name + " doesn't have any arguments");
     }
 }
 exports.verifyPseudoArgs = verifyPseudoArgs;
@@ -6381,14 +5227,10 @@ exports.verifyPseudoArgs = verifyPseudoArgs;
 
 "use strict";
 
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.subselects = exports.getNextSiblings = exports.ensureIsTag = exports.PLACEHOLDER_ELEMENT = void 0;
@@ -6398,7 +5240,7 @@ var procedure_1 = __nccwpck_require__(7396);
 exports.PLACEHOLDER_ELEMENT = {};
 function ensureIsTag(next, adapter) {
     if (next === boolbase_1.falseFunc)
-        return boolbase_1.falseFunc;
+        return next;
     return function (elem) { return adapter.isTag(elem) && next(elem); };
 }
 exports.ensureIsTag = ensureIsTag;
@@ -6422,17 +5264,16 @@ var is = function (next, token, options, context, compileToken) {
     return function (elem) { return func(elem) && next(elem); };
 };
 /*
- * :not, :has, :is, :matches and :where have to compile selectors
+ * :not, :has, :is and :matches have to compile selectors
  * doing this in src/pseudos.ts would lead to circular dependencies,
  * so we add them here
  */
 exports.subselects = {
     is: is,
     /**
-     * `:matches` and `:where` are aliases for `:is`.
+     * `:matches` is an alias for `:is`.
      */
     matches: is,
-    where: is,
     not: function (next, token, options, context, compileToken) {
         var opts = {
             xmlMode: !!options.xmlMode,
@@ -6480,7 +5321,7 @@ exports.subselects = {
                 context[0] = elem;
                 var childs = adapter.getChildren(elem);
                 var nextElements = shouldTestNextSiblings
-                    ? __spreadArray(__spreadArray([], childs, true), getNextSiblings(elem, adapter), true) : childs;
+                    ? __spreadArray(__spreadArray([], childs), getNextSiblings(elem, adapter)) : childs;
                 return (next(elem) && adapter.existsOne(hasElement, nextElements));
             };
         }
@@ -6500,7 +5341,6 @@ exports.subselects = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-var css_what_1 = __nccwpck_require__(284);
 var procedure_1 = __nccwpck_require__(7396);
 var attributes = {
     exists: 10,
@@ -6537,7 +5377,7 @@ function sortByProcedure(arr) {
 exports.default = sortByProcedure;
 function getProcedure(token) {
     var proc = procedure_1.procedure[token.type];
-    if (token.type === css_what_1.SelectorType.Attribute) {
+    if (token.type === "attribute") {
         proc = attributes[token.action];
         if (proc === attributes.equals && token.name === "id") {
             // Prefer ID selectors (eg. #ID)
@@ -6551,7 +5391,7 @@ function getProcedure(token) {
             proc >>= 1;
         }
     }
-    else if (token.type === css_what_1.SelectorType.Pseudo) {
+    else if (token.type === "pseudo") {
         if (!token.data) {
             proc = 3;
         }
@@ -6587,18 +5427,14 @@ function getProcedure(token) {
 
 /***/ }),
 
-/***/ 284:
+/***/ 9218:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -6606,45 +5442,121 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.stringify = exports.parse = exports.isTraversal = void 0;
-__exportStar(__nccwpck_require__(8752), exports);
-var parse_1 = __nccwpck_require__(7255);
-Object.defineProperty(exports, "isTraversal", ({ enumerable: true, get: function () { return parse_1.isTraversal; } }));
-Object.defineProperty(exports, "parse", ({ enumerable: true, get: function () { return parse_1.parse; } }));
-var stringify_1 = __nccwpck_require__(9265);
-Object.defineProperty(exports, "stringify", ({ enumerable: true, get: function () { return stringify_1.stringify; } }));
+exports.stringify = exports.parse = void 0;
+__exportStar(__nccwpck_require__(7751), exports);
+var parse_1 = __nccwpck_require__(7751);
+Object.defineProperty(exports, "parse", ({ enumerable: true, get: function () { return __importDefault(parse_1).default; } }));
+var stringify_1 = __nccwpck_require__(586);
+Object.defineProperty(exports, "stringify", ({ enumerable: true, get: function () { return __importDefault(stringify_1).default; } }));
 
 
 /***/ }),
 
-/***/ 7255:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ 7751:
+/***/ (function(__unused_webpack_module, exports) {
 
 "use strict";
 
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.parse = exports.isTraversal = void 0;
-var types_1 = __nccwpck_require__(8752);
+exports.isTraversal = void 0;
 var reName = /^[^\\#]?(?:\\(?:[\da-f]{1,6}\s?|.)|[\w\-\u00b0-\uFFFF])+/;
 var reEscape = /\\([\da-f]{1,6}\s?|(\s)|.)/gi;
-var actionTypes = new Map([
-    [126 /* Tilde */, types_1.AttributeAction.Element],
-    [94 /* Circumflex */, types_1.AttributeAction.Start],
-    [36 /* Dollar */, types_1.AttributeAction.End],
-    [42 /* Asterisk */, types_1.AttributeAction.Any],
-    [33 /* ExclamationMark */, types_1.AttributeAction.Not],
-    [124 /* Pipe */, types_1.AttributeAction.Hyphen],
-]);
+// Modified version of https://github.com/jquery/sizzle/blob/master/src/sizzle.js#L87
+var reAttr = /^\s*(?:(\*|[-\w]*)\|)?((?:\\.|[\w\u00b0-\uFFFF-])+)\s*(?:(\S?)=\s*(?:(['"])((?:[^\\]|\\[^])*?)\4|(#?(?:\\.|[\w\u00b0-\uFFFF-])*)|)|)\s*([iIsS])?\s*\]/;
+var actionTypes = {
+    undefined: "exists",
+    "": "equals",
+    "~": "element",
+    "^": "start",
+    $: "end",
+    "*": "any",
+    "!": "not",
+    "|": "hyphen",
+};
+var Traversals = {
+    ">": "child",
+    "<": "parent",
+    "~": "sibling",
+    "+": "adjacent",
+};
+var attribSelectors = {
+    "#": ["id", "equals"],
+    ".": ["class", "element"],
+};
 // Pseudos, whose data property is parsed as well.
 var unpackPseudos = new Set([
     "has",
     "not",
     "matches",
     "is",
-    "where",
     "host",
     "host-context",
+]);
+var traversalNames = new Set(__spreadArray([
+    "descendant"
+], Object.keys(Traversals).map(function (k) { return Traversals[k]; })));
+/**
+ * Attributes that are case-insensitive in HTML.
+ *
+ * @private
+ * @see https://html.spec.whatwg.org/multipage/semantics-other.html#case-sensitivity-of-selectors
+ */
+var caseInsensitiveAttributes = new Set([
+    "accept",
+    "accept-charset",
+    "align",
+    "alink",
+    "axis",
+    "bgcolor",
+    "charset",
+    "checked",
+    "clear",
+    "codetype",
+    "color",
+    "compact",
+    "declare",
+    "defer",
+    "dir",
+    "direction",
+    "disabled",
+    "enctype",
+    "face",
+    "frame",
+    "hreflang",
+    "http-equiv",
+    "lang",
+    "language",
+    "link",
+    "media",
+    "method",
+    "multiple",
+    "nohref",
+    "noresize",
+    "noshade",
+    "nowrap",
+    "readonly",
+    "rel",
+    "rev",
+    "rules",
+    "scope",
+    "scrolling",
+    "selected",
+    "shape",
+    "target",
+    "text",
+    "type",
+    "valign",
+    "valuetype",
+    "vlink",
 ]);
 /**
  * Checks whether a specific selector is a traversal.
@@ -6654,20 +5566,11 @@ var unpackPseudos = new Set([
  * @param selector Selector to check.
  */
 function isTraversal(selector) {
-    switch (selector.type) {
-        case types_1.SelectorType.Adjacent:
-        case types_1.SelectorType.Child:
-        case types_1.SelectorType.Descendant:
-        case types_1.SelectorType.Parent:
-        case types_1.SelectorType.Sibling:
-        case types_1.SelectorType.ColumnCombinator:
-            return true;
-        default:
-            return false;
-    }
+    return traversalNames.has(selector.type);
 }
 exports.isTraversal = isTraversal;
 var stripQuotesFromPseudos = new Set(["contains", "icontains"]);
+var quotes = new Set(['"', "'"]);
 // Unescape function taken from https://github.com/jquery/sizzle/blob/master/src/sizzle.js#L152
 function funescape(_, escaped, escapedWhitespace) {
     var high = parseInt(escaped, 16) - 0x10000;
@@ -6683,15 +5586,8 @@ function funescape(_, escaped, escapedWhitespace) {
 function unescapeCSS(str) {
     return str.replace(reEscape, funescape);
 }
-function isQuote(c) {
-    return c === 39 /* SingleQuote */ || c === 34 /* DoubleQuote */;
-}
 function isWhitespace(c) {
-    return (c === 32 /* Space */ ||
-        c === 9 /* Tab */ ||
-        c === 10 /* NewLine */ ||
-        c === 12 /* FormFeed */ ||
-        c === 13 /* CarriageReturn */);
+    return c === " " || c === "\n" || c === "\t" || c === "\f" || c === "\r";
 }
 /**
  * Parses `selector`, optionally with the passed `options`.
@@ -6702,57 +5598,37 @@ function isWhitespace(c) {
  * The first dimension represents selectors separated by commas (eg. `sub1, sub2`),
  * the second contains the relevant tokens for that selector.
  */
-function parse(selector) {
+function parse(selector, options) {
     var subselects = [];
-    var endIndex = parseSelector(subselects, "".concat(selector), 0);
+    var endIndex = parseSelector(subselects, "" + selector, options, 0);
     if (endIndex < selector.length) {
-        throw new Error("Unmatched selector: ".concat(selector.slice(endIndex)));
+        throw new Error("Unmatched selector: " + selector.slice(endIndex));
     }
     return subselects;
 }
-exports.parse = parse;
-function parseSelector(subselects, selector, selectorIndex) {
+exports.default = parse;
+function parseSelector(subselects, selector, options, selectorIndex) {
+    var _a, _b;
+    if (options === void 0) { options = {}; }
     var tokens = [];
+    var sawWS = false;
     function getName(offset) {
         var match = selector.slice(selectorIndex + offset).match(reName);
         if (!match) {
-            throw new Error("Expected name, found ".concat(selector.slice(selectorIndex)));
+            throw new Error("Expected name, found " + selector.slice(selectorIndex));
         }
         var name = match[0];
         selectorIndex += offset + name.length;
         return unescapeCSS(name);
     }
     function stripWhitespace(offset) {
+        while (isWhitespace(selector.charAt(selectorIndex + offset)))
+            offset++;
         selectorIndex += offset;
-        while (selectorIndex < selector.length &&
-            isWhitespace(selector.charCodeAt(selectorIndex))) {
-            selectorIndex++;
-        }
-    }
-    function readValueWithParenthesis() {
-        selectorIndex += 1;
-        var start = selectorIndex;
-        var counter = 1;
-        for (; counter > 0 && selectorIndex < selector.length; selectorIndex++) {
-            if (selector.charCodeAt(selectorIndex) ===
-                40 /* LeftParenthesis */ &&
-                !isEscaped(selectorIndex)) {
-                counter++;
-            }
-            else if (selector.charCodeAt(selectorIndex) ===
-                41 /* RightParenthesis */ &&
-                !isEscaped(selectorIndex)) {
-                counter--;
-            }
-        }
-        if (counter) {
-            throw new Error("Parenthesis not matched");
-        }
-        return unescapeCSS(selector.slice(start, selectorIndex - 1));
     }
     function isEscaped(pos) {
         var slashCount = 0;
-        while (selector.charCodeAt(--pos) === 92 /* BackSlash */)
+        while (selector.charAt(--pos) === "\\")
             slashCount++;
         return (slashCount & 1) === 1;
     }
@@ -6761,488 +5637,304 @@ function parseSelector(subselects, selector, selectorIndex) {
             throw new Error("Did not expect successive traversals.");
         }
     }
-    function addTraversal(type) {
-        if (tokens.length > 0 &&
-            tokens[tokens.length - 1].type === types_1.SelectorType.Descendant) {
-            tokens[tokens.length - 1].type = type;
-            return;
-        }
-        ensureNotTraversal();
-        tokens.push({ type: type });
-    }
-    function addSpecialAttribute(name, action) {
-        tokens.push({
-            type: types_1.SelectorType.Attribute,
-            name: name,
-            action: action,
-            value: getName(1),
-            namespace: null,
-            ignoreCase: "quirks",
-        });
-    }
-    /**
-     * We have finished parsing the current part of the selector.
-     *
-     * Remove descendant tokens at the end if they exist,
-     * and return the last index, so that parsing can be
-     * picked up from here.
-     */
-    function finalizeSubselector() {
-        if (tokens.length &&
-            tokens[tokens.length - 1].type === types_1.SelectorType.Descendant) {
-            tokens.pop();
-        }
-        if (tokens.length === 0) {
-            throw new Error("Empty sub-selector");
-        }
-        subselects.push(tokens);
-    }
     stripWhitespace(0);
-    if (selector.length === selectorIndex) {
-        return selectorIndex;
-    }
-    loop: while (selectorIndex < selector.length) {
-        var firstChar = selector.charCodeAt(selectorIndex);
-        switch (firstChar) {
-            // Whitespace
-            case 32 /* Space */:
-            case 9 /* Tab */:
-            case 10 /* NewLine */:
-            case 12 /* FormFeed */:
-            case 13 /* CarriageReturn */: {
-                if (tokens.length === 0 ||
-                    tokens[0].type !== types_1.SelectorType.Descendant) {
-                    ensureNotTraversal();
-                    tokens.push({ type: types_1.SelectorType.Descendant });
-                }
-                stripWhitespace(1);
-                break;
+    while (selector !== "") {
+        var firstChar = selector.charAt(selectorIndex);
+        if (isWhitespace(firstChar)) {
+            sawWS = true;
+            stripWhitespace(1);
+        }
+        else if (firstChar in Traversals) {
+            ensureNotTraversal();
+            tokens.push({ type: Traversals[firstChar] });
+            sawWS = false;
+            stripWhitespace(1);
+        }
+        else if (firstChar === ",") {
+            if (tokens.length === 0) {
+                throw new Error("Empty sub-selector");
             }
-            // Traversals
-            case 62 /* GreaterThan */: {
-                addTraversal(types_1.SelectorType.Child);
-                stripWhitespace(1);
-                break;
+            subselects.push(tokens);
+            tokens = [];
+            sawWS = false;
+            stripWhitespace(1);
+        }
+        else if (firstChar === "/" &&
+            selector.charAt(selectorIndex + 1) === "*") {
+            var endIndex = selector.indexOf("*/", selectorIndex + 2);
+            if (endIndex < 0) {
+                throw new Error("Comment was not terminated");
             }
-            case 60 /* LessThan */: {
-                addTraversal(types_1.SelectorType.Parent);
-                stripWhitespace(1);
-                break;
+            selectorIndex = endIndex + 2;
+        }
+        else {
+            if (sawWS) {
+                ensureNotTraversal();
+                tokens.push({ type: "descendant" });
+                sawWS = false;
             }
-            case 126 /* Tilde */: {
-                addTraversal(types_1.SelectorType.Sibling);
-                stripWhitespace(1);
-                break;
-            }
-            case 43 /* Plus */: {
-                addTraversal(types_1.SelectorType.Adjacent);
-                stripWhitespace(1);
-                break;
-            }
-            // Special attribute selectors: .class, #id
-            case 46 /* Period */: {
-                addSpecialAttribute("class", types_1.AttributeAction.Element);
-                break;
-            }
-            case 35 /* Hash */: {
-                addSpecialAttribute("id", types_1.AttributeAction.Equals);
-                break;
-            }
-            case 91 /* LeftSquareBracket */: {
-                stripWhitespace(1);
-                // Determine attribute name and namespace
-                var name_1 = void 0;
-                var namespace = null;
-                if (selector.charCodeAt(selectorIndex) === 124 /* Pipe */) {
-                    // Equivalent to no namespace
-                    name_1 = getName(1);
-                }
-                else if (selector.startsWith("*|", selectorIndex)) {
-                    namespace = "*";
-                    name_1 = getName(2);
-                }
-                else {
-                    name_1 = getName(0);
-                    if (selector.charCodeAt(selectorIndex) === 124 /* Pipe */ &&
-                        selector.charCodeAt(selectorIndex + 1) !==
-                            61 /* Equal */) {
-                        namespace = name_1;
-                        name_1 = getName(1);
-                    }
-                }
-                stripWhitespace(0);
-                // Determine comparison operation
-                var action = types_1.AttributeAction.Exists;
-                var possibleAction = actionTypes.get(selector.charCodeAt(selectorIndex));
-                if (possibleAction) {
-                    action = possibleAction;
-                    if (selector.charCodeAt(selectorIndex + 1) !==
-                        61 /* Equal */) {
-                        throw new Error("Expected `=`");
-                    }
-                    stripWhitespace(2);
-                }
-                else if (selector.charCodeAt(selectorIndex) === 61 /* Equal */) {
-                    action = types_1.AttributeAction.Equals;
-                    stripWhitespace(1);
-                }
-                // Determine value
-                var value = "";
-                var ignoreCase = null;
-                if (action !== "exists") {
-                    if (isQuote(selector.charCodeAt(selectorIndex))) {
-                        var quote = selector.charCodeAt(selectorIndex);
-                        var sectionEnd = selectorIndex + 1;
-                        while (sectionEnd < selector.length &&
-                            (selector.charCodeAt(sectionEnd) !== quote ||
-                                isEscaped(sectionEnd))) {
-                            sectionEnd += 1;
-                        }
-                        if (selector.charCodeAt(sectionEnd) !== quote) {
-                            throw new Error("Attribute value didn't end");
-                        }
-                        value = unescapeCSS(selector.slice(selectorIndex + 1, sectionEnd));
-                        selectorIndex = sectionEnd + 1;
-                    }
-                    else {
-                        var valueStart = selectorIndex;
-                        while (selectorIndex < selector.length &&
-                            ((!isWhitespace(selector.charCodeAt(selectorIndex)) &&
-                                selector.charCodeAt(selectorIndex) !==
-                                    93 /* RightSquareBracket */) ||
-                                isEscaped(selectorIndex))) {
-                            selectorIndex += 1;
-                        }
-                        value = unescapeCSS(selector.slice(valueStart, selectorIndex));
-                    }
-                    stripWhitespace(0);
-                    // See if we have a force ignore flag
-                    var forceIgnore = selector.charCodeAt(selectorIndex) | 0x20;
-                    // If the forceIgnore flag is set (either `i` or `s`), use that value
-                    if (forceIgnore === 115 /* LowerS */) {
-                        ignoreCase = false;
-                        stripWhitespace(1);
-                    }
-                    else if (forceIgnore === 105 /* LowerI */) {
-                        ignoreCase = true;
-                        stripWhitespace(1);
-                    }
-                }
-                if (selector.charCodeAt(selectorIndex) !==
-                    93 /* RightSquareBracket */) {
-                    throw new Error("Attribute selector didn't terminate");
-                }
-                selectorIndex += 1;
-                var attributeSelector = {
-                    type: types_1.SelectorType.Attribute,
+            if (firstChar in attribSelectors) {
+                var _c = attribSelectors[firstChar], name_1 = _c[0], action = _c[1];
+                tokens.push({
+                    type: "attribute",
                     name: name_1,
                     action: action,
-                    value: value,
+                    value: getName(1),
+                    namespace: null,
+                    // TODO: Add quirksMode option, which makes `ignoreCase` `true` for HTML.
+                    ignoreCase: options.xmlMode ? null : false,
+                });
+            }
+            else if (firstChar === "[") {
+                var attributeMatch = selector
+                    .slice(selectorIndex + 1)
+                    .match(reAttr);
+                if (!attributeMatch) {
+                    throw new Error("Malformed attribute selector: " + selector.slice(selectorIndex));
+                }
+                var completeSelector = attributeMatch[0], _d = attributeMatch[1], namespace = _d === void 0 ? null : _d, baseName = attributeMatch[2], actionType = attributeMatch[3], _e = attributeMatch[5], quotedValue = _e === void 0 ? "" : _e, _f = attributeMatch[6], value = _f === void 0 ? quotedValue : _f, forceIgnore = attributeMatch[7];
+                selectorIndex += completeSelector.length + 1;
+                var name_2 = unescapeCSS(baseName);
+                if ((_a = options.lowerCaseAttributeNames) !== null && _a !== void 0 ? _a : !options.xmlMode) {
+                    name_2 = name_2.toLowerCase();
+                }
+                var ignoreCase = 
+                // If the forceIgnore flag is set (either `i` or `s`), use that value
+                forceIgnore
+                    ? forceIgnore.toLowerCase() === "i"
+                    : // If `xmlMode` is set, there are no rules; return `null`.
+                        options.xmlMode
+                            ? null
+                            : // Otherwise, use the `caseInsensitiveAttributes` list.
+                                caseInsensitiveAttributes.has(name_2);
+                var attributeSelector = {
+                    type: "attribute",
+                    name: name_2,
+                    action: actionTypes[actionType],
+                    value: unescapeCSS(value),
                     namespace: namespace,
                     ignoreCase: ignoreCase,
                 };
                 tokens.push(attributeSelector);
-                break;
             }
-            case 58 /* Colon */: {
-                if (selector.charCodeAt(selectorIndex + 1) === 58 /* Colon */) {
+            else if (firstChar === ":") {
+                if (selector.charAt(selectorIndex + 1) === ":") {
                     tokens.push({
-                        type: types_1.SelectorType.PseudoElement,
+                        type: "pseudo-element",
                         name: getName(2).toLowerCase(),
-                        data: selector.charCodeAt(selectorIndex) ===
-                            40 /* LeftParenthesis */
-                            ? readValueWithParenthesis()
-                            : null,
                     });
                     continue;
                 }
-                var name_2 = getName(1).toLowerCase();
+                var name_3 = getName(1).toLowerCase();
                 var data = null;
-                if (selector.charCodeAt(selectorIndex) ===
-                    40 /* LeftParenthesis */) {
-                    if (unpackPseudos.has(name_2)) {
-                        if (isQuote(selector.charCodeAt(selectorIndex + 1))) {
-                            throw new Error("Pseudo-selector ".concat(name_2, " cannot be quoted"));
+                if (selector.charAt(selectorIndex) === "(") {
+                    if (unpackPseudos.has(name_3)) {
+                        if (quotes.has(selector.charAt(selectorIndex + 1))) {
+                            throw new Error("Pseudo-selector " + name_3 + " cannot be quoted");
                         }
                         data = [];
-                        selectorIndex = parseSelector(data, selector, selectorIndex + 1);
-                        if (selector.charCodeAt(selectorIndex) !==
-                            41 /* RightParenthesis */) {
-                            throw new Error("Missing closing parenthesis in :".concat(name_2, " (").concat(selector, ")"));
+                        selectorIndex = parseSelector(data, selector, options, selectorIndex + 1);
+                        if (selector.charAt(selectorIndex) !== ")") {
+                            throw new Error("Missing closing parenthesis in :" + name_3 + " (" + selector + ")");
                         }
                         selectorIndex += 1;
                     }
                     else {
-                        data = readValueWithParenthesis();
-                        if (stripQuotesFromPseudos.has(name_2)) {
-                            var quot = data.charCodeAt(0);
-                            if (quot === data.charCodeAt(data.length - 1) &&
-                                isQuote(quot)) {
-                                data = data.slice(1, -1);
+                        selectorIndex += 1;
+                        var start = selectorIndex;
+                        var counter = 1;
+                        for (; counter > 0 && selectorIndex < selector.length; selectorIndex++) {
+                            if (selector.charAt(selectorIndex) === "(" &&
+                                !isEscaped(selectorIndex)) {
+                                counter++;
+                            }
+                            else if (selector.charAt(selectorIndex) === ")" &&
+                                !isEscaped(selectorIndex)) {
+                                counter--;
                             }
                         }
-                        data = unescapeCSS(data);
+                        if (counter) {
+                            throw new Error("Parenthesis not matched");
+                        }
+                        data = selector.slice(start, selectorIndex - 1);
+                        if (stripQuotesFromPseudos.has(name_3)) {
+                            var quot = data.charAt(0);
+                            if (quot === data.slice(-1) && quotes.has(quot)) {
+                                data = data.slice(1, -1);
+                            }
+                            data = unescapeCSS(data);
+                        }
                     }
                 }
-                tokens.push({ type: types_1.SelectorType.Pseudo, name: name_2, data: data });
-                break;
+                tokens.push({ type: "pseudo", name: name_3, data: data });
             }
-            case 44 /* Comma */: {
-                finalizeSubselector();
-                tokens = [];
-                stripWhitespace(1);
-                break;
-            }
-            default: {
-                if (selector.startsWith("/*", selectorIndex)) {
-                    var endIndex = selector.indexOf("*/", selectorIndex + 2);
-                    if (endIndex < 0) {
-                        throw new Error("Comment was not terminated");
-                    }
-                    selectorIndex = endIndex + 2;
-                    // Remove leading whitespace
-                    if (tokens.length === 0) {
-                        stripWhitespace(0);
-                    }
-                    break;
-                }
+            else {
                 var namespace = null;
-                var name_3 = void 0;
-                if (firstChar === 42 /* Asterisk */) {
+                var name_4 = void 0;
+                if (firstChar === "*") {
                     selectorIndex += 1;
-                    name_3 = "*";
-                }
-                else if (firstChar === 124 /* Pipe */) {
-                    name_3 = "";
-                    if (selector.charCodeAt(selectorIndex + 1) === 124 /* Pipe */) {
-                        addTraversal(types_1.SelectorType.ColumnCombinator);
-                        stripWhitespace(2);
-                        break;
-                    }
+                    name_4 = "*";
                 }
                 else if (reName.test(selector.slice(selectorIndex))) {
-                    name_3 = getName(0);
+                    if (selector.charAt(selectorIndex) === "|") {
+                        namespace = "";
+                        selectorIndex += 1;
+                    }
+                    name_4 = getName(0);
                 }
                 else {
-                    break loop;
+                    /*
+                     * We have finished parsing the selector.
+                     * Remove descendant tokens at the end if they exist,
+                     * and return the last index, so that parsing can be
+                     * picked up from here.
+                     */
+                    if (tokens.length &&
+                        tokens[tokens.length - 1].type === "descendant") {
+                        tokens.pop();
+                    }
+                    addToken(subselects, tokens);
+                    return selectorIndex;
                 }
-                if (selector.charCodeAt(selectorIndex) === 124 /* Pipe */ &&
-                    selector.charCodeAt(selectorIndex + 1) !== 124 /* Pipe */) {
-                    namespace = name_3;
-                    if (selector.charCodeAt(selectorIndex + 1) ===
-                        42 /* Asterisk */) {
-                        name_3 = "*";
+                if (selector.charAt(selectorIndex) === "|") {
+                    namespace = name_4;
+                    if (selector.charAt(selectorIndex + 1) === "*") {
+                        name_4 = "*";
                         selectorIndex += 2;
                     }
                     else {
-                        name_3 = getName(1);
+                        name_4 = getName(1);
                     }
                 }
-                tokens.push(name_3 === "*"
-                    ? { type: types_1.SelectorType.Universal, namespace: namespace }
-                    : { type: types_1.SelectorType.Tag, name: name_3, namespace: namespace });
+                if (name_4 === "*") {
+                    tokens.push({ type: "universal", namespace: namespace });
+                }
+                else {
+                    if ((_b = options.lowerCaseTags) !== null && _b !== void 0 ? _b : !options.xmlMode) {
+                        name_4 = name_4.toLowerCase();
+                    }
+                    tokens.push({ type: "tag", name: name_4, namespace: namespace });
+                }
             }
         }
     }
-    finalizeSubselector();
+    addToken(subselects, tokens);
     return selectorIndex;
+}
+function addToken(subselects, tokens) {
+    if (subselects.length > 0 && tokens.length === 0) {
+        throw new Error("Empty sub-selector");
+    }
+    subselects.push(tokens);
 }
 
 
 /***/ }),
 
-/***/ 9265:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+/***/ 586:
+/***/ (function(__unused_webpack_module, exports) {
 
 "use strict";
 
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.stringify = void 0;
-var types_1 = __nccwpck_require__(8752);
-var attribValChars = ["\\", '"'];
-var pseudoValChars = __spreadArray(__spreadArray([], attribValChars, true), ["(", ")"], false);
-var charsToEscapeInAttributeValue = new Set(attribValChars.map(function (c) { return c.charCodeAt(0); }));
-var charsToEscapeInPseudoValue = new Set(pseudoValChars.map(function (c) { return c.charCodeAt(0); }));
-var charsToEscapeInName = new Set(__spreadArray(__spreadArray([], pseudoValChars, true), [
-    "~",
-    "^",
-    "$",
-    "*",
-    "+",
-    "!",
-    "|",
+var actionTypes = {
+    equals: "",
+    element: "~",
+    start: "^",
+    end: "$",
+    any: "*",
+    not: "!",
+    hyphen: "|",
+};
+var charsToEscape = new Set(__spreadArray(__spreadArray([], Object.keys(actionTypes)
+    .map(function (typeKey) { return actionTypes[typeKey]; })
+    .filter(Boolean)), [
     ":",
     "[",
     "]",
     " ",
-    ".",
-], false).map(function (c) { return c.charCodeAt(0); }));
+    "\\",
+    "(",
+    ")",
+]));
 /**
  * Turns `selector` back into a string.
  *
  * @param selector Selector to stringify.
  */
 function stringify(selector) {
-    return selector
-        .map(function (token) { return token.map(stringifyToken).join(""); })
-        .join(", ");
+    return selector.map(stringifySubselector).join(", ");
 }
-exports.stringify = stringify;
-function stringifyToken(token, index, arr) {
+exports.default = stringify;
+function stringifySubselector(token) {
+    return token.map(stringifyToken).join("");
+}
+function stringifyToken(token) {
     switch (token.type) {
         // Simple types
-        case types_1.SelectorType.Child:
-            return index === 0 ? "> " : " > ";
-        case types_1.SelectorType.Parent:
-            return index === 0 ? "< " : " < ";
-        case types_1.SelectorType.Sibling:
-            return index === 0 ? "~ " : " ~ ";
-        case types_1.SelectorType.Adjacent:
-            return index === 0 ? "+ " : " + ";
-        case types_1.SelectorType.Descendant:
+        case "child":
+            return " > ";
+        case "parent":
+            return " < ";
+        case "sibling":
+            return " ~ ";
+        case "adjacent":
+            return " + ";
+        case "descendant":
             return " ";
-        case types_1.SelectorType.ColumnCombinator:
-            return index === 0 ? "|| " : " || ";
-        case types_1.SelectorType.Universal:
-            // Return an empty string if the selector isn't needed.
-            return token.namespace === "*" &&
-                index + 1 < arr.length &&
-                "name" in arr[index + 1]
-                ? ""
-                : "".concat(getNamespace(token.namespace), "*");
-        case types_1.SelectorType.Tag:
+        case "universal":
+            return getNamespace(token.namespace) + "*";
+        case "tag":
             return getNamespacedName(token);
-        case types_1.SelectorType.PseudoElement:
-            return "::".concat(escapeName(token.name, charsToEscapeInName)).concat(token.data === null
-                ? ""
-                : "(".concat(escapeName(token.data, charsToEscapeInPseudoValue), ")"));
-        case types_1.SelectorType.Pseudo:
-            return ":".concat(escapeName(token.name, charsToEscapeInName)).concat(token.data === null
-                ? ""
-                : "(".concat(typeof token.data === "string"
-                    ? escapeName(token.data, charsToEscapeInPseudoValue)
-                    : stringify(token.data), ")"));
-        case types_1.SelectorType.Attribute: {
+        case "pseudo-element":
+            return "::" + escapeName(token.name);
+        case "pseudo":
+            if (token.data === null)
+                return ":" + escapeName(token.name);
+            if (typeof token.data === "string") {
+                return ":" + escapeName(token.name) + "(" + escapeName(token.data) + ")";
+            }
+            return ":" + escapeName(token.name) + "(" + stringify(token.data) + ")";
+        case "attribute": {
             if (token.name === "id" &&
-                token.action === types_1.AttributeAction.Equals &&
-                token.ignoreCase === "quirks" &&
+                token.action === "equals" &&
+                !token.ignoreCase &&
                 !token.namespace) {
-                return "#".concat(escapeName(token.value, charsToEscapeInName));
+                return "#" + escapeName(token.value);
             }
             if (token.name === "class" &&
-                token.action === types_1.AttributeAction.Element &&
-                token.ignoreCase === "quirks" &&
+                token.action === "element" &&
+                !token.ignoreCase &&
                 !token.namespace) {
-                return ".".concat(escapeName(token.value, charsToEscapeInName));
+                return "." + escapeName(token.value);
             }
             var name_1 = getNamespacedName(token);
-            if (token.action === types_1.AttributeAction.Exists) {
-                return "[".concat(name_1, "]");
+            if (token.action === "exists") {
+                return "[" + name_1 + "]";
             }
-            return "[".concat(name_1).concat(getActionValue(token.action), "=\"").concat(escapeName(token.value, charsToEscapeInAttributeValue), "\"").concat(token.ignoreCase === null ? "" : token.ignoreCase ? " i" : " s", "]");
+            return "[" + name_1 + actionTypes[token.action] + "='" + escapeName(token.value) + "'" + (token.ignoreCase ? "i" : token.ignoreCase === false ? "s" : "") + "]";
         }
-    }
-}
-function getActionValue(action) {
-    switch (action) {
-        case types_1.AttributeAction.Equals:
-            return "";
-        case types_1.AttributeAction.Element:
-            return "~";
-        case types_1.AttributeAction.Start:
-            return "^";
-        case types_1.AttributeAction.End:
-            return "$";
-        case types_1.AttributeAction.Any:
-            return "*";
-        case types_1.AttributeAction.Not:
-            return "!";
-        case types_1.AttributeAction.Hyphen:
-            return "|";
-        case types_1.AttributeAction.Exists:
-            throw new Error("Shouldn't be here");
     }
 }
 function getNamespacedName(token) {
-    return "".concat(getNamespace(token.namespace)).concat(escapeName(token.name, charsToEscapeInName));
+    return "" + getNamespace(token.namespace) + escapeName(token.name);
 }
 function getNamespace(namespace) {
     return namespace !== null
-        ? "".concat(namespace === "*"
-            ? "*"
-            : escapeName(namespace, charsToEscapeInName), "|")
+        ? (namespace === "*" ? "*" : escapeName(namespace)) + "|"
         : "";
 }
-function escapeName(str, charsToEscape) {
-    var lastIdx = 0;
-    var ret = "";
-    for (var i = 0; i < str.length; i++) {
-        if (charsToEscape.has(str.charCodeAt(i))) {
-            ret += "".concat(str.slice(lastIdx, i), "\\").concat(str.charAt(i));
-            lastIdx = i + 1;
-        }
-    }
-    return ret.length > 0 ? ret + str.slice(lastIdx) : str;
+function escapeName(str) {
+    return str
+        .split("")
+        .map(function (c) { return (charsToEscape.has(c) ? "\\" + c : c); })
+        .join("");
 }
-
-
-/***/ }),
-
-/***/ 8752:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.AttributeAction = exports.IgnoreCaseMode = exports.SelectorType = void 0;
-var SelectorType;
-(function (SelectorType) {
-    SelectorType["Attribute"] = "attribute";
-    SelectorType["Pseudo"] = "pseudo";
-    SelectorType["PseudoElement"] = "pseudo-element";
-    SelectorType["Tag"] = "tag";
-    SelectorType["Universal"] = "universal";
-    // Traversals
-    SelectorType["Adjacent"] = "adjacent";
-    SelectorType["Child"] = "child";
-    SelectorType["Descendant"] = "descendant";
-    SelectorType["Parent"] = "parent";
-    SelectorType["Sibling"] = "sibling";
-    SelectorType["ColumnCombinator"] = "column-combinator";
-})(SelectorType = exports.SelectorType || (exports.SelectorType = {}));
-/**
- * Modes for ignore case.
- *
- * This could be updated to an enum, and the object is
- * the current stand-in that will allow code to be updated
- * without big changes.
- */
-exports.IgnoreCaseMode = {
-    Unknown: null,
-    QuirksMode: "quirks",
-    IgnoreCase: true,
-    CaseSensitive: false,
-};
-var AttributeAction;
-(function (AttributeAction) {
-    AttributeAction["Any"] = "any";
-    AttributeAction["Element"] = "element";
-    AttributeAction["End"] = "end";
-    AttributeAction["Equals"] = "equals";
-    AttributeAction["Exists"] = "exists";
-    AttributeAction["Hyphen"] = "hyphen";
-    AttributeAction["Not"] = "not";
-    AttributeAction["Start"] = "start";
-})(AttributeAction = exports.AttributeAction || (exports.AttributeAction = {}));
 
 
 /***/ }),
@@ -7647,11 +6339,7 @@ exports.Doctype = ElementType.Doctype;
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -7670,7 +6358,6 @@ var defaultOpts = {
     normalizeWhitespace: false,
     withStartIndices: false,
     withEndIndices: false,
-    xmlMode: false,
 };
 var DomHandler = /** @class */ (function () {
     /**
@@ -7709,12 +6396,13 @@ var DomHandler = /** @class */ (function () {
     };
     // Resets the handler back to starting state
     DomHandler.prototype.onreset = function () {
+        var _a;
         this.dom = [];
         this.root = new node_1.Document(this.dom);
         this.done = false;
         this.tagStack = [this.root];
         this.lastNode = null;
-        this.parser = null;
+        this.parser = (_a = this.parser) !== null && _a !== void 0 ? _a : null;
     };
     // Signals the handler that parsing is done
     DomHandler.prototype.onend = function () {
@@ -7751,9 +6439,6 @@ var DomHandler = /** @class */ (function () {
             }
             else {
                 lastNode.data += data;
-            }
-            if (this.options.withEndIndices) {
-                lastNode.endIndex = this.parser.endIndex;
             }
         }
         else {
@@ -7892,10 +6577,6 @@ var Node = /** @class */ (function () {
     }
     Object.defineProperty(Node.prototype, "nodeType", {
         // Read-only aliases
-        /**
-         * [DOM spec](https://dom.spec.whatwg.org/#dom-node-nodetype)-compatible
-         * node {@link type}.
-         */
         get: function () {
             var _a;
             return (_a = nodeTypes.get(this.type)) !== null && _a !== void 0 ? _a : 1;
@@ -7905,10 +6586,6 @@ var Node = /** @class */ (function () {
     });
     Object.defineProperty(Node.prototype, "parentNode", {
         // Read-write aliases for properties
-        /**
-         * Same as {@link parent}.
-         * [DOM spec](https://dom.spec.whatwg.org)-compatible alias.
-         */
         get: function () {
             return this.parent;
         },
@@ -7919,10 +6596,6 @@ var Node = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(Node.prototype, "previousSibling", {
-        /**
-         * Same as {@link prev}.
-         * [DOM spec](https://dom.spec.whatwg.org)-compatible alias.
-         */
         get: function () {
             return this.prev;
         },
@@ -7933,10 +6606,6 @@ var Node = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(Node.prototype, "nextSibling", {
-        /**
-         * Same as {@link next}.
-         * [DOM spec](https://dom.spec.whatwg.org)-compatible alias.
-         */
         get: function () {
             return this.next;
         },
@@ -7959,9 +6628,6 @@ var Node = /** @class */ (function () {
     return Node;
 }());
 exports.Node = Node;
-/**
- * A node that contains some data.
- */
 var DataNode = /** @class */ (function (_super) {
     __extends(DataNode, _super);
     /**
@@ -7974,10 +6640,6 @@ var DataNode = /** @class */ (function (_super) {
         return _this;
     }
     Object.defineProperty(DataNode.prototype, "nodeValue", {
-        /**
-         * Same as {@link data}.
-         * [DOM spec](https://dom.spec.whatwg.org)-compatible alias.
-         */
         get: function () {
             return this.data;
         },
@@ -7990,9 +6652,6 @@ var DataNode = /** @class */ (function (_super) {
     return DataNode;
 }(Node));
 exports.DataNode = DataNode;
-/**
- * Text within the document.
- */
 var Text = /** @class */ (function (_super) {
     __extends(Text, _super);
     function Text(data) {
@@ -8001,9 +6660,6 @@ var Text = /** @class */ (function (_super) {
     return Text;
 }(DataNode));
 exports.Text = Text;
-/**
- * Comments within the document.
- */
 var Comment = /** @class */ (function (_super) {
     __extends(Comment, _super);
     function Comment(data) {
@@ -8012,9 +6668,6 @@ var Comment = /** @class */ (function (_super) {
     return Comment;
 }(DataNode));
 exports.Comment = Comment;
-/**
- * Processing instructions, including doc types.
- */
 var ProcessingInstruction = /** @class */ (function (_super) {
     __extends(ProcessingInstruction, _super);
     function ProcessingInstruction(name, data) {
@@ -8041,7 +6694,6 @@ var NodeWithChildren = /** @class */ (function (_super) {
     }
     Object.defineProperty(NodeWithChildren.prototype, "firstChild", {
         // Aliases
-        /** First child of the node. */
         get: function () {
             var _a;
             return (_a = this.children[0]) !== null && _a !== void 0 ? _a : null;
@@ -8050,7 +6702,6 @@ var NodeWithChildren = /** @class */ (function (_super) {
         configurable: true
     });
     Object.defineProperty(NodeWithChildren.prototype, "lastChild", {
-        /** Last child of the node. */
         get: function () {
             return this.children.length > 0
                 ? this.children[this.children.length - 1]
@@ -8060,10 +6711,6 @@ var NodeWithChildren = /** @class */ (function (_super) {
         configurable: true
     });
     Object.defineProperty(NodeWithChildren.prototype, "childNodes", {
-        /**
-         * Same as {@link children}.
-         * [DOM spec](https://dom.spec.whatwg.org)-compatible alias.
-         */
         get: function () {
             return this.children;
         },
@@ -8076,9 +6723,6 @@ var NodeWithChildren = /** @class */ (function (_super) {
     return NodeWithChildren;
 }(Node));
 exports.NodeWithChildren = NodeWithChildren;
-/**
- * The root node of the document.
- */
 var Document = /** @class */ (function (_super) {
     __extends(Document, _super);
     function Document(children) {
@@ -8087,9 +6731,6 @@ var Document = /** @class */ (function (_super) {
     return Document;
 }(NodeWithChildren));
 exports.Document = Document;
-/**
- * An element within the DOM.
- */
 var Element = /** @class */ (function (_super) {
     __extends(Element, _super);
     /**
@@ -8111,10 +6752,6 @@ var Element = /** @class */ (function (_super) {
     }
     Object.defineProperty(Element.prototype, "tagName", {
         // DOM Level 1 aliases
-        /**
-         * Same as {@link name}.
-         * [DOM spec](https://dom.spec.whatwg.org)-compatible alias.
-         */
         get: function () {
             return this.name;
         },
@@ -8148,7 +6785,7 @@ exports.Element = Element;
  * @returns `true` if the node is a `Element`, `false` otherwise.
  */
 function isTag(node) {
-    return (0, domelementtype_1.isTag)(node);
+    return domelementtype_1.isTag(node);
 }
 exports.isTag = isTag;
 /**
@@ -8218,9 +6855,6 @@ function cloneNode(node, recursive) {
         var children = recursive ? cloneChildren(node.children) : [];
         var clone_1 = new Element(node.name, __assign({}, node.attribs), children);
         children.forEach(function (child) { return (child.parent = clone_1); });
-        if (node.namespace != null) {
-            clone_1.namespace = node.namespace;
-        }
         if (node["x-attribsNamespace"]) {
             clone_1["x-attribsNamespace"] = __assign({}, node["x-attribsNamespace"]);
         }
@@ -8254,13 +6888,10 @@ function cloneNode(node, recursive) {
         result = instruction;
     }
     else {
-        throw new Error("Not implemented yet: ".concat(node.type));
+        throw new Error("Not implemented yet: " + node.type);
     }
     result.startIndex = node.startIndex;
     result.endIndex = node.endIndex;
-    if (node.sourceCodeLocation != null) {
-        result.sourceCodeLocation = node.sourceCodeLocation;
-    }
     return result;
 }
 exports.cloneNode = cloneNode;
@@ -32130,204 +30761,6 @@ function isValidQName(s) {
 
 /***/ }),
 
-/***/ 1503:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getFeed = void 0;
-var stringify_1 = __nccwpck_require__(9561);
-var legacy_1 = __nccwpck_require__(2185);
-/**
- * Get the feed object from the root of a DOM tree.
- *
- * @param doc - The DOM to to extract the feed from.
- * @returns The feed.
- */
-function getFeed(doc) {
-    var feedRoot = getOneElement(isValidFeed, doc);
-    return !feedRoot
-        ? null
-        : feedRoot.name === "feed"
-            ? getAtomFeed(feedRoot)
-            : getRssFeed(feedRoot);
-}
-exports.getFeed = getFeed;
-/**
- * Parse an Atom feed.
- *
- * @param feedRoot The root of the feed.
- * @returns The parsed feed.
- */
-function getAtomFeed(feedRoot) {
-    var _a;
-    var childs = feedRoot.children;
-    var feed = {
-        type: "atom",
-        items: (0, legacy_1.getElementsByTagName)("entry", childs).map(function (item) {
-            var _a;
-            var children = item.children;
-            var entry = { media: getMediaElements(children) };
-            addConditionally(entry, "id", "id", children);
-            addConditionally(entry, "title", "title", children);
-            var href = (_a = getOneElement("link", children)) === null || _a === void 0 ? void 0 : _a.attribs.href;
-            if (href) {
-                entry.link = href;
-            }
-            var description = fetch("summary", children) || fetch("content", children);
-            if (description) {
-                entry.description = description;
-            }
-            var pubDate = fetch("updated", children);
-            if (pubDate) {
-                entry.pubDate = new Date(pubDate);
-            }
-            return entry;
-        }),
-    };
-    addConditionally(feed, "id", "id", childs);
-    addConditionally(feed, "title", "title", childs);
-    var href = (_a = getOneElement("link", childs)) === null || _a === void 0 ? void 0 : _a.attribs.href;
-    if (href) {
-        feed.link = href;
-    }
-    addConditionally(feed, "description", "subtitle", childs);
-    var updated = fetch("updated", childs);
-    if (updated) {
-        feed.updated = new Date(updated);
-    }
-    addConditionally(feed, "author", "email", childs, true);
-    return feed;
-}
-/**
- * Parse a RSS feed.
- *
- * @param feedRoot The root of the feed.
- * @returns The parsed feed.
- */
-function getRssFeed(feedRoot) {
-    var _a, _b;
-    var childs = (_b = (_a = getOneElement("channel", feedRoot.children)) === null || _a === void 0 ? void 0 : _a.children) !== null && _b !== void 0 ? _b : [];
-    var feed = {
-        type: feedRoot.name.substr(0, 3),
-        id: "",
-        items: (0, legacy_1.getElementsByTagName)("item", feedRoot.children).map(function (item) {
-            var children = item.children;
-            var entry = { media: getMediaElements(children) };
-            addConditionally(entry, "id", "guid", children);
-            addConditionally(entry, "title", "title", children);
-            addConditionally(entry, "link", "link", children);
-            addConditionally(entry, "description", "description", children);
-            var pubDate = fetch("pubDate", children);
-            if (pubDate)
-                entry.pubDate = new Date(pubDate);
-            return entry;
-        }),
-    };
-    addConditionally(feed, "title", "title", childs);
-    addConditionally(feed, "link", "link", childs);
-    addConditionally(feed, "description", "description", childs);
-    var updated = fetch("lastBuildDate", childs);
-    if (updated) {
-        feed.updated = new Date(updated);
-    }
-    addConditionally(feed, "author", "managingEditor", childs, true);
-    return feed;
-}
-var MEDIA_KEYS_STRING = ["url", "type", "lang"];
-var MEDIA_KEYS_INT = [
-    "fileSize",
-    "bitrate",
-    "framerate",
-    "samplingrate",
-    "channels",
-    "duration",
-    "height",
-    "width",
-];
-/**
- * Get all media elements of a feed item.
- *
- * @param where Nodes to search in.
- * @returns Media elements.
- */
-function getMediaElements(where) {
-    return (0, legacy_1.getElementsByTagName)("media:content", where).map(function (elem) {
-        var attribs = elem.attribs;
-        var media = {
-            medium: attribs.medium,
-            isDefault: !!attribs.isDefault,
-        };
-        for (var _i = 0, MEDIA_KEYS_STRING_1 = MEDIA_KEYS_STRING; _i < MEDIA_KEYS_STRING_1.length; _i++) {
-            var attrib = MEDIA_KEYS_STRING_1[_i];
-            if (attribs[attrib]) {
-                media[attrib] = attribs[attrib];
-            }
-        }
-        for (var _a = 0, MEDIA_KEYS_INT_1 = MEDIA_KEYS_INT; _a < MEDIA_KEYS_INT_1.length; _a++) {
-            var attrib = MEDIA_KEYS_INT_1[_a];
-            if (attribs[attrib]) {
-                media[attrib] = parseInt(attribs[attrib], 10);
-            }
-        }
-        if (attribs.expression) {
-            media.expression =
-                attribs.expression;
-        }
-        return media;
-    });
-}
-/**
- * Get one element by tag name.
- *
- * @param tagName Tag name to look for
- * @param node Node to search in
- * @returns The element or null
- */
-function getOneElement(tagName, node) {
-    return (0, legacy_1.getElementsByTagName)(tagName, node, true, 1)[0];
-}
-/**
- * Get the text content of an element with a certain tag name.
- *
- * @param tagName Tag name to look for.
- * @param where  Node to search in.
- * @param recurse Whether to recurse into child nodes.
- * @returns The text content of the element.
- */
-function fetch(tagName, where, recurse) {
-    if (recurse === void 0) { recurse = false; }
-    return (0, stringify_1.textContent)((0, legacy_1.getElementsByTagName)(tagName, where, recurse, 1)).trim();
-}
-/**
- * Adds a property to an object if it has a value.
- *
- * @param obj Object to be extended
- * @param prop Property name
- * @param tagName Tag name that contains the conditionally added property
- * @param where Element to search for the property
- * @param recurse Whether to recurse into child nodes.
- */
-function addConditionally(obj, prop, tagName, where, recurse) {
-    if (recurse === void 0) { recurse = false; }
-    var val = fetch(tagName, where, recurse);
-    if (val)
-        obj[prop] = val;
-}
-/**
- * Checks if an element is a feed root node.
- *
- * @param value The name of the element to check.
- * @returns Whether an element is a feed root node.
- */
-function isValidFeed(value) {
-    return value === "rss" || value === "feed" || value === "rdf:RDF";
-}
-
-
-/***/ }),
-
 /***/ 1447:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -32400,12 +30833,12 @@ function compareDocumentPosition(nodeA, nodeB) {
     if (nodeA === nodeB) {
         return 0;
     }
-    var current = (0, domhandler_1.hasChildren)(nodeA) ? nodeA : nodeA.parent;
+    var current = domhandler_1.hasChildren(nodeA) ? nodeA : nodeA.parent;
     while (current) {
         aParents.unshift(current);
         current = current.parent;
     }
-    current = (0, domhandler_1.hasChildren)(nodeB) ? nodeB : nodeB.parent;
+    current = domhandler_1.hasChildren(nodeB) ? nodeB : nodeB.parent;
     while (current) {
         bParents.unshift(current);
         current = current.parent;
@@ -32484,8 +30917,6 @@ __exportStar(__nccwpck_require__(177), exports);
 __exportStar(__nccwpck_require__(9908), exports);
 __exportStar(__nccwpck_require__(2185), exports);
 __exportStar(__nccwpck_require__(1447), exports);
-__exportStar(__nccwpck_require__(1503), exports);
-/** @deprecated Use these methods from `domhandler` directly. */
 var domhandler_1 = __nccwpck_require__(4038);
 Object.defineProperty(exports, "isTag", ({ enumerable: true, get: function () { return domhandler_1.isTag; } }));
 Object.defineProperty(exports, "isCDATA", ({ enumerable: true, get: function () { return domhandler_1.isCDATA; } }));
@@ -32509,12 +30940,12 @@ var querying_1 = __nccwpck_require__(9908);
 var Checks = {
     tag_name: function (name) {
         if (typeof name === "function") {
-            return function (elem) { return (0, domhandler_1.isTag)(elem) && name(elem.name); };
+            return function (elem) { return domhandler_1.isTag(elem) && name(elem.name); };
         }
         else if (name === "*") {
             return domhandler_1.isTag;
         }
-        return function (elem) { return (0, domhandler_1.isTag)(elem) && elem.name === name; };
+        return function (elem) { return domhandler_1.isTag(elem) && elem.name === name; };
     },
     tag_type: function (type) {
         if (typeof type === "function") {
@@ -32524,9 +30955,9 @@ var Checks = {
     },
     tag_contains: function (data) {
         if (typeof data === "function") {
-            return function (elem) { return (0, domhandler_1.isText)(elem) && data(elem.data); };
+            return function (elem) { return domhandler_1.isText(elem) && data(elem.data); };
         }
-        return function (elem) { return (0, domhandler_1.isText)(elem) && elem.data === data; };
+        return function (elem) { return domhandler_1.isText(elem) && elem.data === data; };
     },
 };
 /**
@@ -32536,9 +30967,9 @@ var Checks = {
  */
 function getAttribCheck(attrib, value) {
     if (typeof value === "function") {
-        return function (elem) { return (0, domhandler_1.isTag)(elem) && value(elem.attribs[attrib]); };
+        return function (elem) { return domhandler_1.isTag(elem) && value(elem.attribs[attrib]); };
     }
-    return function (elem) { return (0, domhandler_1.isTag)(elem) && elem.attribs[attrib] === value; };
+    return function (elem) { return domhandler_1.isTag(elem) && elem.attribs[attrib] === value; };
 }
 /**
  * @param a First function to combine.
@@ -32557,7 +30988,7 @@ function combineFuncs(a, b) {
 function compileTest(options) {
     var funcs = Object.keys(options).map(function (key) {
         var value = options[key];
-        return Object.prototype.hasOwnProperty.call(Checks, key)
+        return key in Checks
             ? Checks[key](value)
             : getAttribCheck(key, value);
     });
@@ -32583,7 +31014,7 @@ exports.testElement = testElement;
 function getElements(options, nodes, recurse, limit) {
     if (limit === void 0) { limit = Infinity; }
     var test = compileTest(options);
-    return test ? (0, querying_1.filter)(test, nodes, recurse, limit) : [];
+    return test ? querying_1.filter(test, nodes, recurse, limit) : [];
 }
 exports.getElements = getElements;
 /**
@@ -32596,7 +31027,7 @@ function getElementById(id, nodes, recurse) {
     if (recurse === void 0) { recurse = true; }
     if (!Array.isArray(nodes))
         nodes = [nodes];
-    return (0, querying_1.findOne)(getAttribCheck("id", id), nodes, recurse);
+    return querying_1.findOne(getAttribCheck("id", id), nodes, recurse);
 }
 exports.getElementById = getElementById;
 /**
@@ -32609,7 +31040,7 @@ exports.getElementById = getElementById;
 function getElementsByTagName(tagName, nodes, recurse, limit) {
     if (recurse === void 0) { recurse = true; }
     if (limit === void 0) { limit = Infinity; }
-    return (0, querying_1.filter)(Checks.tag_name(tagName), nodes, recurse, limit);
+    return querying_1.filter(Checks.tag_name(tagName), nodes, recurse, limit);
 }
 exports.getElementsByTagName = getElementsByTagName;
 /**
@@ -32622,7 +31053,7 @@ exports.getElementsByTagName = getElementsByTagName;
 function getElementsByTagType(type, nodes, recurse, limit) {
     if (recurse === void 0) { recurse = true; }
     if (limit === void 0) { limit = Infinity; }
-    return (0, querying_1.filter)(Checks.tag_type(type), nodes, recurse, limit);
+    return querying_1.filter(Checks.tag_type(type), nodes, recurse, limit);
 }
 exports.getElementsByTagType = getElementsByTagType;
 
@@ -32809,7 +31240,7 @@ function find(test, nodes, recurse, limit) {
             if (--limit <= 0)
                 break;
         }
-        if (recurse && (0, domhandler_1.hasChildren)(elem) && elem.children.length > 0) {
+        if (recurse && domhandler_1.hasChildren(elem) && elem.children.length > 0) {
             var children = find(test, elem.children, recurse, limit);
             result.push.apply(result, children);
             limit -= children.length;
@@ -32844,7 +31275,7 @@ function findOne(test, nodes, recurse) {
     var elem = null;
     for (var i = 0; i < nodes.length && !elem; i++) {
         var checked = nodes[i];
-        if (!(0, domhandler_1.isTag)(checked)) {
+        if (!domhandler_1.isTag(checked)) {
             continue;
         }
         else if (test(checked)) {
@@ -32864,7 +31295,7 @@ exports.findOne = findOne;
  */
 function existsOne(test, nodes) {
     return nodes.some(function (checked) {
-        return (0, domhandler_1.isTag)(checked) &&
+        return domhandler_1.isTag(checked) &&
             (test(checked) ||
                 (checked.children.length > 0 &&
                     existsOne(test, checked.children)));
@@ -32909,10 +31340,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.innerText = exports.textContent = exports.getText = exports.getInnerHTML = exports.getOuterHTML = void 0;
+exports.getText = exports.getInnerHTML = exports.getOuterHTML = void 0;
 var domhandler_1 = __nccwpck_require__(4038);
 var dom_serializer_1 = __importDefault(__nccwpck_require__(8621));
-var domelementtype_1 = __nccwpck_require__(3944);
 /**
  * @param node Node to get the outer HTML of.
  * @param options Options for serialization.
@@ -32920,7 +31350,7 @@ var domelementtype_1 = __nccwpck_require__(3944);
  * @returns `node`'s outer HTML.
  */
 function getOuterHTML(node, options) {
-    return (0, dom_serializer_1.default)(node, options);
+    return dom_serializer_1.default(node, options);
 }
 exports.getOuterHTML = getOuterHTML;
 /**
@@ -32930,66 +31360,29 @@ exports.getOuterHTML = getOuterHTML;
  * @returns `node`'s inner HTML.
  */
 function getInnerHTML(node, options) {
-    return (0, domhandler_1.hasChildren)(node)
+    return domhandler_1.hasChildren(node)
         ? node.children.map(function (node) { return getOuterHTML(node, options); }).join("")
         : "";
 }
 exports.getInnerHTML = getInnerHTML;
 /**
- * Get a node's inner text. Same as `textContent`, but inserts newlines for `<br>` tags.
+ * Get a node's inner text.
  *
- * @deprecated Use `textContent` instead.
  * @param node Node to get the inner text of.
  * @returns `node`'s inner text.
  */
 function getText(node) {
     if (Array.isArray(node))
         return node.map(getText).join("");
-    if ((0, domhandler_1.isTag)(node))
+    if (domhandler_1.isTag(node))
         return node.name === "br" ? "\n" : getText(node.children);
-    if ((0, domhandler_1.isCDATA)(node))
+    if (domhandler_1.isCDATA(node))
         return getText(node.children);
-    if ((0, domhandler_1.isText)(node))
+    if (domhandler_1.isText(node))
         return node.data;
     return "";
 }
 exports.getText = getText;
-/**
- * Get a node's text content.
- *
- * @param node Node to get the text content of.
- * @returns `node`'s text content.
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent}
- */
-function textContent(node) {
-    if (Array.isArray(node))
-        return node.map(textContent).join("");
-    if ((0, domhandler_1.hasChildren)(node) && !(0, domhandler_1.isComment)(node)) {
-        return textContent(node.children);
-    }
-    if ((0, domhandler_1.isText)(node))
-        return node.data;
-    return "";
-}
-exports.textContent = textContent;
-/**
- * Get a node's inner text.
- *
- * @param node Node to get the inner text of.
- * @returns `node`'s inner text.
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Node/innerText}
- */
-function innerText(node) {
-    if (Array.isArray(node))
-        return node.map(innerText).join("");
-    if ((0, domhandler_1.hasChildren)(node) && (node.type === domelementtype_1.ElementType.Tag || (0, domhandler_1.isCDATA)(node))) {
-        return innerText(node.children);
-    }
-    if ((0, domhandler_1.isText)(node))
-        return node.data;
-    return "";
-}
-exports.innerText = innerText;
 
 
 /***/ }),
@@ -33096,7 +31489,7 @@ exports.getName = getName;
 function nextElementSibling(elem) {
     var _a;
     var next = elem.next;
-    while (next !== null && !(0, domhandler_1.isTag)(next))
+    while (next !== null && !domhandler_1.isTag(next))
         (_a = next, next = _a.next);
     return next;
 }
@@ -33110,7 +31503,7 @@ exports.nextElementSibling = nextElementSibling;
 function prevElementSibling(elem) {
     var _a;
     var prev = elem.prev;
-    while (prev !== null && !(0, domhandler_1.isTag)(prev))
+    while (prev !== null && !domhandler_1.isTag(prev))
         (_a = prev, prev = _a.prev);
     return prev;
 }
@@ -39033,7 +37426,7 @@ Object.defineProperty(exports, "compile", ({ enumerable: true, get: function () 
  * check(6); // `true`
  */
 function nthCheck(formula) {
-    return (0, compile_1.compile)((0, parse_1.parse)(formula));
+    return compile_1.compile(parse_1.parse(formula));
 }
 exports.default = nthCheck;
 
@@ -39048,10 +37441,8 @@ exports.default = nthCheck;
 // Following http://www.w3.org/TR/css3-selectors/#nth-child-pseudo
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parse = void 0;
-// Whitespace as per https://www.w3.org/TR/selectors-3/#lex is " \t\r\n\f"
-var whitespace = new Set([9, 10, 12, 13, 32]);
-var ZERO = "0".charCodeAt(0);
-var NINE = "9".charCodeAt(0);
+// [ ['-'|'+']? INTEGER? {N} [ S* ['-'|'+'] S* INTEGER ]?
+var RE_NTH_ELEMENT = /^([+-]?\d*n)?\s*(?:([+-]?)\s*(\d+))?$/;
 /**
  * Parses an expression.
  *
@@ -39067,57 +37458,22 @@ function parse(formula) {
     else if (formula === "odd") {
         return [2, 1];
     }
-    // Parse [ ['-'|'+']? INTEGER? {N} [ S* ['-'|'+'] S* INTEGER ]?
-    var idx = 0;
-    var a = 0;
-    var sign = readSign();
-    var number = readNumber();
-    if (idx < formula.length && formula.charAt(idx) === "n") {
-        idx++;
-        a = sign * (number !== null && number !== void 0 ? number : 1);
-        skipWhitespace();
-        if (idx < formula.length) {
-            sign = readSign();
-            skipWhitespace();
-            number = readNumber();
-        }
-        else {
-            sign = number = 0;
-        }
-    }
-    // Throw if there is anything else
-    if (number === null || idx < formula.length) {
+    var parsed = formula.match(RE_NTH_ELEMENT);
+    if (!parsed) {
         throw new Error("n-th rule couldn't be parsed ('" + formula + "')");
     }
-    return [a, sign * number];
-    function readSign() {
-        if (formula.charAt(idx) === "-") {
-            idx++;
-            return -1;
-        }
-        if (formula.charAt(idx) === "+") {
-            idx++;
-        }
-        return 1;
-    }
-    function readNumber() {
-        var start = idx;
-        var value = 0;
-        while (idx < formula.length &&
-            formula.charCodeAt(idx) >= ZERO &&
-            formula.charCodeAt(idx) <= NINE) {
-            value = value * 10 + (formula.charCodeAt(idx) - ZERO);
-            idx++;
-        }
-        // Return `null` if we didn't read anything.
-        return idx === start ? null : value;
-    }
-    function skipWhitespace() {
-        while (idx < formula.length &&
-            whitespace.has(formula.charCodeAt(idx))) {
-            idx++;
+    var a;
+    if (parsed[1]) {
+        a = parseInt(parsed[1], 10);
+        if (isNaN(a)) {
+            a = parsed[1].startsWith("-") ? -1 : 1;
         }
     }
+    else
+        a = 0;
+    var b = (parsed[2] === "-" ? -1 : 1) *
+        (parsed[3] ? parseInt(parsed[3], 10) : 0);
+    return [a, b];
 }
 exports.parse = parse;
 
@@ -47634,10 +45990,9 @@ __nccwpck_require__.r(__webpack_exports__);
 /* harmony export */   "__importStar": () => /* binding */ __importStar,
 /* harmony export */   "__importDefault": () => /* binding */ __importDefault,
 /* harmony export */   "__classPrivateFieldGet": () => /* binding */ __classPrivateFieldGet,
-/* harmony export */   "__classPrivateFieldSet": () => /* binding */ __classPrivateFieldSet,
-/* harmony export */   "__classPrivateFieldIn": () => /* binding */ __classPrivateFieldIn
+/* harmony export */   "__classPrivateFieldSet": () => /* binding */ __classPrivateFieldSet
 /* harmony export */ });
-/******************************************************************************
+/*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
 
 Permission to use, copy, modify, and/or distribute this software for any
@@ -47746,11 +46101,7 @@ function __generator(thisArg, body) {
 
 var __createBinding = Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-        desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -47805,14 +46156,10 @@ function __spreadArrays() {
     return r;
 }
 
-function __spreadArray(to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
+function __spreadArray(to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 }
 
 function __await(v) {
@@ -47880,291 +46227,6 @@ function __classPrivateFieldSet(receiver, state, value, kind, f) {
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
     return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 }
-
-function __classPrivateFieldIn(state, receiver) {
-    if (receiver === null || (typeof receiver !== "object" && typeof receiver !== "function")) throw new TypeError("Cannot use 'in' operator on non-object");
-    return typeof state === "function" ? receiver === state : state.has(receiver);
-}
-
-
-/***/ }),
-
-/***/ 4294:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-module.exports = __nccwpck_require__(4219);
-
-
-/***/ }),
-
-/***/ 4219:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-var net = __nccwpck_require__(1631);
-var tls = __nccwpck_require__(4016);
-var http = __nccwpck_require__(8605);
-var https = __nccwpck_require__(7211);
-var events = __nccwpck_require__(8614);
-var assert = __nccwpck_require__(2357);
-var util = __nccwpck_require__(1669);
-
-
-exports.httpOverHttp = httpOverHttp;
-exports.httpsOverHttp = httpsOverHttp;
-exports.httpOverHttps = httpOverHttps;
-exports.httpsOverHttps = httpsOverHttps;
-
-
-function httpOverHttp(options) {
-  var agent = new TunnelingAgent(options);
-  agent.request = http.request;
-  return agent;
-}
-
-function httpsOverHttp(options) {
-  var agent = new TunnelingAgent(options);
-  agent.request = http.request;
-  agent.createSocket = createSecureSocket;
-  agent.defaultPort = 443;
-  return agent;
-}
-
-function httpOverHttps(options) {
-  var agent = new TunnelingAgent(options);
-  agent.request = https.request;
-  return agent;
-}
-
-function httpsOverHttps(options) {
-  var agent = new TunnelingAgent(options);
-  agent.request = https.request;
-  agent.createSocket = createSecureSocket;
-  agent.defaultPort = 443;
-  return agent;
-}
-
-
-function TunnelingAgent(options) {
-  var self = this;
-  self.options = options || {};
-  self.proxyOptions = self.options.proxy || {};
-  self.maxSockets = self.options.maxSockets || http.Agent.defaultMaxSockets;
-  self.requests = [];
-  self.sockets = [];
-
-  self.on('free', function onFree(socket, host, port, localAddress) {
-    var options = toOptions(host, port, localAddress);
-    for (var i = 0, len = self.requests.length; i < len; ++i) {
-      var pending = self.requests[i];
-      if (pending.host === options.host && pending.port === options.port) {
-        // Detect the request to connect same origin server,
-        // reuse the connection.
-        self.requests.splice(i, 1);
-        pending.request.onSocket(socket);
-        return;
-      }
-    }
-    socket.destroy();
-    self.removeSocket(socket);
-  });
-}
-util.inherits(TunnelingAgent, events.EventEmitter);
-
-TunnelingAgent.prototype.addRequest = function addRequest(req, host, port, localAddress) {
-  var self = this;
-  var options = mergeOptions({request: req}, self.options, toOptions(host, port, localAddress));
-
-  if (self.sockets.length >= this.maxSockets) {
-    // We are over limit so we'll add it to the queue.
-    self.requests.push(options);
-    return;
-  }
-
-  // If we are under maxSockets create a new one.
-  self.createSocket(options, function(socket) {
-    socket.on('free', onFree);
-    socket.on('close', onCloseOrRemove);
-    socket.on('agentRemove', onCloseOrRemove);
-    req.onSocket(socket);
-
-    function onFree() {
-      self.emit('free', socket, options);
-    }
-
-    function onCloseOrRemove(err) {
-      self.removeSocket(socket);
-      socket.removeListener('free', onFree);
-      socket.removeListener('close', onCloseOrRemove);
-      socket.removeListener('agentRemove', onCloseOrRemove);
-    }
-  });
-};
-
-TunnelingAgent.prototype.createSocket = function createSocket(options, cb) {
-  var self = this;
-  var placeholder = {};
-  self.sockets.push(placeholder);
-
-  var connectOptions = mergeOptions({}, self.proxyOptions, {
-    method: 'CONNECT',
-    path: options.host + ':' + options.port,
-    agent: false,
-    headers: {
-      host: options.host + ':' + options.port
-    }
-  });
-  if (options.localAddress) {
-    connectOptions.localAddress = options.localAddress;
-  }
-  if (connectOptions.proxyAuth) {
-    connectOptions.headers = connectOptions.headers || {};
-    connectOptions.headers['Proxy-Authorization'] = 'Basic ' +
-        new Buffer(connectOptions.proxyAuth).toString('base64');
-  }
-
-  debug('making CONNECT request');
-  var connectReq = self.request(connectOptions);
-  connectReq.useChunkedEncodingByDefault = false; // for v0.6
-  connectReq.once('response', onResponse); // for v0.6
-  connectReq.once('upgrade', onUpgrade);   // for v0.6
-  connectReq.once('connect', onConnect);   // for v0.7 or later
-  connectReq.once('error', onError);
-  connectReq.end();
-
-  function onResponse(res) {
-    // Very hacky. This is necessary to avoid http-parser leaks.
-    res.upgrade = true;
-  }
-
-  function onUpgrade(res, socket, head) {
-    // Hacky.
-    process.nextTick(function() {
-      onConnect(res, socket, head);
-    });
-  }
-
-  function onConnect(res, socket, head) {
-    connectReq.removeAllListeners();
-    socket.removeAllListeners();
-
-    if (res.statusCode !== 200) {
-      debug('tunneling socket could not be established, statusCode=%d',
-        res.statusCode);
-      socket.destroy();
-      var error = new Error('tunneling socket could not be established, ' +
-        'statusCode=' + res.statusCode);
-      error.code = 'ECONNRESET';
-      options.request.emit('error', error);
-      self.removeSocket(placeholder);
-      return;
-    }
-    if (head.length > 0) {
-      debug('got illegal response body from proxy');
-      socket.destroy();
-      var error = new Error('got illegal response body from proxy');
-      error.code = 'ECONNRESET';
-      options.request.emit('error', error);
-      self.removeSocket(placeholder);
-      return;
-    }
-    debug('tunneling connection has established');
-    self.sockets[self.sockets.indexOf(placeholder)] = socket;
-    return cb(socket);
-  }
-
-  function onError(cause) {
-    connectReq.removeAllListeners();
-
-    debug('tunneling socket could not be established, cause=%s\n',
-          cause.message, cause.stack);
-    var error = new Error('tunneling socket could not be established, ' +
-                          'cause=' + cause.message);
-    error.code = 'ECONNRESET';
-    options.request.emit('error', error);
-    self.removeSocket(placeholder);
-  }
-};
-
-TunnelingAgent.prototype.removeSocket = function removeSocket(socket) {
-  var pos = this.sockets.indexOf(socket)
-  if (pos === -1) {
-    return;
-  }
-  this.sockets.splice(pos, 1);
-
-  var pending = this.requests.shift();
-  if (pending) {
-    // If we have pending requests and a socket gets closed a new one
-    // needs to be created to take over in the pool for the one that closed.
-    this.createSocket(pending, function(socket) {
-      pending.request.onSocket(socket);
-    });
-  }
-};
-
-function createSecureSocket(options, cb) {
-  var self = this;
-  TunnelingAgent.prototype.createSocket.call(self, options, function(socket) {
-    var hostHeader = options.request.getHeader('host');
-    var tlsOptions = mergeOptions({}, self.options, {
-      socket: socket,
-      servername: hostHeader ? hostHeader.replace(/:.*$/, '') : options.host
-    });
-
-    // 0 is dummy port for v0.6
-    var secureSocket = tls.connect(0, tlsOptions);
-    self.sockets[self.sockets.indexOf(socket)] = secureSocket;
-    cb(secureSocket);
-  });
-}
-
-
-function toOptions(host, port, localAddress) {
-  if (typeof host === 'string') { // since v0.10
-    return {
-      host: host,
-      port: port,
-      localAddress: localAddress
-    };
-  }
-  return host; // for v0.11 or later
-}
-
-function mergeOptions(target) {
-  for (var i = 1, len = arguments.length; i < len; ++i) {
-    var overrides = arguments[i];
-    if (typeof overrides === 'object') {
-      var keys = Object.keys(overrides);
-      for (var j = 0, keyLen = keys.length; j < keyLen; ++j) {
-        var k = keys[j];
-        if (overrides[k] !== undefined) {
-          target[k] = overrides[k];
-        }
-      }
-    }
-  }
-  return target;
-}
-
-
-var debug;
-if (process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG)) {
-  debug = function() {
-    var args = Array.prototype.slice.call(arguments);
-    if (typeof args[0] === 'string') {
-      args[0] = 'TUNNEL: ' + args[0];
-    } else {
-      args.unshift('TUNNEL:');
-    }
-    console.error.apply(console, args);
-  }
-} else {
-  debug = function() {};
-}
-exports.debug = debug; // for test
 
 
 /***/ }),
@@ -48357,17 +46419,6 @@ function extend (destination) {
 
 function repeat (character, count) {
   return Array(count + 1).join(character)
-}
-
-function trimLeadingNewlines (string) {
-  return string.replace(/^\n*/, '')
-}
-
-function trimTrailingNewlines (string) {
-  // avoid match-at-end regexp bottleneck, see #370
-  var indexEnd = string.length;
-  while (indexEnd > 0 && string[indexEnd - 1] === '\n') indexEnd--;
-  return string.substring(0, indexEnd)
 }
 
 var blockElements = [
@@ -48655,15 +46706,19 @@ rules.code = {
   },
 
   replacement: function (content) {
-    if (!content) return ''
-    content = content.replace(/\r?\n|\r/g, ' ');
+    if (!content.trim()) return ''
 
-    var extraSpace = /^`|^ .*?[^ ].* $|`$/.test(content) ? ' ' : '';
     var delimiter = '`';
-    var matches = content.match(/`+/gm) || [];
-    while (matches.indexOf(delimiter) !== -1) delimiter = delimiter + '`';
+    var leadingSpace = '';
+    var trailingSpace = '';
+    var matches = content.match(/`+/gm);
+    if (matches) {
+      if (/^`/.test(content)) leadingSpace = ' ';
+      if (/`$/.test(content)) trailingSpace = ' ';
+      while (matches.indexOf(delimiter) !== -1) delimiter = delimiter + '`';
+    }
 
-    return delimiter + extraSpace + content + extraSpace + delimiter
+    return delimiter + leadingSpace + content + trailingSpace + delimiter
   }
 };
 
@@ -48807,7 +46862,7 @@ function collapseWhitespace (options) {
   if (!element.firstChild || isPre(element)) return
 
   var prevText = null;
-  var keepLeadingWs = false;
+  var prevVoid = false;
 
   var prev = null;
   var node = next(prev, element, isPre);
@@ -48817,7 +46872,7 @@ function collapseWhitespace (options) {
       var text = node.data.replace(/[ \r\n\t]+/g, ' ');
 
       if ((!prevText || / $/.test(prevText.data)) &&
-          !keepLeadingWs && text[0] === ' ') {
+          !prevVoid && text[0] === ' ') {
         text = text.substr(1);
       }
 
@@ -48837,14 +46892,11 @@ function collapseWhitespace (options) {
         }
 
         prevText = null;
-        keepLeadingWs = false;
-      } else if (isVoid(node) || isPre(node)) {
-        // Avoid trimming space around non-block, non-BR void elements and inline PRE.
+        prevVoid = false;
+      } else if (isVoid(node)) {
+        // Avoid trimming space around non-block, non-BR void elements.
         prevText = null;
-        keepLeadingWs = true;
-      } else if (prevText) {
-        // Drop protection if set previously.
-        keepLeadingWs = false;
+        prevVoid = true;
       }
     } else {
       node = remove(node);
@@ -48936,7 +46988,7 @@ function createHTMLParser () {
 
 var HTMLParser = canParseHTMLNatively() ? root.DOMParser : createHTMLParser();
 
-function RootNode (input, options) {
+function RootNode (input) {
   var root;
   if (typeof input === 'string') {
     var doc = htmlParser().parseFromString(
@@ -48953,8 +47005,7 @@ function RootNode (input, options) {
   collapseWhitespace({
     element: root,
     isBlock: isBlock,
-    isVoid: isVoid,
-    isPre: options.preformattedCode ? isPreOrCode : null
+    isVoid: isVoid
   });
 
   return root
@@ -48966,15 +47017,11 @@ function htmlParser () {
   return _htmlParser
 }
 
-function isPreOrCode (node) {
-  return node.nodeName === 'PRE' || node.nodeName === 'CODE'
-}
-
-function Node (node, options) {
+function Node (node) {
   node.isBlock = isBlock(node);
-  node.isCode = node.nodeName === 'CODE' || node.parentNode.isCode;
+  node.isCode = node.nodeName.toLowerCase() === 'code' || node.parentNode.isCode;
   node.isBlank = isBlank(node);
-  node.flankingWhitespace = flankingWhitespace(node, options);
+  node.flankingWhitespace = flankingWhitespace(node);
   return node
 }
 
@@ -48988,39 +47035,28 @@ function isBlank (node) {
   )
 }
 
-function flankingWhitespace (node, options) {
-  if (node.isBlock || (options.preformattedCode && node.isCode)) {
-    return { leading: '', trailing: '' }
+function flankingWhitespace (node) {
+  var leading = '';
+  var trailing = '';
+
+  if (!node.isBlock) {
+    var hasLeading = /^\s/.test(node.textContent);
+    var hasTrailing = /\s$/.test(node.textContent);
+    var blankWithSpaces = node.isBlank && hasLeading && hasTrailing;
+
+    if (hasLeading && !isFlankedByWhitespace('left', node)) {
+      leading = ' ';
+    }
+
+    if (!blankWithSpaces && hasTrailing && !isFlankedByWhitespace('right', node)) {
+      trailing = ' ';
+    }
   }
 
-  var edges = edgeWhitespace(node.textContent);
-
-  // abandon leading ASCII WS if left-flanked by ASCII WS
-  if (edges.leadingAscii && isFlankedByWhitespace('left', node, options)) {
-    edges.leading = edges.leadingNonAscii;
-  }
-
-  // abandon trailing ASCII WS if right-flanked by ASCII WS
-  if (edges.trailingAscii && isFlankedByWhitespace('right', node, options)) {
-    edges.trailing = edges.trailingNonAscii;
-  }
-
-  return { leading: edges.leading, trailing: edges.trailing }
+  return { leading: leading, trailing: trailing }
 }
 
-function edgeWhitespace (string) {
-  var m = string.match(/^(([ \t\r\n]*)(\s*))[\s\S]*?((\s*?)([ \t\r\n]*))$/);
-  return {
-    leading: m[1], // whole string for whitespace-only strings
-    leadingAscii: m[2],
-    leadingNonAscii: m[3],
-    trailing: m[4], // empty for whitespace-only strings
-    trailingNonAscii: m[5],
-    trailingAscii: m[6]
-  }
-}
-
-function isFlankedByWhitespace (side, node, options) {
+function isFlankedByWhitespace (side, node) {
   var sibling;
   var regExp;
   var isFlanked;
@@ -49036,8 +47072,6 @@ function isFlankedByWhitespace (side, node, options) {
   if (sibling) {
     if (sibling.nodeType === 3) {
       isFlanked = regExp.test(sibling.nodeValue);
-    } else if (options.preformattedCode && sibling.nodeName === 'CODE') {
-      isFlanked = false;
     } else if (sibling.nodeType === 1 && !isBlock(sibling)) {
       isFlanked = regExp.test(sibling.textContent);
     }
@@ -49046,6 +47080,8 @@ function isFlankedByWhitespace (side, node, options) {
 }
 
 var reduce = Array.prototype.reduce;
+var leadingNewLinesRegExp = /^\n*/;
+var trailingNewLinesRegExp = /\n*$/;
 var escapes = [
   [/\\/g, '\\\\'],
   [/\*/g, '\\*'],
@@ -49077,7 +47113,6 @@ function TurndownService (options) {
     linkStyle: 'inlined',
     linkReferenceStyle: 'full',
     br: '  ',
-    preformattedCode: false,
     blankReplacement: function (content, node) {
       return node.isBlock ? '\n\n' : ''
     },
@@ -49110,7 +47145,7 @@ TurndownService.prototype = {
 
     if (input === '') return ''
 
-    var output = process.call(this, new RootNode(input, this.options));
+    var output = process.call(this, new RootNode(input));
     return postProcess.call(this, output)
   },
 
@@ -49199,7 +47234,7 @@ TurndownService.prototype = {
 function process (parentNode) {
   var self = this;
   return reduce.call(parentNode.childNodes, function (output, node) {
-    node = new Node(node, self.options);
+    node = new Node(node);
 
     var replacement = '';
     if (node.nodeType === 3) {
@@ -49252,21 +47287,31 @@ function replacementForNode (node) {
 }
 
 /**
- * Joins replacement to the current output with appropriate number of new lines
+ * Determines the new lines between the current output and the replacement
  * @private
  * @param {String} output The current conversion output
  * @param {String} replacement The string to append to the output
- * @returns Joined output
+ * @returns The whitespace to separate the current output and the replacement
  * @type String
  */
 
-function join (output, replacement) {
-  var s1 = trimTrailingNewlines(output);
-  var s2 = trimLeadingNewlines(replacement);
-  var nls = Math.max(output.length - s1.length, replacement.length - s2.length);
-  var separator = '\n\n'.substring(0, nls);
+function separatingNewlines (output, replacement) {
+  var newlines = [
+    output.match(trailingNewLinesRegExp)[0],
+    replacement.match(leadingNewLinesRegExp)[0]
+  ].sort();
+  var maxNewlines = newlines[newlines.length - 1];
+  return maxNewlines.length < 2 ? maxNewlines : '\n\n'
+}
 
-  return s1 + separator + s2
+function join (string1, string2) {
+  var separator = separatingNewlines(string1, string2);
+
+  // Remove trailing/leading newlines and replace with separator
+  string1 = string1.replace(trailingNewLinesRegExp, '');
+  string2 = string2.replace(leadingNewLinesRegExp, '');
+
+  return string1 + separator + string2
 }
 
 /**
@@ -49567,22 +47612,6 @@ module.exports = JSON.parse("[[[0,44],\"disallowed_STD3_valid\"],[[45,46],\"vali
 
 /***/ }),
 
-/***/ 2357:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("assert");;
-
-/***/ }),
-
-/***/ 8614:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("events");;
-
-/***/ }),
-
 /***/ 5747:
 /***/ ((module) => {
 
@@ -49604,14 +47633,6 @@ module.exports = require("http");;
 
 "use strict";
 module.exports = require("https");;
-
-/***/ }),
-
-/***/ 1631:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("net");;
 
 /***/ }),
 
@@ -49647,27 +47668,11 @@ module.exports = require("stream");;
 
 /***/ }),
 
-/***/ 4016:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("tls");;
-
-/***/ }),
-
 /***/ 8835:
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("url");;
-
-/***/ }),
-
-/***/ 1669:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("util");;
 
 /***/ }),
 

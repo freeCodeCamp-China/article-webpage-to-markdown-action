@@ -51385,7 +51385,7 @@ const core = __nccwpck_require__(2186);
 const fs = __nccwpck_require__(5747);
 const cheerio = __nccwpck_require__(4612);
 const TurndownService = __nccwpck_require__(4800);
-const  {Octokit} = __nccwpck_require__(5375);
+const { Octokit } = __nccwpck_require__(5375);
 const github = __nccwpck_require__(5438);
 
 const {
@@ -51438,28 +51438,31 @@ exports.isNewFile = (path) => {
 };
 
 //add comment to issue
-exports.addComment = async (comment) =>{
+exports.addComment = async (comment) => {
   const githubToken = core.getInput("githubToken") || undefined;
-  
-  if(githubToken) {
-    const octokit = new Octokit({auth: githubToken});
-    const content = octokit.content
-    const {data: {id}} = await octokit.issues.createComment({
-      
+
+  if (githubToken) {
+    const octokit = new Octokit({ auth: githubToken });
+    const payload = github.context.payload;
+    const issue = payload.issue;
+    const repository = payload.repository;
+
+    await octokit.issues.createComment({
+      owner: repository.owner.login,
+      repo: repository.name,
+      body: comment.toString(),
+      issue_number: issue.number,
     });
-    return id;
+
+    core.debug(`issue: ${issue}`);
+    core.debug(`repository: ${repository}`);
+    core.debug(`comment: ${comment}`);
+
+  } else {
+    throw new Error('GitHub token was not found');
   }
-
-
-  const context = github.context;
-  const issueComment = await octokit.issues.createComment({
-    owner: context.repo.owner,
-    repo: context.repo.repo,
-    issue_number: context.issue.number,
-    body: comment
-  });
-  return issueComment.data;
 }
+
 
 // Check the input parameters, and get the routing address of the article.
 // - 原文网址：[原文标题](https://www.freecodecamp.org/news/xxxxxxx/

@@ -56,28 +56,27 @@ exports.isNewFile = (path) => {
 
 //add comment to issue
 exports.addComment = async (comment) => {
-  const githubToken = core.getInput("githubToken") || undefined;
+  const githubToken = core.getInput("githubToken");
 
-  if (githubToken) {
-    const octokit = new Octokit({ auth: githubToken });
-    const payload = github.context.payload;
-    const issue = payload.issue;
-    const repository = payload.repository;
-
-    await octokit.issues.createComment({
-      owner: repository.owner.login,
-      repo: repository.name,
-      body: comment.toString(),
-      issue_number: issue.number,
-    });
-
-    core.debug(`issue: ${issue}`);
-    core.debug(`repository: ${repository}`);
-    core.debug(`comment: ${comment}`);
-
-  } else {
+  if (!githubToken) {
     throw new Error('GitHub token was not found');
   }
+
+  const octokit = new Octokit({ auth: githubToken });
+  const payload = github.context.payload;
+  const issue = payload.issue;
+  const repository = payload.repository;
+
+  await octokit.issues.createComment({
+    owner: repository.owner.login,
+    repo: repository.name,
+    body: comment.toString(),
+    issue_number: issue.number,
+  });
+
+  core.debug(`issue: ${issue}`);
+  core.debug(`repository: ${repository}`);
+  core.debug(`comment: ${comment}`);
 }
 
 // Check the input parameters, and get the routing address of the article.

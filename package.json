@@ -21,14 +21,16 @@
   "homepage": "https://github.com/freeCodeCamp-China/article-webpage-to-markdown-action#readme",
   "dependencies": {
     "@actions/core": "^1.2.7",
+    "@actions/github": "^5.0.3",
+    "@octokit/rest": "^18.12.0",
     "cheerio": "^1.0.0-rc.5",
     "node-fetch": "^2.6.1",
     "turndown": "^7.0.0",
     "turndown-plugin-gfm": "^1.0.2"
   },
   "devDependencies": {
-    "husky": "^4.3.0",
     "@vercel/ncc": "^0.27.0",
+    "husky": "^4.3.0",
     "jest": "^26.6.3",
     "lint-md-cli": "^0.1.2",
     "lint-staged": "^10.5.4",

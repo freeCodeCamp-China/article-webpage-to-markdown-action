@@ -9,6 +9,9 @@ inputs:
     description: "Path of the generated MarkDown file and relative path relative to the root folder."
     required: false
     default: "./"
+  githubToken:
+    description: " GitHub  write and read token,auto create,no need to set"
+    default: ''
 
 runs:
   using: "node12"

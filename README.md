@@ -45,15 +45,17 @@ news-translate
 Add the following step your job.
 
 ```yml
-- uses: freeCodeCamp-China/article-webpage-to-markdown-action@v0.1.5
+- uses: freeCodeCamp-China/article-webpage-to-markdown-action@v0.1.6
   with:
     newsLink: '${{ github.event.issue.Body }}'
+    markDownFilePath: './chinese/articles/'
+    githubToken: ${{ github.token }}
 ```
 
 The following is an extended example with all possible options available for this Action.
 
 ```yml
-- uses: freeCodeCamp-China/article-webpage-to-markdown-action@v0.1.5
+- uses: freeCodeCamp-China/article-webpage-to-markdown-action@v0.1.6
   with:
     # A string in a specific format that contains a link to freeCodeCamp News
     # format: "原文网址：[原文标题](https://www.freecodecamp.org/news/xxxxxxx/"
@@ -61,6 +63,7 @@ The following is an extended example with all possible options available for thi
     # Path of the generated MarkDown file
     # Relative path relative to the root folder
     markDownFilePath: './chinese/articles/'
+    githubToken: ${{ github.token }}
 ```
 
 <h4 id="submit-an-issue">Run the script by the issue of GitHub</h4>

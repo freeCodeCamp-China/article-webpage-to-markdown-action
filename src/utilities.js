@@ -79,11 +79,6 @@ exports.addComment = async (comment) => {
   core.debug(`comment: ${comment}`);
 }
 
-//remove DOM 
-exports.removeDOM = async(DOMArray) => {
-  
-}
-
 // Check the input parameters, and get the routing address of the article.
 // - 原文网址：[原文标题](https://www.freecodecamp.org/news/xxxxxxx/
 exports.getRouteAddr = (URL) =>

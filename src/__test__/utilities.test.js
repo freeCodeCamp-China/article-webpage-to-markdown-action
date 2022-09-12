@@ -17,7 +17,7 @@ const {
 
 const path = require('path');
 const crypto = require('crypto');
-const fs   = require('fs');
+const fs = require('fs');
 
 
 // Take an object of key/value pairs and convert it to input environment variables
@@ -968,3 +968,31 @@ describe("6. test file is new", () => {
     return expect(isNewFile(DIR_BASE + FILE_ID)).toBe(true);
   })
 });
+
+describe("7. remove ad-container class div", () => {
+  options.path = "/news/testremoveadcontainer/";
+  return expect(HTMLtoMarkdown(`<!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <title>System Design Interview Questions – Concepts You Should Know</title>
+    </head>
+    <body class="post-template tag-interviews tag-systems-engineering tag-coding-interview">
+      <div class="site-wrapper">
+        <main id="site-main" class="site-main outer">
+          <div class="inner">
+          <div class="ad-container " data-test-label="ad-container" style="height: auto !important; min-height: 0px !important;">
+          <span class="ad-text" data-test-label="ad-text">ADVERTISEMENT</span>
+    
+          <script>
+            window.addEventListener('load', () => {
+                if (notAuthenticated) (adsbygoogle = window.adsbygoogle || []).push({});
+            });
+          </script>
+        </div>
+          </div>
+        </main>
+      </div>
+    </body>
+  </html>`)).toStrictEqual(expect.not.stringContaining('ADVERTISEMENT'))
+
+})

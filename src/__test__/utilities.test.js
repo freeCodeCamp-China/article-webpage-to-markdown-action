@@ -17,7 +17,7 @@ const {
 
 const path = require('path');
 const crypto = require('crypto');
-const fs   = require('fs');
+const fs = require('fs');
 
 
 // Take an object of key/value pairs and convert it to input environment variables
@@ -919,9 +919,15 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                 <header class="post-full-header">
                   <h1 class="post-full-title">testexample post-full-title</h1>
                 </header>
+
                 <figure class="post-full-image">
-                  <picture></picture>
+                       <picture>
+                      <source media="(max-width: 700px)" sizes="1px" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7 1w">
+                      <source media="(min-width: 701px)" sizes="(max-width: 800px) 400px, (max-width: 1170px) 700px, 1400px" srcset="https://www.freecodecamp.org/news/content/images/size/w300/2022/09/Screen-Shot-2022-09-07-at-4.09.00-PM.png 300w,https://www.freecodecamp.org/news/content/images/size/w600/2022/09/Screen-Shot-2022-09-07-at-4.09.00-PM.png 600w,https://www.freecodecamp.org/news/content/images/size/w1000/2022/09/Screen-Shot-2022-09-07-at-4.09.00-PM.png 1000w,https://www.freecodecamp.org/news/content/images/size/w2000/2022/09/Screen-Shot-2022-09-07-at-4.09.00-PM.png 2000w">
+                      <img onerror="this.style.display='none'" src="https://www.freecodecamp.org/news/content/images/size/w2000/2022/09/Screen-Shot-2022-09-07-at-4.09.00-PM.png" alt="Intro to Deno – Guide for Beginners" ,="" width="748" height="378">
+                      </picture>
                 </figure>
+                
                 <section class="post-full-content">
                   <div class="post-content">
                   </div>
@@ -933,6 +939,8 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
                         <h4 class="author-card-name"><a href="/news/author/authorURL/">authorName</a></h4>
                       </section>
                     </section>
+                    
+
                   </div>
                   <hr />
                 </section>
@@ -968,3 +976,81 @@ describe("6. test file is new", () => {
     return expect(isNewFile(DIR_BASE + FILE_ID)).toBe(true);
   })
 });
+
+describe("7. remove div", () => {
+  options.path = "/news/testremoveadcontainer/";
+
+  test("7-1-1.It should not ADVERTISEMENT", async () => {
+     const data = await HTMLtoMarkdown(`<!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <title>System Design Interview Questions – Concepts You Should Know</title>
+      </head>
+      <body class="post-template tag-interviews tag-systems-engineering tag-coding-interview">
+        <div class="site-wrapper">
+          <main id="site-main" class="site-main outer">
+            <div class="inner">
+              <article class="post-full post tag-interviews tag-systems-engineering tag-coding-interview ">
+                <header class="post-full-header">
+                  <h1 class="post-full-title">testexample post-full-title</h1>
+                </header>
+                <figure class="post-full-image">
+                  <picture>
+                    <img src="/postFullImageURL" alt="postFullImage" />
+                  </picture>
+                </figure>
+                <div class="ad-container " data-test-label="ad-container" style="height: auto !important; min-height: 0px !important;">
+                   <span class="ad-text" data-test-label="ad-text">ADVERTISEMENT</span>
+                  <script>
+                  window.addEventListener('load', () => {
+                      if (notAuthenticated) (adsbygoogle = window.adsbygoogle || []).push({});
+                  });
+                </script>
+              </div>
+                <section class="post-full-content">
+                  <div class="post-content">
+                    <h1>h1</h1>
+                    <h2>h2</h2>
+                    <h3>h3</h3>
+                    <h4>h4</h4>
+                    <h5>h5</h5>
+                    <p>ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp<a href="link">Link</a></p>
+                    <ol>
+                      <li>ol one</li>
+                      <li>ol two</li>
+                      <li>ol three</li>
+                    </ol>
+                    <ol>
+                      <li><a href="#1_a">ol one a</a></li>
+                      <li><a href="#2_a">ol two a</a></li>
+                      <li><a href="#3_a">ol three a</a></li>
+                    </ol>
+                    <ul>
+                      <li>ul one</li>
+                      <li>ul two</li>
+                      <li>ul three</li>
+                    </ul>
+                    <img src="https://www.freecodecamp.org/img.jpeg" alt="img" />
+                  </div>
+                  <hr />
+                  <div class="post-full-author-header">
+                    <section class="author-card">
+                      <img class="author-profile-image" src="/news/content/images/size/w100/2019/06/WhatsApp-Image-2018-03-22-at-13.36.56.jpeg" alt="Zubin Pratap" />
+                      <section class="author-card-content author-card-content-no-bio">
+                        <h4 class="author-card-name"><a href="/news/author/authorURL/">authorName</a></h4>
+                      </section>
+                    </section>
+                  </div>
+                  <hr />
+                </section>
+              </article>
+            </div>
+          </main>
+        </div>
+      </body>
+    </html>`)
+     
+     expect(data).toEqual(expect.not.stringContaining('ADVERTISEMENT'))
+  })
+
+})

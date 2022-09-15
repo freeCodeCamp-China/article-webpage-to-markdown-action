@@ -980,8 +980,8 @@ describe("6. test file is new", () => {
 describe("7. remove div", () => {
   options.path = "/news/testremoveadcontainer/";
 
-  test("7-1-1.It should not ADVERTISEMENT", () => {
-    return HTMLtoMarkdown(`<!DOCTYPE html>
+  test("7-1-1.It should not ADVERTISEMENT", async () => {
+     const data = await HTMLtoMarkdown(`<!DOCTYPE html>
     <html lang="en">
       <head>
         <title>System Design Interview Questions – Concepts You Should Know</title>
@@ -1049,12 +1049,8 @@ describe("7. remove div", () => {
         </div>
       </body>
     </html>`)
-      .then((data) => {
-        expect(data).toEqual(expect.not.stringContaining('ADVERTISEMENT'))
-      })
-      .catch((err) => {
-        throw err;
-      });
+     
+     expect(data).toEqual(expect.not.stringContaining('ADVERTISEMENT'))
   })
 
 })

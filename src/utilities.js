@@ -121,10 +121,9 @@ exports.HTMLtoMarkdown = (html) =>
     const authorName = authorCardName.text().trim() || 'Anonymous';
     // Original author's personal page
     const authorURL = hostURL_EN + (authorCardName.attr('href') || 'Anonymous');
-    // remove div ad-container class  
-    $(".ad-container").remove();
-    // remove div ad-wrapper class
-    $(".ad-wrapper").remove();
+    // remove div ad-container & ad-wrapper class  
+    $(".ad-container, .ad-wrapper").remove();
+ 
 
     if (!articleTitle || !authorName || (authorURL === hostURL_EN))
       return reject(Err_DOMWrong);

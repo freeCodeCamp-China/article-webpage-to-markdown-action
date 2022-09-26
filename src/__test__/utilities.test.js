@@ -980,7 +980,7 @@ describe("6. test file is new", () => {
 describe("7. remove div", () => {
   options.path = "/news/testremoveadcontainer/";
 
-  test("7-1-1.It should not ADVERTISEMENT", async () => {
+  test("7-1-1.It should be remove ad-container class div. It should not ADVERTISEMENT", async () => {
      const data = await HTMLtoMarkdown(`<!DOCTYPE html>
     <html lang="en">
       <head>
@@ -1052,5 +1052,78 @@ describe("7. remove div", () => {
      
      expect(data).toEqual(expect.not.stringContaining('ADVERTISEMENT'))
   })
+
+  test("7-1-2.It should be remove ad-wraper class div. It should not ADVERTISEMENT", async () => {
+    const data = await HTMLtoMarkdown(`<!DOCTYPE html>
+   <html lang="en">
+     <head>
+       <title>System Design Interview Questions – Concepts You Should Know</title>
+     </head>
+     <body class="post-template tag-interviews tag-systems-engineering tag-coding-interview">
+       <div class="site-wrapper">
+         <main id="site-main" class="site-main outer">
+           <div class="inner">
+             <article class="post-full post tag-interviews tag-systems-engineering tag-coding-interview ">
+               <header class="post-full-header">
+                 <h1 class="post-full-title">testexample post-full-title</h1>
+               </header>
+               <figure class="post-full-image">
+                 <picture>
+                   <img src="/postFullImageURL" alt="postFullImage" />
+                 </picture>
+               </figure>
+               <div class="ad-wrapper " data-test-label="ad-container" style="height: auto !important; min-height: 0px !important;">
+                  <span class="ad-text" data-test-label="ad-text">ADVERTISEMENT</span>
+                 <script>
+                 window.addEventListener('load', () => {
+                     if (notAuthenticated) (adsbygoogle = window.adsbygoogle || []).push({});
+                 });
+               </script>
+             </div>
+               <section class="post-full-content">
+                 <div class="post-content">
+                   <h1>h1</h1>
+                   <h2>h2</h2>
+                   <h3>h3</h3>
+                   <h4>h4</h4>
+                   <h5>h5</h5>
+                   <p>ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp<a href="link">Link</a></p>
+                   <ol>
+                     <li>ol one</li>
+                     <li>ol two</li>
+                     <li>ol three</li>
+                   </ol>
+                   <ol>
+                     <li><a href="#1_a">ol one a</a></li>
+                     <li><a href="#2_a">ol two a</a></li>
+                     <li><a href="#3_a">ol three a</a></li>
+                   </ol>
+                   <ul>
+                     <li>ul one</li>
+                     <li>ul two</li>
+                     <li>ul three</li>
+                   </ul>
+                   <img src="https://www.freecodecamp.org/img.jpeg" alt="img" />
+                 </div>
+                 <hr />
+                 <div class="post-full-author-header">
+                   <section class="author-card">
+                     <img class="author-profile-image" src="/news/content/images/size/w100/2019/06/WhatsApp-Image-2018-03-22-at-13.36.56.jpeg" alt="Zubin Pratap" />
+                     <section class="author-card-content author-card-content-no-bio">
+                       <h4 class="author-card-name"><a href="/news/author/authorURL/">authorName</a></h4>
+                     </section>
+                   </section>
+                 </div>
+                 <hr />
+               </section>
+             </article>
+           </div>
+         </main>
+       </div>
+     </body>
+   </html>`)
+    
+    expect(data).toEqual(expect.not.stringContaining('ADVERTISEMENT'))
+ })
 
 })

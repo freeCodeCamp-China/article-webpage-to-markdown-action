@@ -1,52 +1,46 @@
-const https = require('https');
-const nodeFetch = require('node-fetch');
 const fs = require('fs');
-const {
-  hostURL_EN,
-  options
-} = require('./toMarkdownConstant.js');
-const {
-  gatherInputs,
-  inputExistCheck,
-  isNewFile,
-  addComment,
-  getRouteAddr,
-  haveRouterAddrmd,
-  HTMLtoMarkdown
-} = require('./utilities.js');
+const { join } = require('path');
+const { JSDOM } = require('jsdom');
+
+const { Err_DontGetNewsLink } = require('./toMarkdownConstant');
+const { addComment, getRouteAddr, turndownService } = require('./utilities');
 
 // cd ./news-translation
 // You can run `node script\toMarkdown\index.js URL<String>`(URL is the URL of the article).
-(async function toMarkdown() {
+(async () => {
   try {
-    const input = gatherInputs();
+    const newsLink = core.getInput('newsLink'),
+      markDownFilePath = core.getInput('markDownFilePath') || './';
 
-    await inputExistCheck(input);
+    if (!newsLink) throw new Error(Err_DontGetNewsLink);
 
-    const articleChildRouter = await getRouteAddr(input.newsLink);
+    const { title, path } = getRouteAddr(newsLink);
+    const articleChildRouter = path.split('/').filter(Boolean).at(-1);
+    const {
+      window: { document }
+    } = await JSDOM.fromURL(path);
 
-    const URL = `${hostURL_EN}/news/${articleChildRouter}/`;
-    options.path = `/news/${articleChildRouter}/`;
-    options.agent = new https.Agent(options);
+    const articleFileName = articleChildRouter + '.md',
+      { textContent, href } =
+        document.querySelector(
+          '.author-card-content-no-bio > .author-card-name > a'
+        ) || {};
 
-    const articleFileName = await haveRouterAddrmd(articleChildRouter);
-    const htmlString = await (await nodeFetch(URL, options)).text();
-    const articleText = await HTMLtoMarkdown(htmlString);
-      
-    if (!await isNewFile(input.markDownFilePath + articleFileName)) {
-      throw new Error('file has exist');
-    } 
+    const articleText = `> -  原文地址：[${title}](${path})
+> -  原文作者：[${textContent.trim() || '匿名'}](${href})
+> -  译者：
+> -  校对者：
 
-    await fs.writeFile(
-      input.markDownFilePath + articleFileName,
-      articleText,
-      (err) => {
-        if (err) return Promise.reject(err);
-      }
-    );
+${turndownService.turndown(document.documentElement.outerHTML)}`;
+
+    const filePath = join(markDownFilePath, articleFileName);
+
+    if (fs.existsSync(filePath)) throw new Error('file has exist');
+
+    await fs.promises.writeFile(filePath, articleText);
   } catch (error) {
-      console.log('ERR:', error);
-      addComment(error);
-      process.exitCode = 1;
+    console.log('ERR:', error);
+    addComment(error);
+    process.exit(1);
   }
 })();

@@ -1,18 +1,18 @@
-name: "article-webpage-to-markdown-action"
+name: 'article-webpage-to-markdown-action'
 description: "Automatically generate Markdown files based on the webpages of articles. Currently supports freecodecamp's news site."
-author: "freeCodeCamp-China"
+author: 'freeCodeCamp-China'
 inputs:
   newsLink:
-    description: "A string in a specific format that contains a link to a article."
+    description: 'A string in a specific format that contains a link to a article.'
     required: true
   markDownFilePath:
-    description: "Path of the generated MarkDown file and relative path relative to the root folder."
+    description: 'Path of the generated MarkDown file and relative path relative to the root folder.'
     required: false
-    default: "./"
+    default: './'
   githubToken:
-    description: " GitHub  write and read token,auto create,no need to set"
+    description: ' GitHub  write and read token,auto create,no need to set'
     default: ''
 
 runs:
-  using: "node12"
-  main: "dist/index.js"
+  using: 'node20'
+  main: 'dist/index.js'

@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["src/**/*"]
+}

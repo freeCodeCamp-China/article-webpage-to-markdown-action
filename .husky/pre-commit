@@ -2,4 +2,4 @@
 
 . "$(dirname -- "$0")/_/husky.sh"
 
-npm run prefix  &&  npm run build  &&  git add dist/index.js
+npm run prefix  &&  npm run build  &&  git add dist/*

@@ -1,7 +1,7 @@
 import { debug, getInput } from '@actions/core';
 import github from '@actions/github';
 import { Octokit } from '@octokit/rest';
-import { JSDOM } from 'jsdom';
+import { parseHTML } from 'linkedom';
 import TurndownService from 'turndown';
 import { gfm, strikethrough, tables, taskListItems } from 'turndown-plugin-gfm';
 
@@ -50,9 +50,8 @@ export function getRouteAddr(URL: string) {
 }
 
 export async function HTMLtoMarkdown(path: string) {
-  const {
-    window: { document }
-  } = await JSDOM.fromURL(path);
+  const raw = await (await fetch(path)).text();
+  const { document } = parseHTML(raw);
 
   const title =
       document.querySelector('h1')?.textContent?.trim() ||

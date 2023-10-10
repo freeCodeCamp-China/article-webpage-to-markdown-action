@@ -1,5 +1,5 @@
 import { getInput } from '@actions/core';
-import { existsSync, promises } from 'fs';
+import { existsSync, outputFile } from 'fs-extra';
 import { join } from 'path';
 
 import { Err_DontGetNewsLink, Err_SameNameFile } from './toMarkdownConstant';
@@ -29,7 +29,7 @@ import { HTMLtoMarkdown, addComment, getRouteAddr } from './utilities';
 
 ${content}`;
 
-  await promises.writeFile(filePath, articleText);
+  await outputFile(filePath, articleText);
 })().catch((error) => {
   console.log('ERR:', error);
   addComment(error + '');

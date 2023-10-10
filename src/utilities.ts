@@ -15,7 +15,25 @@ export const turndownService = new TurndownService({
   .use(strikethrough)
   .use(tables)
   .use(taskListItems)
-  .use(gfm);
+  .use(gfm)
+  .addRule('img-srcset', {
+    filter: ['img'],
+    replacement(_, { alt, title, src, srcset }: HTMLImageElement) {
+      const [firstSet] = srcset.split(',')[0]?.split(/\s+/) || [];
+
+      return `![${alt}](${src || firstSet} ${JSON.stringify(title)})`;
+    }
+  })
+  .addRule('source-srcset', {
+    filter: ['picture'],
+    replacement(_, node: HTMLPictureElement) {
+      const { srcset } = node.querySelector('source') || {},
+        { alt, title } = node.querySelector('img') || {};
+      const [src] = srcset.split(',')[0]?.split(/\s+/) || [];
+
+      return `![${alt}](${src} ${JSON.stringify(title)})`;
+    }
+  });
 
 //add comment to issue
 export async function addComment(body: string) {

@@ -1,5 +1,5 @@
 name: 'article-webpage-to-markdown-action'
-description: "Automatically generate Markdown files based on the webpages of articles. Currently supports freecodecamp's news site."
+description: "Automatically generate Markdown files based on the webpages of articles. Currently supports freeCodeCamp's news site."
 author: 'freeCodeCamp-China'
 inputs:
   newsLink:

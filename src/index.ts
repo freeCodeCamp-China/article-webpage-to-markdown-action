@@ -3,10 +3,13 @@ import { existsSync, outputFile } from 'fs-extra';
 import { join } from 'path';
 
 import { Err_DontGetNewsLink, Err_SameNameFile } from './toMarkdownConstant';
-import { HTMLtoMarkdown, addComment, getRouteAddr } from './utilities';
+import {
+  HTMLtoMarkdown,
+  addComment,
+  getRouteAddr,
+  loadPage
+} from './utilities';
 
-// cd ./news-translation
-// You can run `node script\toMarkdown\index.js URL<String>`(URL is the URL of the article).
 (async () => {
   const newsLink = getInput('newsLink'),
     markDownFilePath = getInput('markDownFilePath') || './';
@@ -20,7 +23,8 @@ import { HTMLtoMarkdown, addComment, getRouteAddr } from './utilities';
   );
   if (existsSync(filePath)) throw new URIError(Err_SameNameFile);
 
-  const { meta, content } = await HTMLtoMarkdown(path);
+  const { document } = await loadPage(path);
+  const { meta, content } = HTMLtoMarkdown(document);
 
   const articleText = `> -  原文地址：[${title}](${path})
 > -  原文作者：[${meta.author || '匿名'}](${meta.authorURL})

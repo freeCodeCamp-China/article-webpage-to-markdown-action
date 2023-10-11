@@ -5,11 +5,12 @@ import { parseHTML } from 'linkedom';
 import TurndownService from 'turndown';
 import { gfm, strikethrough, tables, taskListItems } from 'turndown-plugin-gfm';
 
-import { Err_DontGetTrueRoute } from './toMarkdownConstant.js';
+import { Err_DontGetTrueRoute } from './toMarkdownConstant';
 
 export const turndownService = new TurndownService({
   headingStyle: 'atx',
   bulletListMarker: '-',
+  hr: '---',
   codeBlockStyle: 'fenced'
 })
   .use(strikethrough)
@@ -21,19 +22,43 @@ export const turndownService = new TurndownService({
     replacement(_, { alt, title, src, srcset }: HTMLImageElement) {
       const [firstSet] = srcset.split(',')[0]?.split(/\s+/) || [];
 
-      return `![${alt}](${src || firstSet} ${JSON.stringify(title)})`;
+      const content = [src || firstSet, title && JSON.stringify(title)].filter(
+        Boolean
+      );
+      return `![${alt}](${content.join(' ')})`;
     }
   })
   .addRule('source-srcset', {
     filter: ['picture'],
     replacement(_, node: HTMLPictureElement) {
-      const { srcset } = node.querySelector('source') || {},
-        { alt, title } = node.querySelector('img') || {};
-      const [src] = srcset.split(',')[0]?.split(/\s+/) || [];
+      const { src, alt, title } = node.querySelector('img') || {};
 
-      return `![${alt}](${src} ${JSON.stringify(title)})`;
+      const sourceList = Array.from(
+        node.querySelectorAll('source'),
+        ({ sizes, srcset }) => {
+          const size = Math.max(
+            ...sizes
+              .split(/,|\)/)
+              .map((pixel) => parseFloat(pixel.trim()))
+              .filter(Boolean)
+          );
+          const [src] = srcset.split(',')[0]?.split(/\s+/) || [];
+
+          return { size, src };
+        }
+      );
+      const sources = sourceList.sort(({ size: a }, { size: b }) => b - a);
+
+      const content = [
+        src || sources[0]?.src,
+        title && JSON.stringify(title)
+      ].filter(Boolean);
+
+      return `![${alt}](${content.join(' ')})`;
     }
-  });
+  })
+  .remove('script')
+  .remove((node) => node.matches('aside, [class*="ads" i]'));
 
 //add comment to issue
 export async function addComment(body: string) {
@@ -67,10 +92,10 @@ export function getRouteAddr(URL: string) {
   return { title, path };
 }
 
-export async function HTMLtoMarkdown(path: string) {
-  const raw = await (await fetch(path)).text();
-  const { document } = parseHTML(raw);
+export const loadPage = async (path: string) =>
+  parseHTML(await (await fetch(path)).text());
 
+export function HTMLtoMarkdown(document: Document) {
   const title =
       document.querySelector('h1')?.textContent?.trim() ||
       document.title.trim(),
@@ -91,11 +116,6 @@ export async function HTMLtoMarkdown(path: string) {
     const box = document.querySelector(selector);
 
     if (box) {
-      for (const useless of document.querySelectorAll(
-        'aside, [class*="ads" i]'
-      ))
-        useless.remove();
-
       content = turndownService.turndown(box.innerHTML);
       break;
     }

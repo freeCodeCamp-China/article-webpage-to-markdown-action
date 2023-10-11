@@ -1,51 +1,51 @@
 # article-webpage-to-markdown-action
 
-![GitHub](https://img.shields.io/github/license/freeCodeCamp-China/article-webpage-to-markdown-action) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/freeCodeCamp-China/article-webpage-to-markdown-action) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/freeCodeCamp-China/article-webpage-to-markdown-action?include_prereleases&label=release-last) 
+![GitHub](https://img.shields.io/github/license/freeCodeCamp-China/article-webpage-to-markdown-action)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/freeCodeCamp-China/article-webpage-to-markdown-action)
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/freeCodeCamp-China/article-webpage-to-markdown-action?include_prereleases&label=release-last)
 
 Language: English | [简体中文](./README-zh-cn.md)
 
-### Introduction
+## Introduction
 
-Automatically generate Markdown files based on the webpages of articles. Currently supports freecodecamp's news site.
+Automatically generate Markdown files based on the webpages of articles. Currently supports freeCodeCamp's news site.
 
+### Project structure
 
-#### Project structure
-
-```
+```plain
 news-translate
-|  action.yml  /** Entry file **/
+|  action.yml  // Entry file 
 │  package.json
 │  README.md
 │
 |-.github
 │  |-ISSUE_TEMPLATE
-│  │   AutoGenerateMarkdown.md  /** Automatically generate Markdown issue template **/
+│  │   AutoGenerateMarkdown.md  // Automatically generate Markdown issue template 
 │  │
 │  |-workflows
-│      WebPageToMarkdown.yml  /** Actions file for automatically generating Markdown files **/
+│      WebPageToMarkdown.yml  // Actions file for automatically generating Markdown files 
 │
-|-dist  /** Compiled static folder **/
+|-dist  // Compiled static folder 
 │
 |-node_modules
 │
 |-src
-   |-toMarkdown
-      |  index.js  /** Entry file of the script **/
-      |  toMarkdownConstant.js  /** Configuration file **/
-      |  utilities.js  /** Function library file **/
-      |
-      |-__tests__
-         utilities.test.js  /** test file **/
+|  |-index.ts  // Entry file of the script 
+|  |-toMarkdownConstant.ts  // Configuration file 
+|  |-utilities.ts  // Function library file 
+|
+|-test
+   |-utilities.test.js  // test file 
 ```
 
 ---
 
-<h3 id="Usage">Usage</h3>
+### Usage
 
 Add the following step your job.
 
 ```yml
-- uses: freeCodeCamp-China/article-webpage-to-markdown-action@v0.1.8
+- uses: freeCodeCamp-China/article-webpage-to-markdown-action@v0.2.0
   with:
     newsLink: '${{ github.event.issue.Body }}'
     markDownFilePath: './chinese/articles/'
@@ -55,7 +55,7 @@ Add the following step your job.
 The following is an extended example with all possible options available for this Action.
 
 ```yml
-- uses: freeCodeCamp-China/article-webpage-to-markdown-action@v0.1.8
+- uses: freeCodeCamp-China/article-webpage-to-markdown-action@v0.2.0
   with:
     # A string in a specific format that contains a link to freeCodeCamp News
     # format: "原文网址：[原文标题](https://www.freecodecamp.org/news/xxxxxxx/"
@@ -66,33 +66,37 @@ The following is an extended example with all possible options available for thi
     githubToken: ${{ github.token }}
 ```
 
-<h4 id="submit-an-issue">Run the script by the issue of GitHub</h4>
+<h3 id="submit-an-issue">Run the script by the issue of GitHub</h3>
 
 **Issues** >> **New issue** >> Fill in the title and description of the issue >> **Submit new issue**
 
-#### Description:
-```
+### Description
+
+```plain
 - 原文网址：[原文标题](https://www.freeCodeCamp.org/news/路由/)
 - MarkDown 文件：https://github.com/freeCodeCamp/news-translation/edit/master/chinese/articles/文章文件名称.md
 ```
+
 Replace `原文标题` with the original title. And replace `路由` and `文章文件名称` with the route of the article.
 
-#### e.g.
+### Example
+
 If the URL of an article is `https://www.freecodecamp.org/news/Example/`, and its title is `Example Title`.
 
-*Description:*
-```
+_Description:_
+
+```plain
 - 原文网址：[Example Title](https://www.freecodecamp.org/news/Example/)
 - MarkDown 文件：https://github.com/freeCodeCamp/news-translation/edit/master/chinese/articles/Example.md
 ```
 
 If you want to confirm whether the script is executed successfully, you can check the execution result of **Actions**, or check the existence of the file at the location you set in the option `markDownFilePath`. If you do not configure the option `markDownFilePath`, the file is generated in the current path by default.
 
-If the script execution **fails**, you need to confirm the problem, solve them, and post a **new issue** according to the previous steps. In the **Action log**, The [*Common Error Messages*](#CommonErrorMessages) will give you some reliable tips. 
+If the script execution **fails**, you need to confirm the problem, solve them, and post a **new issue** according to the previous steps. In the **Action log**, The [_Common Error Messages_](#CommonErrorMessages) will give you some reliable tips.
 
 ---
 
-<h3 id="CommonErrorMessages">Common Error Messages</h3>
+### Common Error Messages
 
 - **No parameters were found. Please confirm that the description of the issue has been entered.**
   The description of the issue is empty, please fill in the content according to the template.
@@ -111,6 +115,6 @@ Please go to the [contributing guide](CONTRIBUTING.md).
 
 ---
 
-### License
+## License
 
 - The computer software is licensed under the [BSD-3-Clause](LICENSE) license.

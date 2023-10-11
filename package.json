@@ -2,7 +2,7 @@
   "name": "article-webpage-to-markdown-action",
   "private": true,
   "version": "0.2.0",
-  "description": "Automatically generate Markdown files based on the webpages of articles. Currently supports freecodecamp's news site.",
+  "description": "Automatically generate Markdown files based on the webpages of articles. Currently supports freeCodeCamp's news site.",
   "main": "dist/index.js",
   "scripts": {
     "prepare": "husky install",
@@ -49,7 +49,10 @@
     "trailingComma": "none"
   },
   "lint-staged": {
-    "*.{json,yml}": "prettier --write",
+    "*.{json,yml,ts}": "prettier --write",
     "*.md": "lint-md --fix"
+  },
+  "jest": {
+    "preset": "ts-jest"
   }
 }

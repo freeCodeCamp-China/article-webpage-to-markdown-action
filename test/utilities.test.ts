@@ -1,7 +1,6 @@
 import { readFile } from 'fs-extra';
 import { parseHTML } from 'linkedom';
 
-import { Err_DontGetTrueRoute } from '../src/toMarkdownConstant';
 import { HTMLtoMarkdown, getRouteAddr } from '../src/utilities';
 
 // Reset modules and remove input environment variables before each run
@@ -17,62 +16,7 @@ describe('3. test getRouteAddr(Check the input parameters, and get the routing a
       getRouteAddr(
         '- 原文网址：[Test Example](https://www.freecodecamp.org/news/testexample/)'
       )
-    ).toEqual({
-      title: 'Test Example',
-      path: 'https://www.freecodecamp.org/news/testexample/'
-    });
-  });
-
-  describe('3-2. Wrong URL test', () => {
-    test('3-2-1. Without the last forward slash', () => {
-      try {
-        getRouteAddr(
-          '- 原文网址：[Test Example](https://www.freecodecamp.org/news/testexample/)'
-        );
-      } catch (error) {
-        expect(error.message).toBe(Err_DontGetTrueRoute);
-      }
-    });
-
-    test("3-2-8. With '\\n'", () => {
-      try {
-        getRouteAddr(
-          '- 原文网址：[Test\nExample](https://www.freecodecamp.org/news/testexample/)'
-        );
-      } catch (error) {
-        expect(error.message).toBe(Err_DontGetTrueRoute);
-      }
-    });
-
-    test("3-2-8. With '\\f'", () => {
-      try {
-        getRouteAddr(
-          '- 原文网址：[Test\fExample](https://www.freecodecamp.org/news/testexample/)'
-        );
-      } catch (error) {
-        expect(error.message).toBe(Err_DontGetTrueRoute);
-      }
-    });
-
-    test("3-2-8. With '\\r'", () => {
-      try {
-        getRouteAddr(
-          '- 原文网址：[Test\rExample](https://www.freecodecamp.org/news/testexample/)'
-        );
-      } catch (error) {
-        expect(error.message).toBe(Err_DontGetTrueRoute);
-      }
-    });
-
-    test("3-2-8. With '\\t'", () => {
-      try {
-        getRouteAddr(
-          '- 原文网址：[Test\tExample](https://www.freecodecamp.org/news/testexample/)'
-        );
-      } catch (error) {
-        expect(error.message).toBe(Err_DontGetTrueRoute);
-      }
-    });
+    ).toEqual('https://www.freecodecamp.org/news/testexample/');
   });
 });
 

@@ -6,8 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "prepare": "husky install",
-    "jest": "jest",
-    "prefix": "lint-staged",
+    "test": "lint-staged  &&  jest",
     "build": "rimraf dist/  &&  ncc build ./src/index.ts -m -o dist --license licenses.txt"
   },
   "repository": {
@@ -26,8 +25,10 @@
     "@octokit/rest": "^20.0.2",
     "fs-extra": "^11.1.1",
     "linkedom": "^0.15.4",
+    "marked": "^9.1.1",
     "turndown": "^7.1.2",
-    "turndown-plugin-gfm": "^1.0.2"
+    "turndown-plugin-gfm": "^1.0.2",
+    "yaml": "^2.3.2"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.2",

@@ -1,7 +1,8 @@
 import { debug, getInput } from '@actions/core';
-import github from '@actions/github';
+import { context } from '@actions/github';
 import { Octokit } from '@octokit/rest';
 import { parseHTML } from 'linkedom';
+import { marked } from 'marked';
 import TurndownService from 'turndown';
 import { gfm, strikethrough, tables, taskListItems } from 'turndown-plugin-gfm';
 
@@ -57,17 +58,18 @@ export const turndownService = new TurndownService({
       return `![${alt}](${content.join(' ')})`;
     }
   })
-  .remove('script')
-  .remove((node) => node.matches('aside, [class*="ads" i]'));
+  .remove((node) => node.matches('script, aside, [class*="ads" i]'));
 
-//add comment to issue
+/**
+ * add comment to issue
+ */
 export async function addComment(body: string) {
   const githubToken = getInput('githubToken');
 
   if (!githubToken) throw new Error('GitHub token was not found');
 
   const octokit = new Octokit({ auth: githubToken });
-  const { issue, repository } = github.context.payload;
+  const { issue, repository } = context.payload;
 
   if (issue && repository)
     await octokit.issues.createComment({
@@ -82,20 +84,23 @@ export async function addComment(body: string) {
   debug(`comment: ${body}`);
 }
 
-// Check the input parameters, and get the routing address of the article.
-// [原文标题](https://www.freecodecamp.org/news/xxxxxxx/)
-export function getRouteAddr(URL: string) {
-  const [_, title, path] = /\[(.+?)\]\((.+?)\)/.exec(URL) || [];
+/**
+ * Check the input parameters, and get the routing address of the article.
+ */
+export function getRouteAddr(markdown: string) {
+  const { document } = parseHTML(marked(markdown));
 
-  if (!title || !path) throw new SyntaxError(Err_DontGetTrueRoute);
+  const { href } = document.querySelector('a') || {};
 
-  return { title, path };
+  if (!href) throw new SyntaxError(Err_DontGetTrueRoute);
+
+  return href;
 }
 
 export const loadPage = async (path: string) =>
   parseHTML(await (await fetch(path)).text());
 
-export function HTMLtoMarkdown(document: Document) {
+export function HTMLtoMarkdown(document: Document, ignoreSelector = '') {
   const title =
       document.querySelector('h1')?.textContent?.trim() ||
       document.title.trim(),
@@ -116,6 +121,9 @@ export function HTMLtoMarkdown(document: Document) {
     const box = document.querySelector(selector);
 
     if (box) {
+      if (ignoreSelector)
+        turndownService.remove((node) => node.matches(ignoreSelector));
+
       content = turndownService.turndown(box.innerHTML);
       break;
     }

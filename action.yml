@@ -5,6 +5,8 @@ inputs:
   newsLink:
     description: 'A string in a specific format that contains a link to a article.'
     required: true
+  ignoreSelector:
+    description: 'CSS selector of elements which should be ignored'
   markDownFilePath:
     description: 'Path of the generated MarkDown file and relative path relative to the root folder.'
     required: false

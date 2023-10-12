@@ -1,6 +1,8 @@
 import { getInput } from '@actions/core';
+import { context } from '@actions/github';
 import { existsSync, outputFile } from 'fs-extra';
 import { join } from 'path';
+import { stringify } from 'yaml';
 
 import { Err_DontGetNewsLink, Err_SameNameFile } from './toMarkdownConstant';
 import {
@@ -12,11 +14,12 @@ import {
 
 (async () => {
   const newsLink = getInput('newsLink'),
+    ignoreSelector = getInput('ignoreSelector'),
     markDownFilePath = getInput('markDownFilePath') || './';
 
   if (!newsLink) throw new Error(Err_DontGetNewsLink);
 
-  const { title, path } = getRouteAddr(newsLink);
+  const path = getRouteAddr(newsLink);
   const filePath = join(
     markDownFilePath,
     path.split('/').filter(Boolean).at(-1) + '.md'
@@ -24,18 +27,35 @@ import {
   if (existsSync(filePath)) throw new URIError(Err_SameNameFile);
 
   const { document } = await loadPage(path);
-  const { meta, content } = HTMLtoMarkdown(document);
+  const { meta, content } = HTMLtoMarkdown(document, ignoreSelector);
 
-  const articleText = `> -  原文地址：[${title}](${path})
-> -  原文作者：[${meta.author || '匿名'}](${meta.authorURL})
-> -  译者：
-> -  校对者：
+  const articleText = `---
+${stringify({
+  ...meta,
+  originalURL: path,
+  translator: '',
+  reviewer: ''
+}).trim()}
+---
 
 ${content}`;
 
   await outputFile(filePath, articleText);
-})().catch((error) => {
+
+  const { repo, ref } = context;
+
+  await addComment(
+    `
+- 原文地址：[${meta.title}](${path})
+- 原文作者：[${meta.author || '匿名'}](${meta.authorURL})
+- 翻译文件：[点击编辑](${join(
+      `https://github.com/${repo.owner}/${repo.repo}/edit/${ref}`,
+      filePath
+    )})
+`.trim()
+  );
+})().catch(async (error) => {
   console.log('ERR:', error);
-  addComment(error + '');
+  await addComment(error + '');
   process.exit(1);
 });

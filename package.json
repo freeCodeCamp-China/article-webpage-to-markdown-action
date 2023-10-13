@@ -1,7 +1,7 @@
 {
   "name": "article-webpage-to-markdown-action",
   "private": true,
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Automatically generate Markdown files based on the webpages of articles. Currently supports freeCodeCamp's news site.",
   "main": "dist/index.js",
   "scripts": {

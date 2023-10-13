@@ -49,7 +49,10 @@ ${content}`;
 - 原文地址：[${meta.title}](${path})
 - 原文作者：[${meta.author || '匿名'}](${meta.authorURL})
 - 翻译文件：[点击编辑](${join(
-      `https://github.com/${repo.owner}/${repo.repo}/edit/${ref}`,
+      `https://${repo.owner}/${repo.repo}/edit/${ref.replace(
+        /^refs\/heads\//,
+        ''
+      )}`,
       filePath
     )})
 `.trim()

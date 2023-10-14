@@ -24,13 +24,19 @@ describe('5. test HTMLtoMarkdown().', () => {
   test('Parse Meta, Convert Markdown & Filter Waste', async () => {
     const HTML = await readFile('test/example.html', { encoding: 'utf-8' }),
       Markdown = await readFile('test/example.md', { encoding: 'utf-8' });
+
     const { document } = parseHTML(HTML);
+
+    Object.defineProperty(document, 'baseURI', {
+      value: 'http://localhost',
+      writable: false
+    });
     const { meta, content } = HTMLtoMarkdown(document);
 
     expect(meta).toEqual({
       title: 'testexample post-full-title',
       author: 'authorName',
-      authorURL: '/news/author/authorURL/'
+      authorURL: 'http://localhost/news/author/authorURL/'
     });
     expect(content).toBe(Markdown);
   });

@@ -1,7 +1,7 @@
 {
   "name": "article-webpage-to-markdown-action",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Automatically generate Markdown files based on the webpages of articles. Currently supports freeCodeCamp's news site.",
   "main": "dist/index.js",
   "scripts": {
@@ -21,19 +21,19 @@
   "homepage": "https://github.com/freeCodeCamp-China/article-webpage-to-markdown-action#readme",
   "dependencies": {
     "@actions/core": "^1.10.1",
-    "@actions/github": "^5.1.1",
+    "@actions/github": "^6.0.0",
     "@octokit/rest": "^20.0.2",
     "fs-extra": "^11.1.1",
-    "linkedom": "^0.15.4",
-    "marked": "^9.1.1",
+    "linkedom": "^0.15.6",
+    "marked": "^9.1.2",
     "turndown": "^7.1.2",
     "turndown-plugin-gfm": "^1.0.2",
-    "yaml": "^2.3.2"
+    "yaml": "^2.3.3"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.2",
     "@types/jest": "^29.5.5",
-    "@types/node": "^20.8.3",
+    "@types/node": "^20.8.6",
     "@types/turndown": "^5.0.2",
     "@vercel/ncc": "^0.38.0",
     "husky": "^8.0.3",

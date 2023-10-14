@@ -43,20 +43,14 @@ ${content}`;
   await outputFile(filePath, articleText);
 
   const { repo, ref } = context;
+  const successMessage = `
+- Original URL: [${meta.title}](${path})
+- Original author: [${meta.author || 'anonymous'}](${meta.authorURL})
+- Markdown file: [click to edit](https://github.com/${repo.owner}/${
+    repo.repo
+  }/edit/${join(ref.replace(/^refs\/heads\//, ''), filePath)})`;
 
-  await addComment(
-    `
-- 原文地址：[${meta.title}](${path})
-- 原文作者：[${meta.author || '匿名'}](${meta.authorURL})
-- 翻译文件：[点击编辑](${join(
-      `https://${repo.owner}/${repo.repo}/edit/${ref.replace(
-        /^refs\/heads\//,
-        ''
-      )}`,
-      filePath
-    )})
-`.trim()
-  );
+  await addComment(successMessage.trim());
 })().catch(async (error) => {
   console.log('ERR:', error);
   await addComment(error + '');

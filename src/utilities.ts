@@ -97,8 +97,15 @@ export function getRouteAddr(markdown: string) {
   return href;
 }
 
-export const loadPage = async (path: string) =>
-  parseHTML(await (await fetch(path)).text());
+export async function loadPage(path: string) {
+  const window = parseHTML(await (await fetch(path)).text());
+
+  Object.defineProperty(window.document, 'baseURI', {
+    value: path,
+    writable: false
+  });
+  return window;
+}
 
 export function HTMLtoMarkdown(document: Document, ignoreSelector = '') {
   const title =
@@ -133,7 +140,7 @@ export function HTMLtoMarkdown(document: Document, ignoreSelector = '') {
     meta: {
       title,
       author: textContent?.trim(),
-      authorURL: href
+      authorURL: href ? new URL(href, document.baseURI) + '' : ''
     },
     content
   };

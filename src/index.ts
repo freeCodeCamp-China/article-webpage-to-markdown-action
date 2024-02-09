@@ -38,7 +38,7 @@ ${stringify({
 }).trim()}
 ---
 
-${content}`;
+${content.replace('\n\n', '\n\n<!-- more -->\n\n')}`;
 
   await outputFile(filePath, articleText);
 

@@ -12,7 +12,8 @@ export const turndownService = new TurndownService({
   headingStyle: 'atx',
   bulletListMarker: '-',
   hr: '---',
-  codeBlockStyle: 'fenced'
+  codeBlockStyle: 'fenced',
+  linkStyle: 'referenced'
 })
   .use(strikethrough)
   .use(tables)
@@ -58,7 +59,9 @@ export const turndownService = new TurndownService({
       return `![${alt}](${content.join(' ')})`;
     }
   })
-  .remove((node) => node.matches('script, aside, [class*="ads" i]'));
+  .remove((node) =>
+    node.matches('style, script, aside, form, [class*="ads" i]')
+  );
 
 /**
  * add comment to issue
@@ -107,6 +110,8 @@ export async function loadPage(path: string) {
   return window;
 }
 
+export const selectorOf = (tag: string) => `${tag}, [class*="${tag}" i]`;
+
 export function HTMLtoMarkdown(document: Document, ignoreSelector = '') {
   const title =
       document.querySelector('h1')?.textContent?.trim() ||
@@ -117,15 +122,8 @@ export function HTMLtoMarkdown(document: Document, ignoreSelector = '') {
       ) || {};
   var content = '';
 
-  for (const selector of [
-    'article',
-    '.article',
-    '.content',
-    'main',
-    '.main',
-    'body'
-  ]) {
-    const box = document.querySelector(selector);
+  for (const selector of ['article', 'content', 'main', 'body']) {
+    const box = document.querySelector(selectorOf(selector));
 
     if (box) {
       if (ignoreSelector)

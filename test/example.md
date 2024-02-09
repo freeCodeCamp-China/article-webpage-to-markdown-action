@@ -12,7 +12,7 @@
 
 ##### h5
 
-ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp[Link](link)
+ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp[Link][1]
 
 1.  ol one
 2.  ol two
@@ -22,9 +22,9 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
 -   ul two
 -   ul three
 
-1.  [ol one a](#1_a)
-2.  [ol two a](#2_a)
-3.  [ol three a](#3_a)
+1.  [ol one a][2]
+2.  [ol two a][3]
+3.  [ol three a][4]
 
 ![img](https://www.freecodecamp.org/img.jpeg)
 
@@ -32,6 +32,12 @@ pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
 
 ![Zubin Pratap](/news/content/images/size/w100/2019/06/WhatsApp-Image-2018-03-22-at-13.36.56.jpeg)
 
-#### [authorName](/news/author/authorURL/)
+#### [authorName][5]
 
 ---
+
+[1]: link
+[2]: #1_a
+[3]: #2_a
+[4]: #3_a
+[5]: /news/author/authorURL/

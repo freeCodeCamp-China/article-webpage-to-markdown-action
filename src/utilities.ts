@@ -61,8 +61,7 @@ export const turndownService = new TurndownService({
   })
   .remove((node) =>
     node.matches('style, script, aside, form, [class*="ads" i]')
-  )
-  .keep('iframe');
+  );
 
 /**
  * add comment to issue
@@ -117,17 +116,10 @@ export function HTMLtoMarkdown(document: Document, ignoreSelector = '') {
   const title =
       document.querySelector('h1')?.textContent?.trim() ||
       document.title.trim(),
-    time = document.querySelector<HTMLTimeElement>(
-      'time, [class*="time" i], [class*="date" i]'
-    ),
-    author = document.querySelector<HTMLAnchorElement>(
-      'a[class*="author" i], [class*="author" i] a'
-    );
-  const dateTime = new Date(time?.getAttribute('datetime')),
-    dateText = new Date(time?.textContent?.trim());
-
-  time?.remove();
-
+    { textContent, href } =
+      document.querySelector<HTMLAnchorElement>(
+        'a[class*="author" i], [class*="author" i] a'
+      ) || {};
   var content = '';
 
   for (const selector of ['article', 'content', 'main', 'body']) {
@@ -145,11 +137,8 @@ export function HTMLtoMarkdown(document: Document, ignoreSelector = '') {
   return {
     meta: {
       title,
-      date: new Date(
-        +dateTime ? dateTime : +dateText ? dateText : Date.now()
-      ).toJSON(),
-      author: author?.textContent?.trim(),
-      authorURL: author?.href ? new URL(author.href, document.baseURI) + '' : ''
+      author: textContent?.trim(),
+      authorURL: href ? new URL(href, document.baseURI) + '' : ''
     },
     content
   };

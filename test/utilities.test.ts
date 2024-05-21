@@ -35,7 +35,6 @@ describe('5. test HTMLtoMarkdown().', () => {
 
     expect(meta).toEqual({
       title: 'testexample post-full-title',
-      date: '2020-04-01T15:21:00.000Z',
       author: 'authorName',
       authorURL: 'http://localhost/news/author/authorURL/'
     });

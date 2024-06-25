@@ -14,7 +14,7 @@ describe('3. test getRouteAddr(Check the input parameters, and get the routing a
   test('3-1. there is the correct URL in the parameter.', () => {
     expect(
       getRouteAddr(
-        '- 原文网址：[Test Example](https://www.freecodecamp.org/news/testexample/)'
+        '- 原文网址：[Test Example](https://www.freecodecamp.org/news/testexample/index.html)'
       )
     ).toEqual('https://www.freecodecamp.org/news/testexample/');
   });

@@ -8,17 +8,25 @@ import { gfm, strikethrough, tables, taskListItems } from 'turndown-plugin-gfm';
 
 import { Err_DontGetTrueRoute } from './toMarkdownConstant';
 
+const Empty_HREF = /^(#|javascript:\s*void\(0\);?\s*)$/;
+
 export const turndownService = new TurndownService({
+  hr: '---',
+  linkStyle: 'referenced',
   headingStyle: 'atx',
   bulletListMarker: '-',
-  hr: '---',
-  codeBlockStyle: 'fenced',
-  linkStyle: 'referenced'
+  codeBlockStyle: 'fenced'
 })
   .use(strikethrough)
   .use(tables)
   .use(taskListItems)
   .use(gfm)
+  .addRule('non_url', {
+    filter: (node) =>
+      ['a', 'area'].includes(node.nodeName.toLowerCase()) &&
+      Empty_HREF.test(node.getAttribute('href') || ''),
+    replacement: () => ''
+  })
   .addRule('img-srcset', {
     filter: ['img'],
     replacement(_, { alt, title, src, srcset }: HTMLImageElement) {
@@ -62,7 +70,7 @@ export const turndownService = new TurndownService({
   .remove((node) =>
     node.matches('style, script, aside, form, [class*="ads" i]')
   )
-  .keep('iframe');
+  .keep((node) => node.matches('kbd, iframe, audio, video, source'));
 
 /**
  * add comment to issue
@@ -88,6 +96,7 @@ export async function addComment(body: string) {
   debug(`comment: ${body}`);
 }
 
+const IndexHTML = /index\.\w+$/i;
 /**
  * Check the input parameters, and get the routing address of the article.
  */
@@ -98,7 +107,11 @@ export function getRouteAddr(markdown: string) {
 
   if (!href) throw new SyntaxError(Err_DontGetTrueRoute);
 
-  return href;
+  const URI = new URL(href);
+
+  URI.pathname = URI.pathname.replace(IndexHTML, '');
+
+  return URI + '';
 }
 
 export async function loadPage(path: string) {

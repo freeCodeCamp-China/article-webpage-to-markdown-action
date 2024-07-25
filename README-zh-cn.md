@@ -69,16 +69,16 @@ news-translate
 
 ```yml
 - name: fetch webpage to Markdown file
-  # you need set action id
+  # 你需要设置 action 的 id 名
   id: fetch-webpage-to-markdown
   uses: freeCodeCamp-China/article-webpage-to-markdown-action@v1
   with:
-    # A string contains an Original Article URL
+    # 一个包含原文 URL 的字符串
     newsLink: '${{ github.event.issue.Body }}'
-    # CSS selector of elements which should be ignored
+    # 需忽略元素的 CSS 选择符
     ignoreSelector: '.ad-wrapper'
-    # Path of the generated MarkDown file
-    # Relative path relative to current working directory
+    # 生成 MarkDown 文件的路径
+    # 相对命令行工作目录的相对路径
     markDownFilePath: './articles/'
     githubToken: ${{ github.token }}
 

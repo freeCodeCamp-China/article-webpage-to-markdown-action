@@ -82,10 +82,10 @@ Other Action get Markdown file path:
     markDownFilePath: './articles/'
     githubToken: ${{ github.token }}
 
- - name: Use the output from my custom action
-        run: |
-          markdown_file_path=${{ steps.fetch-webpage-to-markdown.outputs.markdown_file_path }}
-          echo "The file path is ${{markdown_file_path}}"
+- name: Use the output from my custom action
+  run: |
+      markdown_file_path=${{ steps.fetch-webpage-to-markdown.outputs.markdown_file_path }}
+      echo "The file path is ${{markdown_file_path}}"
 ```
 
 If you do not configure the option `markDownFilePath`, the file is generated in the current path by default.

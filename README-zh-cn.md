@@ -65,6 +65,29 @@ news-translate
     githubToken: ${{ github.token }}
 ```
 
+别的 Action 获取 Markdown 文件路径:
+
+```yml
+- name: fetch webpage to Markdown file
+  # you need set action id
+  id:  fetch-webpage-to-markdown
+  uses: freeCodeCamp-China/article-webpage-to-markdown-action@v1
+  with:
+    # A string contains an Original Article URL
+    newsLink: '${{ github.event.issue.Body }}'
+    # CSS selector of elements which should be ignored
+    ignoreSelector: '.ad-wrapper'
+    # Path of the generated MarkDown file
+    # Relative path relative to current working directory
+    markDownFilePath: './articles/'
+    githubToken: ${{ github.token }}
+
+ - name: Use the output from my custom action
+        run: |
+          markdown_file_path=${{ steps.fetch-webpage-to-markdown.outputs.markdown_file_path }}
+          echo "The file path is ${{markdown_file_path}}"
+```
+
 如果未配置选项 `markDownFilePath`，则默认情况下会在当前路径中生成文件。
 
 ### 通过 GitHub 的 issue 运行脚本

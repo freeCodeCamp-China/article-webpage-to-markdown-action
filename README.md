@@ -65,6 +65,29 @@ The following is an extended example with all possible options available for thi
     githubToken: ${{ github.token }}
 ```
 
+Other Action get Markdown file path:
+
+```yml
+- name: fetch webpage to Markdown file
+  # you need set action id
+  id:  fetch-webpage-to-markdown
+  uses: freeCodeCamp-China/article-webpage-to-markdown-action@v1
+  with:
+    # A string contains an Original Article URL
+    newsLink: '${{ github.event.issue.Body }}'
+    # CSS selector of elements which should be ignored
+    ignoreSelector: '.ad-wrapper'
+    # Path of the generated MarkDown file
+    # Relative path relative to current working directory
+    markDownFilePath: './articles/'
+    githubToken: ${{ github.token }}
+
+ - name: Use the output from my custom action
+        run: |
+          markdown_file_path=${{ steps.fetch-webpage-to-markdown.outputs.markdown_file_path }}
+          echo "The file path is ${{markdown_file_path}}"
+```
+
 If you do not configure the option `markDownFilePath`, the file is generated in the current path by default.
 
 ### Run the script by the issue of GitHub

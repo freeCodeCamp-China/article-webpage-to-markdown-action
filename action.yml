@@ -18,3 +18,7 @@ inputs:
 runs:
   using: 'node20'
   main: 'dist/index.js'
+
+outputs:
+  markdown_file_path:
+    description: 'The path to the generated Markdown file.'

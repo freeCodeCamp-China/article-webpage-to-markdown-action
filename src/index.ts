@@ -1,4 +1,4 @@
-import { getInput } from '@actions/core';
+import { getInput, setOutput } from '@actions/core';
 import { context } from '@actions/github';
 import { existsSync, outputFile } from 'fs-extra';
 import { join } from 'path';
@@ -51,6 +51,9 @@ ${content.replace('\n\n', '\n\n<!-- more -->\n\n')}`;
   }/edit/${join(ref.replace(/^refs\/heads\//, ''), filePath)})`;
 
   await addComment(successMessage.trim());
+
+  // return  filePath
+  setOutput('markdown_file_path', filePath);
 })().catch(async (error) => {
   console.log('ERR:', error);
   await addComment(error + '');

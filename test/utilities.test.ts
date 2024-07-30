@@ -7,7 +7,7 @@ import { HTMLtoMarkdown, getRouteAddr } from '../src/utilities';
 beforeEach(() => {
   jest.resetModules();
   delete process.env.INPUT_NEWSLINK;
-  delete process.env.INPUT_markDownFilePath;
+  delete process.env.INPUT_markdownFolder;
 });
 
 describe('3. test getRouteAddr(Check the input parameters, and get the routing address of the article.)', () => {
@@ -15,7 +15,7 @@ describe('3. test getRouteAddr(Check the input parameters, and get the routing a
     expect(
       getRouteAddr(
         '- 原文网址：[Test Example](https://www.freecodecamp.org/news/testexample/index.html)'
-      )
+      ) + ''
     ).toEqual('https://www.freecodecamp.org/news/testexample/');
   });
 });

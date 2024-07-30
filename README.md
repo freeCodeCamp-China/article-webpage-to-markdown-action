@@ -43,52 +43,53 @@ news-translate
 Add the following step in the `jobs` field of your GitHub action configuration:
 
 ```yml
-- uses: freeCodeCamp-China/article-webpage-to-markdown-action@v1
+- uses: freeCodeCamp-China/article-webpage-to-markdown-action@v2
   with:
-    newsLink: '${{ github.event.issue.Body }}'
-    markDownFilePath: './articles/'
+    pageURL: '${{ github.event.issue.Body }}'
+    markdownFolder: './articles/'
     githubToken: ${{ github.token }}
 ```
 
-The following is an extended example with all possible options available for this Action:
+The following is an extended example with all possible options & outputs available for this Action:
 
 ```yml
-- uses: freeCodeCamp-China/article-webpage-to-markdown-action@v1
-  with:
-    # A string contains an Original Article URL
-    newsLink: '${{ github.event.issue.Body }}'
-    # CSS selector of elements which should be ignored
-    ignoreSelector: '.ad-wrapper'
-    # Path of the generated MarkDown file
-    # Relative path relative to current working directory
-    markDownFilePath: './articles/'
-    githubToken: ${{ github.token }}
+name: fetch Web pages
+on:
+  issues:
+    types:
+      - labeled
+jobs:
+  fetch-pages:
+    if: github.event.label.name == 'Article'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - id: fetch-md
+        uses: freeCodeCamp-China/article-webpage-to-markdown-action@v2
+        with:
+          # A string contains an Original Article URL
+          pageURL: '${{ github.event.issue.Body }}'
+          # CSS selector of elements which should be ignored
+          ignoreSelector: '.ad-wrapper'
+          # Path of the generated MarkDown file
+          # Relative path relative to current working directory
+          markdownFolder: './articles/'
+          githubToken: ${{ github.token }}
+
+      - name: comment Outputs
+        run: gh issue comment "$NUMBER" --body "$BODY"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+          BODY: >
+            - Original URL: [${{ steps.fetch-md.outputs.title }}](${{ steps.fetch-md.outputs.path }})
+            - Original author: [${{ steps.fetch-md.outputs.author || 'anonymous' }}](${{ steps.fetch-md.outputs.authorURL }})
+            - Markdown file: [click to edit](${{ steps.fetch-md.outputs.editor_url }})
 ```
 
-Other Action get Markdown file path:
-
-```yml
-- name: fetch webpage to Markdown file
-  # you need set action id
-  id:  fetch-webpage-to-markdown
-  uses: freeCodeCamp-China/article-webpage-to-markdown-action@v1
-  with:
-    # A string contains an Original Article URL
-    newsLink: '${{ github.event.issue.Body }}'
-    # CSS selector of elements which should be ignored
-    ignoreSelector: '.ad-wrapper'
-    # Path of the generated MarkDown file
-    # Relative path relative to current working directory
-    markDownFilePath: './articles/'
-    githubToken: ${{ github.token }}
-
-- name: Use the output from my custom action
-  run: |
-      markdown_file_path=${{ steps.fetch-webpage-to-markdown.outputs.markdown_file_path }}
-      echo "The file path is ${{markdown_file_path}}"
-```
-
-If you do not configure the option `markDownFilePath`, the file is generated in the current path by default.
+If you do not configure the option `markdownFolder`, the file is generated in the current path by default.
 
 ### Run the script by the issue of GitHub
 
@@ -109,7 +110,7 @@ If the script execution **fails**, you need to confirm the problem, solve them, 
 - **No parameters were found. Please confirm that the description of the issue has been entered.**
   The description of the issue is empty, please fill in the content according to the template.
 - **There is one file with the same name exists. Please check if the article has been added.**
-  There is a file with the same name under the folder `markDownFilePath`.
+  There is a file with the same name under the folder `markdownFolder`.
 - **The DOM of the website has been modified, or there is a problem with loading, please confirm.**
   The DOM structure of the website may be changed and the script needs to be modified.
 

@@ -111,7 +111,7 @@ export function getRouteAddr(markdown: string) {
 
   URI.pathname = URI.pathname.replace(IndexHTML, '');
 
-  return URI + '';
+  return URI;
 }
 
 export async function loadPage(path: string) {
@@ -136,7 +136,7 @@ export function HTMLtoMarkdown(document: Document, ignoreSelector = '') {
     author = document.querySelector<HTMLAnchorElement>(
       'a[class*="author" i], [class*="author" i] a'
     );
-  const dateTime = new Date(time?.getAttribute('datetime')),
+  const dateTime = new Date(time?.dateTime),
     dateText = new Date(time?.textContent?.trim());
 
   time?.remove();

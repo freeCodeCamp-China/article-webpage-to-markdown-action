@@ -2,12 +2,12 @@ name: 'article-webpage-to-markdown-action'
 description: "Automatically generate Markdown files based on the webpages of articles. Currently supports freeCodeCamp's news site."
 author: 'freeCodeCamp-China'
 inputs:
-  newsLink:
+  pageURL:
     description: 'A string in a specific format that contains a link to a article.'
     required: true
   ignoreSelector:
     description: 'CSS selector of elements which should be ignored'
-  markDownFilePath:
+  markdownFolder:
     description: 'Path of the generated MarkDown file and relative path relative to the root folder.'
     required: false
     default: './'
@@ -20,5 +20,17 @@ runs:
   main: 'dist/index.js'
 
 outputs:
+  original_url:
+    description: 'The original URL of the article.'
+  title:
+    description: 'The title of the article.'
+  date:
+    description: 'The publish date of the article.'
+  author:
+    description: 'The author of the article.'
+  author_url:
+    description: 'The URL of the article author.'
   markdown_file_path:
     description: 'The path to the generated Markdown file.'
+  editor_url:
+    description: 'The editor URL of the generated Markdown file.'

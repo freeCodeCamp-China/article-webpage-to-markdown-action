@@ -3,16 +3,18 @@ description: "Automatically generate Markdown files based on the webpages of art
 author: 'freeCodeCamp-China'
 inputs:
   pageURL:
-    description: 'A string in a specific format that contains a link to a article.'
+    description: 'A string contains an Original Article URL'
     required: true
-  ignoreSelector:
-    description: 'CSS selector of elements which should be ignored'
+  includedSelector:
+    description: 'CSS selector of elements which should be included'
+  excludedSelector:
+    description: 'CSS selector of elements which should be excluded'
   markdownFolder:
-    description: 'Path of the generated MarkDown file and relative path relative to the root folder.'
+    description: 'Path of the generated MarkDown file is a Relative Path relative to current working directory'
     required: false
     default: './'
   githubToken:
-    description: ' GitHub  write and read token,auto create,no need to set'
+    description: ' GitHub write and read token, auto created, no need to set'
     default: ''
 
 runs:

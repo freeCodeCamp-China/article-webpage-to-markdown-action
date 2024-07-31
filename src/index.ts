@@ -13,7 +13,8 @@ import {
 } from './utilities';
 
 const pageURL = getInput('pageURL'),
-  ignoreSelector = getInput('ignoreSelector'),
+  includedSelector = getInput('includedSelector'),
+  excludedSelector = getInput('excludedSelector'),
   markdownFolder = getInput('markdownFolder') || './';
 
 if (!pageURL) throw new Error(Err_DontGetPageURL);
@@ -27,8 +28,12 @@ if (existsSync(filePath)) throw new URIError(Err_SameNameFile);
 
 (async () => {
   const { document } = await loadPage(href);
-  const { meta, content } = HTMLtoMarkdown(document, ignoreSelector);
 
+  const { meta, content } = HTMLtoMarkdown(
+    document,
+    includedSelector,
+    excludedSelector
+  );
   const articleText = `---
 ${stringify({
   ...meta,

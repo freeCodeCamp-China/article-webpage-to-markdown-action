@@ -45,7 +45,7 @@ Add the following step in the `jobs` field of your GitHub action configuration:
 ```yml
 - uses: freeCodeCamp-China/article-webpage-to-markdown-action@v2
   with:
-    pageURL: '${{ github.event.issue.Body }}'
+    pageURL: '${{ github.event.issue.body }}'
     markdownFolder: './articles/'
     githubToken: ${{ github.token }}
 ```
@@ -69,11 +69,13 @@ jobs:
         uses: freeCodeCamp-China/article-webpage-to-markdown-action@v2
         with:
           # A string contains an Original Article URL
-          pageURL: '${{ github.event.issue.Body }}'
-          # CSS selector of elements which should be ignored
-          ignoreSelector: '.ad-wrapper'
-          # Path of the generated MarkDown file
-          # Relative path relative to current working directory
+          pageURL: '${{ github.event.issue.body }}'
+          # CSS selector of elements which should be included
+          includedSelector: '.post-full-content'
+          # CSS selector of elements which should be excluded
+          excludedSelector: '.ad-wrapper'
+          # Path of the generated MarkDown file is
+          # a Relative Path relative to current working directory
           markdownFolder: './articles/'
           githubToken: ${{ github.token }}
 

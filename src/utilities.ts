@@ -126,7 +126,19 @@ export async function loadPage(path: string) {
 
 export const selectorOf = (tag: string) => `${tag}, [class*="${tag}" i]`;
 
-export function HTMLtoMarkdown(document: Document, ignoreSelector = '') {
+export function contentBoxOf(document: Document) {
+  for (const selector of ['article', 'post', 'content', 'main', 'body']) {
+    const box = document.querySelector(selectorOf(selector));
+
+    if (box) return box;
+  }
+}
+
+export function HTMLtoMarkdown(
+  document: Document,
+  includedSelector = '',
+  excludedSelector = ''
+) {
   const title =
       document.querySelector('h1')?.textContent?.trim() ||
       document.title.trim(),
@@ -141,19 +153,13 @@ export function HTMLtoMarkdown(document: Document, ignoreSelector = '') {
 
   time?.remove();
 
-  var content = '';
+  if (excludedSelector)
+    turndownService.remove((node) => node.matches(excludedSelector));
 
-  for (const selector of ['article', 'content', 'main', 'body']) {
-    const box = document.querySelector(selectorOf(selector));
-
-    if (box) {
-      if (ignoreSelector)
-        turndownService.remove((node) => node.matches(ignoreSelector));
-
-      content = turndownService.turndown(box.innerHTML);
-      break;
-    }
-  }
+  const { innerHTML } =
+    (includedSelector && document.querySelector(includedSelector)) ||
+    contentBoxOf(document);
+  const content = turndownService.turndown(innerHTML);
 
   return {
     meta: {

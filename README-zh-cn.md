@@ -45,7 +45,7 @@ news-translate
 ```yml
 - uses: freeCodeCamp-China/article-webpage-to-markdown-action@v1
   with:
-    pageURL: '${{ github.event.issue.Body }}'
+    pageURL: '${{ github.event.issue.body }}'
     markdownFolder: './articles/'
     githubToken: ${{ github.token }}
 ```
@@ -69,11 +69,13 @@ jobs:
         uses: freeCodeCamp-China/article-webpage-to-markdown-action@v2
         with:
           # 一个包含原文 URL 的字符串
-          pageURL: '${{ github.event.issue.Body }}'
-          # 需忽略元素的 CSS 选择符
-          ignoreSelector: '.ad-wrapper'
-          # 生成 MarkDown 文件的路径
-          # 相对命令行工作目录的相对路径
+          pageURL: '${{ github.event.issue.body }}'
+          # 需包含元素的 CSS 选择符
+          includedSelector: '.post-full-content'
+          # 需排除元素的 CSS 选择符
+          excludedSelector: '.ad-wrapper'
+          # 生成 MarkDown 文件的路径是
+          # 一个相对于命令行工作目录的相对路径
           markdownFolder: './articles/'
           githubToken: ${{ github.token }}
 

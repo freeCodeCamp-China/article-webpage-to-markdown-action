@@ -127,7 +127,7 @@ export async function loadPage(path: string) {
 export const selectorOf = (tag: string) => `${tag}, [class*="${tag}" i]`;
 
 export function contentBoxOf(document: Document) {
-  for (const selector of ['article', 'post', 'content', 'main', 'body']) {
+  for (const selector of ['post', 'content', 'article', 'main', 'body']) {
     const box = document.querySelector(selectorOf(selector));
 
     if (box) return box;

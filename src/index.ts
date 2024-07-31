@@ -12,21 +12,21 @@ import {
   loadPage
 } from './utilities';
 
-const pageURL = getInput('pageURL'),
-  includedSelector = getInput('includedSelector'),
-  excludedSelector = getInput('excludedSelector'),
-  markdownFolder = getInput('markdownFolder') || './';
-
-if (!pageURL) throw new Error(Err_DontGetPageURL);
-
-const { href, pathname } = getRouteAddr(pageURL);
-const filePath = join(
-  markdownFolder,
-  pathname.split('/').filter(Boolean).at(-1) + '.md'
-);
-if (existsSync(filePath)) throw new URIError(Err_SameNameFile);
-
 (async () => {
+  const pageURL = getInput('pageURL'),
+    includedSelector = getInput('includedSelector'),
+    excludedSelector = getInput('excludedSelector'),
+    markdownFolder = getInput('markdownFolder') || './';
+
+  if (!pageURL) throw new Error(Err_DontGetPageURL);
+
+  const { href, pathname } = getRouteAddr(pageURL);
+  const filePath = join(
+    markdownFolder,
+    pathname.split('/').filter(Boolean).at(-1) + '.md'
+  );
+  if (existsSync(filePath)) throw new URIError(Err_SameNameFile);
+
   const { document } = await loadPage(href);
 
   const { meta, content } = HTMLtoMarkdown(

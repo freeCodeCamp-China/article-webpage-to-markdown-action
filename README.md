@@ -63,6 +63,7 @@ jobs:
     if: github.event.label.name == 'Article'
     runs-on: ubuntu-latest
     permissions:
+      contents: write
       issues: write
     steps:
       - id: fetch-md
@@ -85,9 +86,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           NUMBER: ${{ github.event.issue.number }}
-          BODY: >
-            - Original URL: [${{ steps.fetch-md.outputs.title }}](${{ steps.fetch-md.outputs.path }})
-            - Original author: [${{ steps.fetch-md.outputs.author || 'anonymous' }}](${{ steps.fetch-md.outputs.authorURL }})
+          BODY: |
+            - Original URL: [${{ steps.fetch-md.outputs.title }}](${{ steps.fetch-md.outputs.original_url }})
+            - Original author: [${{ steps.fetch-md.outputs.author || 'anonymous' }}](${{ steps.fetch-md.outputs.author_url }})
             - Markdown file: [click to edit](${{ steps.fetch-md.outputs.editor_url }})
 ```
 
@@ -103,7 +104,7 @@ If you do not configure the option `markdownFolder`, the file is generated in th
 [Original article](https://example.com/path/to/your/article/)
 ```
 
-Replace the Link Value with the URL of an Original article, after the issue submitted, the action will run, and a success or failed message will be commented to the issue in the end.
+Replace the Link Value with the URL of an Original article, after the issue submitted, the action will run, and a failed message will be commented to the issue in the end.
 
 If the script execution **fails**, you need to confirm the problem, solve them, and post a **new issue** according to the previous steps. In the **Action log**, The [_Common Error Messages_](#Common-Error-Messages) will give you some reliable tips.
 

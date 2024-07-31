@@ -31,7 +31,7 @@ describe('4. test contentBoxOf()', () => {
 
   it('should find elements with Semantic classes', () => {
     const { document } = parseHTML(
-      `<body><div class="post-full-content"></div></body>`
+      `<body><article><div class="post-full-content"></div></article></body>`
     );
     const post = document.querySelector('.post-full-content'),
       box = contentBoxOf(document);

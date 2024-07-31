@@ -63,6 +63,7 @@ jobs:
     if: github.event.label.name == '文章'
     runs-on: ubuntu-latest
     permissions:
+      contents: write
       issues: write
     steps:
       - id: fetch-md
@@ -85,9 +86,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           NUMBER: ${{ github.event.issue.number }}
-          BODY: >
-            - 原文网址: [${{ steps.fetch-md.outputs.title }}](${{ steps.fetch-md.outputs.path }})
-            - 原文作者: [${{ steps.fetch-md.outputs.author || 'anonymous' }}](${{ steps.fetch-md.outputs.authorURL }})
+          BODY: |
+            - 原文网址: [${{ steps.fetch-md.outputs.title }}](${{ steps.fetch-md.outputs.original_url }})
+            - 原文作者: [${{ steps.fetch-md.outputs.author || 'anonymous' }}](${{ steps.fetch-md.outputs.author_url }})
             - Markdown 文件: [点击编辑](${{ steps.fetch-md.outputs.editor_url }})
 ```
 
@@ -103,7 +104,7 @@ jobs:
 [原文链接](https://example.com/path/to/your/article/)
 ```
 
-用原文 URL 替换上文中的 URL，本 action 会在 issue 提交后运行，并将成功或失败消息发到 issue 评论中。
+用原文 URL 替换上文中的 URL，本 action 会在 issue 提交后运行，并将失败消息发到 issue 评论中。
 
 如果脚本执行**失败**，您需要确认问题，解决问题，然后根据前面的步骤发布**新 issue**。 [_常见错误消息_](#常见错误消息) 和 _Actions 的日志_ 将为您提供一些可靠的提示。
 

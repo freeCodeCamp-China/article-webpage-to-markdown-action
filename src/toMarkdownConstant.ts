@@ -1,5 +1,5 @@
 // Errs
-export const Err_DontGetNewsLink =
+export const Err_DontGetPageURL =
   'No parameters were found. Please confirm that the description of the issue has been entered.';
 export const Err_DontGetTrueRoute =
   'The route to the article is not matched. Please confirm that the URL is correct.';

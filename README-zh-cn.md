@@ -45,50 +45,54 @@ news-translate
 ```yml
 - uses: freeCodeCamp-China/article-webpage-to-markdown-action@v1
   with:
-    newsLink: '${{ github.event.issue.Body }}'
-    markDownFilePath: './articles/'
+    pageURL: '${{ github.event.issue.body }}'
+    markdownFolder: './articles/'
     githubToken: ${{ github.token }}
 ```
 
-下面是一个扩展示例，尽可能包含所有选项：
+下面是一个扩展示例，尽可能包含所有选项、输出：
 
 ```yml
-- uses: freeCodeCamp-China/article-webpage-to-markdown-action@v1
-  with:
-    # 一个包含原文 URL 的字符串
-    newsLink: '${{ github.event.issue.Body }}'
-    # 需忽略元素的 CSS 选择符
-    ignoreSelector: '.ad-wrapper'
-    # 生成 MarkDown 文件的路径
-    # 相对命令行工作目录的相对路径
-    markDownFilePath: './articles/'
-    githubToken: ${{ github.token }}
+name: 下载网页
+on:
+  issues:
+    types:
+      - labeled
+jobs:
+  fetch-pages:
+    if: github.event.label.name == '文章'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+    steps:
+      - id: fetch-md
+        uses: freeCodeCamp-China/article-webpage-to-markdown-action@v2
+        with:
+          # 一个包含原文 URL 的字符串
+          pageURL: '${{ github.event.issue.body }}'
+          # 需包含元素的 CSS 选择符
+          includedSelector: '.post-full-content'
+          # 需排除元素的 CSS 选择符
+          excludedSelector: '.ad-wrapper'
+          # 生成 MarkDown 文件的路径是
+          # 一个相对于命令行工作目录的相对路径
+          markdownFolder: './articles/'
+          githubToken: ${{ github.token }}
+
+      - name: 将输出发至评论区
+        run: gh issue comment "$NUMBER" --body "$BODY"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+          BODY: |
+            - 原文网址: [${{ steps.fetch-md.outputs.title }}](${{ steps.fetch-md.outputs.original_url }})
+            - 原文作者: [${{ steps.fetch-md.outputs.author || 'anonymous' }}](${{ steps.fetch-md.outputs.author_url }})
+            - Markdown 文件: [点击编辑](${{ steps.fetch-md.outputs.editor_url }})
 ```
 
-其他 Action 获取 Markdown 文件路径:
-
-```yml
-- name: fetch webpage to Markdown file
-  # 你需要设置 action 的 id 名
-  id: fetch-webpage-to-markdown
-  uses: freeCodeCamp-China/article-webpage-to-markdown-action@v1
-  with:
-    # 一个包含原文 URL 的字符串
-    newsLink: '${{ github.event.issue.Body }}'
-    # 需忽略元素的 CSS 选择符
-    ignoreSelector: '.ad-wrapper'
-    # 生成 MarkDown 文件的路径
-    # 相对命令行工作目录的相对路径
-    markDownFilePath: './articles/'
-    githubToken: ${{ github.token }}
-
-- name: Use the output from my custom action
-  run: |
-    markdown_file_path=${{ steps.fetch-webpage-to-markdown.outputs.markdown_file_path }}
-    echo "The file path is $markdown_file_path"
-```
-
-如果未配置选项 `markDownFilePath`，则默认情况下会在当前路径中生成文件。
+如果未配置选项 `markdownFolder`，则默认情况下会在当前路径中生成文件。
 
 ### 通过 GitHub 的 issue 运行脚本
 
@@ -100,7 +104,7 @@ news-translate
 [原文链接](https://example.com/path/to/your/article/)
 ```
 
-用原文 URL 替换上文中的 URL，本 action 会在 issue 提交后运行，并将成功或失败消息发到 issue 评论中。
+用原文 URL 替换上文中的 URL，本 action 会在 issue 提交后运行，并将失败消息发到 issue 评论中。
 
 如果脚本执行**失败**，您需要确认问题，解决问题，然后根据前面的步骤发布**新 issue**。 [_常见错误消息_](#常见错误消息) 和 _Actions 的日志_ 将为您提供一些可靠的提示。
 
@@ -109,7 +113,7 @@ news-translate
 - **No parameters were found. Please confirm that the description of the issue has been entered.**
   issue 的描述为空，请根据模板填写内容。
 - **There is one file with the same name exists.Please check if the article has been added.**
-  在 `markDownFilePath` 文件夹下有一个同名文件。
+  在 `markdownFolder` 文件夹下有一个同名文件。
 - **The DOM of the website has been modified, or there is a problem with loading, please confirm.**
   网站的 DOM 结构可能更改，并且脚本需要修改。
 
